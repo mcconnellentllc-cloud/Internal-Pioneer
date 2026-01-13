@@ -1777,106 +1777,166 @@ function parsePioneerData() {
 }
 
 function parsePioneerLine(line, yearOverride, productOverride, pricePerUnit, lineIndex) {
-    // Split by tab or multiple spaces
-    const parts = line.split(/\t+|\s{2,}/).map(p => p.trim()).filter(p => p);
+    // Split by tab first (Excel/Power BI copy), then fall back to multiple spaces
+    let parts;
+    if (line.includes('\t')) {
+        parts = line.split('\t').map(p => p.trim());
+    } else {
+        parts = line.split(/\s{2,}/).map(p => p.trim()).filter(p => p);
+    }
 
     if (parts.length < 4) return null;
 
+    // Skip header row
+    if (parts[0].toLowerCase() === 'sales year' || parts[0].toLowerCase() === 'year') {
+        return null;
+    }
+
     let year, growerName, productType, hybrid, quantity;
 
-    // Try to detect year from first column
-    const firstPart = parts[0];
-    if (/^20\d{2}$/.test(firstPart)) {
-        year = parseInt(firstPart);
-        parts.shift();
-    } else if (yearOverride && yearOverride !== 'auto') {
-        year = parseInt(yearOverride);
-    } else {
-        year = new Date().getFullYear();
-    }
+    // Check if this looks like the Demand Plan format:
+    // Sales Year | Operation | Account | Product line | Product | Subproduct | Trait | Total invoice | ... | Delivered | ...
+    const isDemandPlanFormat = parts.length >= 10 && /^20\d{2}$/.test(parts[0]);
 
-    // Look for grower name (usually contains letters and possibly numbers/special chars)
-    // Skip if it looks like a product code
-    let growerIndex = 0;
-    for (let i = 0; i < parts.length; i++) {
-        const part = parts[i];
-        // Grower names typically don't start with P followed by numbers (hybrid codes)
-        // and aren't purely numeric
-        if (!/^P\d/.test(part) && !/^\d+$/.test(part) && !/^NR\d/.test(part) &&
-            !/^(Corn|Soybean|Sorghum|Alfalfa|Herbicide|Fungicide)$/i.test(part)) {
-            growerName = part;
-            growerIndex = i;
-            break;
+    if (isDemandPlanFormat) {
+        // Demand Plan Tracking format
+        year = parseInt(parts[0]);                    // Sales Year
+        growerName = parts[1];                         // Operation
+        // parts[2] = Account (skip)
+        const productLine = parts[3];                  // Product line (Corn, Soybean, etc.)
+        // parts[4] = Product
+        hybrid = parts[5];                             // Subproduct (hybrid code)
+        // parts[6] = Trait segment
+
+        // Detect product type from Product line column
+        if (productOverride && productOverride !== 'auto') {
+            productType = productOverride;
+        } else if (productLine) {
+            const pl = productLine.toLowerCase();
+            if (pl.includes('corn')) {
+                productType = 'Corn Seed';
+            } else if (pl.includes('soybean') || pl.includes('soy')) {
+                productType = 'Soybean Seed';
+            } else if (pl.includes('sorghum')) {
+                productType = 'Sorghum';
+            } else if (pl.includes('alfalfa')) {
+                productType = 'Alfalfa';
+            } else if (pl.includes('sunflower')) {
+                productType = 'Other';
+            } else {
+                productType = 'Corn Seed'; // Default
+            }
         }
-    }
 
-    if (!growerName) return null;
+        // Find "Delivered" column - typically around index 11
+        // Look for a reasonable quantity value in the numeric columns
+        // Columns after Trait segment are: Total invoice, Regular, Sample, Replant, Delivered, Staged, Yet to deliver...
+        const numericCols = parts.slice(7).map(p => parseFloat(String(p).replace(/,/g, '')));
 
-    // Detect product type
-    productType = productOverride !== 'auto' ? productOverride : null;
-
-    for (let i = 0; i < parts.length; i++) {
-        const part = parts[i].toLowerCase();
-        if (part === 'corn') {
-            productType = 'Corn Seed';
-            break;
-        } else if (part === 'soybean' || part === 'soybeans' || part === 'soy') {
-            productType = 'Soybean Seed';
-            break;
-        } else if (part === 'sorghum') {
-            productType = 'Sorghum';
-            break;
-        } else if (part === 'alfalfa') {
-            productType = 'Alfalfa';
-            break;
+        // Delivered is typically column index 11 (parts[11]) or the 5th numeric column
+        // Try to find the "Delivered" value - it's usually the largest non-zero value in early numeric columns
+        // or specifically at position 11 in the full row
+        if (parts.length > 11) {
+            const deliveredVal = parseFloat(String(parts[11]).replace(/,/g, ''));
+            if (!isNaN(deliveredVal) && deliveredVal > 0) {
+                quantity = deliveredVal;
+            }
         }
-    }
 
-    // Look for hybrid code (starts with P followed by digits)
-    for (const part of parts) {
-        if (/^P\d{3,4}/i.test(part)) {
-            hybrid = part.toUpperCase();
-            // If no product type detected, infer from hybrid
-            if (!productType) {
-                if (/^P[01]\d{3}/i.test(part)) {
-                    productType = 'Corn Seed'; // P0xxx, P1xxx are typically corn
-                } else if (/^P[2-9]\d{3}/i.test(part)) {
-                    productType = 'Soybean Seed'; // P2xxx+ are typically soybeans
+        // Fallback: find first reasonable positive number after position 7
+        if (!quantity || quantity <= 0) {
+            for (let i = 7; i < parts.length; i++) {
+                const num = parseFloat(String(parts[i]).replace(/,/g, ''));
+                if (!isNaN(num) && num > 0 && num < 50000) {
+                    quantity = num;
+                    break;
                 }
             }
-            break;
-        }
-    }
-
-    if (!productType) {
-        productType = 'Corn Seed'; // Default
-    }
-
-    // Find quantity - look for numbers, prefer the last reasonable number
-    // that could be a quantity (typically < 1000 bags)
-    const numbers = [];
-    for (const part of parts) {
-        const num = parseFloat(part.replace(/,/g, ''));
-        if (!isNaN(num) && num > 0 && num < 10000) {
-            numbers.push(num);
-        }
-    }
-
-    // Use the last number as quantity, or second-to-last if there are multiple
-    // (often the format is: ordered, shipped, remaining, total)
-    if (numbers.length > 0) {
-        // Try to find the "total" or last significant number
-        quantity = numbers[numbers.length - 1];
-
-        // If the last number is 0, try the one before
-        if (quantity === 0 && numbers.length > 1) {
-            quantity = numbers[numbers.length - 2];
         }
     } else {
-        quantity = 1; // Default to 1 if no quantity found
+        // Generic format detection (original logic)
+
+        // Try to detect year from first column
+        const firstPart = parts[0];
+        if (/^20\d{2}$/.test(firstPart)) {
+            year = parseInt(firstPart);
+            parts.shift();
+        } else if (yearOverride && yearOverride !== 'auto') {
+            year = parseInt(yearOverride);
+        } else {
+            year = new Date().getFullYear();
+        }
+
+        // Look for grower name (usually contains letters and possibly numbers/special chars)
+        for (let i = 0; i < parts.length; i++) {
+            const part = parts[i];
+            // Grower names typically don't start with P followed by numbers (hybrid codes)
+            // and aren't purely numeric
+            if (!/^P\d/.test(part) && !/^\d+$/.test(part) && !/^NR\d/.test(part) &&
+                !/^(Corn|Soybean|Sorghum|Alfalfa|Herbicide|Fungicide)$/i.test(part) &&
+                part.length > 1) {
+                growerName = part;
+                break;
+            }
+        }
+
+        // Detect product type
+        productType = productOverride !== 'auto' ? productOverride : null;
+
+        for (let i = 0; i < parts.length; i++) {
+            const part = parts[i].toLowerCase();
+            if (part === 'corn') {
+                productType = 'Corn Seed';
+                break;
+            } else if (part === 'soybean' || part === 'soybeans' || part === 'soy') {
+                productType = 'Soybean Seed';
+                break;
+            } else if (part === 'sorghum') {
+                productType = 'Sorghum';
+                break;
+            } else if (part === 'alfalfa') {
+                productType = 'Alfalfa';
+                break;
+            }
+        }
+
+        // Look for hybrid code (starts with P followed by digits)
+        for (const part of parts) {
+            if (/^P\d{3,4}/i.test(part)) {
+                hybrid = part.toUpperCase();
+                if (!productType) {
+                    if (/^P[01]\d{3}/i.test(part)) {
+                        productType = 'Corn Seed';
+                    } else if (/^P[2-9]\d{3}/i.test(part)) {
+                        productType = 'Soybean Seed';
+                    }
+                }
+                break;
+            }
+        }
+
+        // Find quantity - look for numbers
+        const numbers = [];
+        for (const part of parts) {
+            const num = parseFloat(String(part).replace(/,/g, ''));
+            if (!isNaN(num) && num > 0 && num < 50000) {
+                numbers.push(num);
+            }
+        }
+
+        if (numbers.length > 0) {
+            quantity = numbers[numbers.length - 1];
+            if (quantity === 0 && numbers.length > 1) {
+                quantity = numbers[numbers.length - 2];
+            }
+        }
     }
 
-    if (quantity <= 0) return null;
+    // Validation
+    if (!growerName || growerName.length < 2) return null;
+    if (!productType) productType = 'Corn Seed';
+    if (!quantity || quantity <= 0) quantity = 1;
+    if (!year) year = yearOverride !== 'auto' ? parseInt(yearOverride) : new Date().getFullYear();
 
     const amount = quantity * pricePerUnit;
 
