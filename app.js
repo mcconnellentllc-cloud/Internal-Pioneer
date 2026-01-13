@@ -1727,3 +1727,297 @@ function generateSampleData() {
 //     state.data = generateSampleData();
 //     saveData();
 // }
+
+// ============================================
+// PIONEER DATA IMPORT
+// ============================================
+let pendingPioneerData = [];
+
+function initializePioneerImport() {
+    document.getElementById('parse-pioneer')?.addEventListener('click', parsePioneerData);
+    document.getElementById('import-pioneer')?.addEventListener('click', importPioneerData);
+}
+
+// Call this in initializeEventListeners or DOMContentLoaded
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(initializePioneerImport, 100);
+});
+
+function parsePioneerData() {
+    const text = document.getElementById('pioneer-paste')?.value.trim();
+    const yearOverride = document.getElementById('pioneer-year')?.value;
+    const productOverride = document.getElementById('pioneer-product-type')?.value;
+    const pricePerUnit = parseFloat(document.getElementById('pioneer-price')?.value) || 280;
+
+    if (!text) {
+        showToast('Please paste your Pioneer data first', 'warning');
+        return;
+    }
+
+    const lines = text.split('\n').filter(line => line.trim());
+    pendingPioneerData = [];
+
+    lines.forEach((line, index) => {
+        const parsed = parsePioneerLine(line, yearOverride, productOverride, pricePerUnit, index);
+        if (parsed) {
+            pendingPioneerData.push(parsed);
+        }
+    });
+
+    if (pendingPioneerData.length > 0) {
+        showPioneerPreview(pendingPioneerData, pricePerUnit);
+        document.getElementById('import-pioneer').disabled = false;
+        document.getElementById('pioneer-status').textContent = `Found ${pendingPioneerData.length} valid records`;
+        document.getElementById('pioneer-status').className = 'import-status success';
+    } else {
+        showToast('No valid data found. Check the format.', 'error');
+        document.getElementById('pioneer-status').textContent = 'No valid records found';
+        document.getElementById('pioneer-status').className = 'import-status error';
+    }
+}
+
+function parsePioneerLine(line, yearOverride, productOverride, pricePerUnit, lineIndex) {
+    // Split by tab or multiple spaces
+    const parts = line.split(/\t+|\s{2,}/).map(p => p.trim()).filter(p => p);
+
+    if (parts.length < 4) return null;
+
+    let year, growerName, productType, hybrid, quantity;
+
+    // Try to detect year from first column
+    const firstPart = parts[0];
+    if (/^20\d{2}$/.test(firstPart)) {
+        year = parseInt(firstPart);
+        parts.shift();
+    } else if (yearOverride && yearOverride !== 'auto') {
+        year = parseInt(yearOverride);
+    } else {
+        year = new Date().getFullYear();
+    }
+
+    // Look for grower name (usually contains letters and possibly numbers/special chars)
+    // Skip if it looks like a product code
+    let growerIndex = 0;
+    for (let i = 0; i < parts.length; i++) {
+        const part = parts[i];
+        // Grower names typically don't start with P followed by numbers (hybrid codes)
+        // and aren't purely numeric
+        if (!/^P\d/.test(part) && !/^\d+$/.test(part) && !/^NR\d/.test(part) &&
+            !/^(Corn|Soybean|Sorghum|Alfalfa|Herbicide|Fungicide)$/i.test(part)) {
+            growerName = part;
+            growerIndex = i;
+            break;
+        }
+    }
+
+    if (!growerName) return null;
+
+    // Detect product type
+    productType = productOverride !== 'auto' ? productOverride : null;
+
+    for (let i = 0; i < parts.length; i++) {
+        const part = parts[i].toLowerCase();
+        if (part === 'corn') {
+            productType = 'Corn Seed';
+            break;
+        } else if (part === 'soybean' || part === 'soybeans' || part === 'soy') {
+            productType = 'Soybean Seed';
+            break;
+        } else if (part === 'sorghum') {
+            productType = 'Sorghum';
+            break;
+        } else if (part === 'alfalfa') {
+            productType = 'Alfalfa';
+            break;
+        }
+    }
+
+    // Look for hybrid code (starts with P followed by digits)
+    for (const part of parts) {
+        if (/^P\d{3,4}/i.test(part)) {
+            hybrid = part.toUpperCase();
+            // If no product type detected, infer from hybrid
+            if (!productType) {
+                if (/^P[01]\d{3}/i.test(part)) {
+                    productType = 'Corn Seed'; // P0xxx, P1xxx are typically corn
+                } else if (/^P[2-9]\d{3}/i.test(part)) {
+                    productType = 'Soybean Seed'; // P2xxx+ are typically soybeans
+                }
+            }
+            break;
+        }
+    }
+
+    if (!productType) {
+        productType = 'Corn Seed'; // Default
+    }
+
+    // Find quantity - look for numbers, prefer the last reasonable number
+    // that could be a quantity (typically < 1000 bags)
+    const numbers = [];
+    for (const part of parts) {
+        const num = parseFloat(part.replace(/,/g, ''));
+        if (!isNaN(num) && num > 0 && num < 10000) {
+            numbers.push(num);
+        }
+    }
+
+    // Use the last number as quantity, or second-to-last if there are multiple
+    // (often the format is: ordered, shipped, remaining, total)
+    if (numbers.length > 0) {
+        // Try to find the "total" or last significant number
+        quantity = numbers[numbers.length - 1];
+
+        // If the last number is 0, try the one before
+        if (quantity === 0 && numbers.length > 1) {
+            quantity = numbers[numbers.length - 2];
+        }
+    } else {
+        quantity = 1; // Default to 1 if no quantity found
+    }
+
+    if (quantity <= 0) return null;
+
+    const amount = quantity * pricePerUnit;
+
+    return {
+        date: `${year}-03-15`, // Default to March 15 (planting season)
+        invoice_number: `PIO-${year}-${(lineIndex + 1).toString().padStart(4, '0')}`,
+        grower_name: cleanGrowerName(growerName),
+        product: productType,
+        hybrid: hybrid || 'Unknown',
+        quantity: quantity,
+        amount: amount
+    };
+}
+
+function cleanGrowerName(name) {
+    // Clean up grower name - remove trailing commas, normalize spacing
+    return name
+        .replace(/,+$/, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+function showPioneerPreview(data, pricePerUnit) {
+    const previewContainer = document.getElementById('pioneer-preview');
+    const table = document.getElementById('pioneer-preview-table');
+
+    // Calculate stats
+    const uniqueGrowers = new Set(data.map(d => d.grower_name)).size;
+    const totalUnits = data.reduce((sum, d) => sum + d.quantity, 0);
+    const totalValue = data.reduce((sum, d) => sum + d.amount, 0);
+
+    document.getElementById('pioneer-record-count').textContent = data.length;
+    document.getElementById('pioneer-grower-count').textContent = uniqueGrowers;
+    document.getElementById('pioneer-unit-count').textContent = totalUnits.toLocaleString();
+    document.getElementById('pioneer-value-count').textContent = formatCurrency(totalValue);
+
+    // Group by grower for preview
+    const byGrower = {};
+    data.forEach(d => {
+        if (!byGrower[d.grower_name]) {
+            byGrower[d.grower_name] = { units: 0, amount: 0, products: new Set(), year: new Date(d.date).getFullYear() };
+        }
+        byGrower[d.grower_name].units += d.quantity;
+        byGrower[d.grower_name].amount += d.amount;
+        byGrower[d.grower_name].products.add(d.product);
+    });
+
+    let html = `
+        <thead>
+            <tr>
+                <th>Grower</th>
+                <th>Year</th>
+                <th>Products</th>
+                <th>Total Units</th>
+                <th>Est. Value</th>
+            </tr>
+        </thead>
+        <tbody>
+    `;
+
+    const growerList = Object.entries(byGrower)
+        .sort((a, b) => b[1].units - a[1].units)
+        .slice(0, 20);
+
+    growerList.forEach(([grower, stats]) => {
+        html += `
+            <tr>
+                <td>${grower}</td>
+                <td>${stats.year}</td>
+                <td>${[...stats.products].join(', ')}</td>
+                <td>${stats.units.toLocaleString()}</td>
+                <td>${formatCurrency(stats.amount)}</td>
+            </tr>
+        `;
+    });
+
+    if (Object.keys(byGrower).length > 20) {
+        html += `<tr><td colspan="5" style="text-align: center; color: #7f8c8d;">... and ${Object.keys(byGrower).length - 20} more growers</td></tr>`;
+    }
+
+    html += '</tbody>';
+    table.innerHTML = html;
+    previewContainer.classList.remove('hidden');
+}
+
+function importPioneerData() {
+    if (pendingPioneerData.length === 0) {
+        showToast('No data to import', 'warning');
+        return;
+    }
+
+    // Add all records
+    pendingPioneerData.forEach(entry => addDataEntry(entry));
+
+    const count = pendingPioneerData.length;
+    const totalUnits = pendingPioneerData.reduce((sum, d) => sum + d.quantity, 0);
+
+    showToast(`Imported ${count} records (${totalUnits.toLocaleString()} units)`, 'success');
+
+    // Reset
+    pendingPioneerData = [];
+    document.getElementById('pioneer-paste').value = '';
+    document.getElementById('pioneer-preview').classList.add('hidden');
+    document.getElementById('import-pioneer').disabled = true;
+    document.getElementById('pioneer-status').textContent = '';
+
+    // Refresh dashboard
+    refreshAllCharts();
+}
+
+// ============================================
+// AGGREGATE DATA BY GROWER (for reports)
+// ============================================
+function getGrowerSummaryByYear() {
+    const summary = {};
+
+    CONFIG.YEARS.forEach(year => {
+        summary[year] = {};
+        const yearData = filterDataByYear(year);
+
+        yearData.forEach(d => {
+            if (!summary[year][d.grower_name]) {
+                summary[year][d.grower_name] = {
+                    totalUnits: 0,
+                    totalAmount: 0,
+                    products: {}
+                };
+            }
+
+            summary[year][d.grower_name].totalUnits += d.quantity;
+            summary[year][d.grower_name].totalAmount += d.amount;
+
+            if (!summary[year][d.grower_name].products[d.product]) {
+                summary[year][d.grower_name].products[d.product] = 0;
+            }
+            summary[year][d.grower_name].products[d.product] += d.quantity;
+        });
+    });
+
+    return summary;
+}
+
+// Export function for console use
+window.getGrowerSummary = getGrowerSummaryByYear;

@@ -357,6 +357,59 @@
             <!-- Data Management Tab -->
             <section id="data-tab" class="tab-content">
                 <div class="data-management">
+                    <!-- Pioneer Format Import -->
+                    <div class="data-section pioneer-import">
+                        <h3>Pioneer Sales Data Import</h3>
+                        <p class="section-desc">Paste your Pioneer sales report data directly. Supports formats with columns: Year, Grower, Product, Hybrid, Quantity fields</p>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Data Year</label>
+                                <select id="pioneer-year">
+                                    <option value="auto">Auto-detect from data</option>
+                                    <option value="2024">2024</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2026">2026</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Product Type</label>
+                                <select id="pioneer-product-type">
+                                    <option value="auto">Auto-detect</option>
+                                    <option value="Corn Seed">Corn Seed</option>
+                                    <option value="Soybean Seed">Soybean Seed</option>
+                                    <option value="Sorghum">Sorghum</option>
+                                    <option value="Alfalfa">Alfalfa</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Price per Unit ($)</label>
+                                <input type="number" id="pioneer-price" placeholder="280" value="280">
+                            </div>
+                        </div>
+                        <textarea id="pioneer-paste" class="bulk-textarea" rows="10" placeholder="Paste your Pioneer sales data here...
+
+Example format:
+2024	Anderson	Corn	P0157AM	NR58	3	3	0	3
+2024	Arrow Acres	Corn	P0339AM	NR62	5	5	0	5
+
+The importer will automatically detect columns and extract grower names, products, and quantities."></textarea>
+                        <div class="paste-actions">
+                            <button id="parse-pioneer" class="btn btn-secondary">Preview Import</button>
+                            <button id="import-pioneer" class="btn btn-primary" disabled>Import Data</button>
+                            <span id="pioneer-status" class="import-status"></span>
+                        </div>
+                        <div id="pioneer-preview" class="preview-container hidden">
+                            <h4>Import Preview</h4>
+                            <div class="preview-stats">
+                                <span><strong>Records:</strong> <span id="pioneer-record-count">0</span></span>
+                                <span><strong>Growers:</strong> <span id="pioneer-grower-count">0</span></span>
+                                <span><strong>Total Units:</strong> <span id="pioneer-unit-count">0</span></span>
+                                <span><strong>Est. Value:</strong> <span id="pioneer-value-count">$0</span></span>
+                            </div>
+                            <table id="pioneer-preview-table" class="data-table"></table>
+                        </div>
+                    </div>
+
                     <!-- CSV Upload -->
                     <div class="data-section">
                         <h3>CSV Import</h3>

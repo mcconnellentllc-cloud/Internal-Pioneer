@@ -781,6 +781,43 @@ body {
     background: var(--text-secondary);
 }
 
+/* Pioneer Import Section */
+.pioneer-import {
+    background: linear-gradient(135deg, #f8fff8 0%, #ffffff 100%);
+    border: 2px solid var(--primary-color);
+}
+
+.pioneer-import h3 {
+    color: var(--primary-color);
+}
+
+.preview-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    background: var(--bg-primary);
+    border-radius: var(--border-radius);
+}
+
+.preview-stats span {
+    font-size: 0.95rem;
+}
+
+.import-status {
+    font-size: 0.9rem;
+    margin-left: 1rem;
+}
+
+.import-status.success {
+    color: var(--success-color);
+}
+
+.import-status.error {
+    color: var(--danger-color);
+}
+
 /* Print Styles */
 @media print {
     .header-right,
