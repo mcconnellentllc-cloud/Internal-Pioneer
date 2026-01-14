@@ -957,9 +957,11 @@
 
             // Find columns
             let opCol = headers.findIndex(h => h.includes('operation') || h.includes('account') || h.includes('grower') || h.includes('customer') || h.includes('farm'));
-            let hybridCol = headers.findIndex(h => h.includes('subproduct') || h.includes('hybrid') || h.includes('variety'));
-            if (hybridCol === -1) hybridCol = headers.findIndex(h => h.includes('product') && !h.includes('line'));
-            let bagsCol = headers.findIndex(h => h.includes('delivered') || h.includes('bags') || h.includes('quantity') || h.includes('qty') || h.includes('total physical') || h.includes('regular'));
+            // For hybrid: prefer "product" column (not "product line"), avoid "subproduct"
+            let hybridCol = headers.findIndex(h => h === 'product' || (h.includes('product') && !h.includes('line') && !h.includes('sub')));
+            if (hybridCol === -1) hybridCol = headers.findIndex(h => h.includes('hybrid') || h.includes('variety'));
+            // For quantity: look for invoiced, delivered, bags, quantity, etc.
+            let bagsCol = headers.findIndex(h => h.includes('invoiced') || h.includes('delivered') || h.includes('bags') || h.includes('quantity') || h.includes('qty') || h.includes('total physical') || h.includes('regular'));
 
             debug += `Mapped: Operation=${opCol}, Hybrid=${hybridCol}, Bags=${bagsCol}\n`;
 
