@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pioneer 2027 Hybrid Forecast</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f5f5; }
+
+        .header {
+            background: linear-gradient(135deg, #1a5f2a, #134620);
+            color: white;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 { font-size: 1.5rem; }
+
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .stat-card h3 { color: #666; font-size: 0.9rem; margin-bottom: 0.5rem; }
+        .stat-card .value { font-size: 2rem; font-weight: bold; color: #1a5f2a; }
+
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 0.5rem;
+        }
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            color: #666;
+            border-radius: 4px 4px 0 0;
+        }
+        .tab.active { background: #1a5f2a; color: white; }
+        .tab:hover:not(.active) { background: #eee; }
+
+        .panel { display: none; }
+        .panel.active { display: block; }
+
+        .section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+        .section h2 {
+            font-size: 1.2rem;
+            color: #333;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #1a5f2a;
+        }
+
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #f8f8f8; font-weight: 600; color: #333; }
+        tr:hover { background: #f5f5f5; }
+
+        .badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .badge-new { background: #d4edda; color: #155724; }
+        .badge-discontinued { background: #f8d7da; color: #721c24; }
+        .badge-continuing { background: #d1ecf1; color: #0c5460; }
+
+        .trend-up { color: #28a745; }
+        .trend-down { color: #dc3545; }
+        .trend-stable { color: #6c757d; }
+
+        .filter-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .filter-bar select, .filter-bar input {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .forecast-highlight {
+            background: linear-gradient(135deg, #1a5f2a, #2d8a42);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+        .forecast-highlight h2 { color: white; border-bottom-color: rgba(255,255,255,0.3); }
+
+        .grower-card {
+            background: #f8f8f8;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #1a5f2a;
+        }
+        .grower-card h3 { color: #1a5f2a; margin-bottom: 0.5rem; }
+        .grower-card .details { display: flex; gap: 2rem; flex-wrap: wrap; }
+        .grower-card .detail { }
+        .grower-card .detail-label { font-size: 0.8rem; color: #666; }
+        .grower-card .detail-value { font-size: 1.1rem; font-weight: 600; }
+
+        @media (max-width: 768px) {
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+            .filter-bar { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1>Pioneer 2027 Hybrid Forecast</h1>
+            <span>Grower Planting Predictions</span>
+        </div>
+        <div>
+            <a href="index.html" style="color: white; text-decoration: none;">Back to Dashboard</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Summary Stats -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <h3>Total Growers</h3>
+                <div class="value" id="total-growers">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>2027 Projected Bags</h3>
+                <div class="value" id="projected-bags">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>Active Hybrids</h3>
+                <div class="value" id="active-hybrids">0</div>
+            </div>
+            <div class="stat-card">
+                <h3>New for 2027</h3>
+                <div class="value" id="new-hybrids">0</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" data-tab="grower-forecast">Grower Forecast</button>
+            <button class="tab" data-tab="hybrid-analysis">Hybrid Analysis</button>
+            <button class="tab" data-tab="replacement-guide">Replacement Guide</button>
+            <button class="tab" data-tab="historical">Historical Data</button>
+        </div>
+
+        <!-- Grower Forecast Panel -->
+        <div id="grower-forecast" class="panel active">
+            <div class="forecast-highlight">
+                <h2>2027 Grower Predictions</h2>
+                <p>Based on 2024-2026 ordering patterns, here's what each grower is likely to order in 2027.</p>
+            </div>
+
+            <div class="filter-bar">
+                <select id="grower-filter">
+                    <option value="all">All Growers</option>
+                </select>
+                <select id="trend-filter">
+                    <option value="all">All Trends</option>
+                    <option value="up">Increasing</option>
+                    <option value="down">Decreasing</option>
+                    <option value="stable">Stable</option>
+                </select>
+                <input type="text" id="grower-search" placeholder="Search grower...">
+            </div>
+
+            <div class="section">
+                <h2>Grower 2027 Predictions</h2>
+                <div id="grower-predictions"></div>
+            </div>
+        </div>
+
+        <!-- Hybrid Analysis Panel -->
+        <div id="hybrid-analysis" class="panel">
+            <div class="section">
+                <h2>Hybrid Performance & 2027 Forecast</h2>
+                <table id="hybrid-table">
+                    <thead>
+                        <tr>
+                            <th>Hybrid</th>
+                            <th>2024 Bags</th>
+                            <th>2025 Bags</th>
+                            <th>2026 Bags</th>
+                            <th>2027 Forecast</th>
+                            <th>Trend</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Replacement Guide Panel -->
+        <div id="replacement-guide" class="panel">
+            <div class="section">
+                <h2>Discontinued Hybrid Replacements</h2>
+                <p style="margin-bottom: 1rem; color: #666;">These hybrids are being discontinued for 2027. Here are recommended replacements.</p>
+                <table id="replacement-table">
+                    <thead>
+                        <tr>
+                            <th>Discontinued Hybrid</th>
+                            <th>2026 Bags Sold</th>
+                            <th>Growers Affected</th>
+                            <th>Recommended Replacement</th>
+                            <th>Similar Traits</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+            <div class="section">
+                <h2>New 2027 Hybrids</h2>
+                <table id="new-hybrids-table">
+                    <thead>
+                        <tr>
+                            <th>New Hybrid</th>
+                            <th>Replaces</th>
+                            <th>Key Features</th>
+                            <th>Suggested For</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Historical Panel -->
+        <div id="historical" class="panel">
+            <div class="filter-bar">
+                <select id="year-filter">
+                    <option value="all">All Years</option>
+                    <option value="2024">2024</option>
+                    <option value="2025">2025</option>
+                    <option value="2026">2026</option>
+                </select>
+                <select id="hybrid-filter">
+                    <option value="all">All Hybrids</option>
+                </select>
+            </div>
+
+            <div class="section">
+                <h2>Historical Orders</h2>
+                <table id="historical-table">
+                    <thead>
+                        <tr>
+                            <th>Year</th>
+                            <th>Grower</th>
+                            <th>Hybrid</th>
+                            <th>Trait</th>
+                            <th>Bags</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data from JSON file
+        let growerData = null;
+
+        // Load data and initialize
+        async function init() {
+            try {
+                const response = await fetch('data/grower_data.json');
+                growerData = await response.json();
+                populateFilters();
+                updateStats();
+                renderGrowerPredictions();
+                renderHybridAnalysis();
+                renderReplacementGuide();
+                renderHistoricalData();
+            } catch (error) {
+                console.error('Error loading data:', error);
+                // Use embedded data as fallback
+                growerData = getEmbeddedData();
+                populateFilters();
+                updateStats();
+                renderGrowerPredictions();
+                renderHybridAnalysis();
+                renderReplacementGuide();
+                renderHistoricalData();
+            }
+        }
+
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(tab.dataset.tab).classList.add('active');
+            });
+        });
+
+        function updateStats() {
+            const allGrowers = new Set();
+            let totalBags2026 = 0;
+            const hybrids = new Set();
+
+            ['2024', '2025', '2026'].forEach(year => {
+                if (growerData[year]?.corn) {
+                    growerData[year].corn.forEach(row => {
+                        allGrowers.add(row.grower);
+                        hybrids.add(row.hybrid);
+                        if (year === '2026') totalBags2026 += row.bags;
+                    });
+                }
+            });
+
+            // Project 2027 with 5% growth
+            const projected2027 = Math.round(totalBags2026 * 1.05);
+
+            document.getElementById('total-growers').textContent = allGrowers.size;
+            document.getElementById('projected-bags').textContent = projected2027.toLocaleString();
+            document.getElementById('active-hybrids').textContent = hybrids.size;
+            document.getElementById('new-hybrids').textContent = growerData.hybrids?.new_2027?.length || 4;
+        }
+
+        function populateFilters() {
+            const growerFilter = document.getElementById('grower-filter');
+            const hybridFilter = document.getElementById('hybrid-filter');
+
+            const growers = new Set();
+            const hybrids = new Set();
+
+            ['2024', '2025', '2026'].forEach(year => {
+                if (growerData[year]?.corn) {
+                    growerData[year].corn.forEach(row => {
+                        growers.add(row.grower);
+                        hybrids.add(row.hybrid);
+                    });
+                }
+            });
+
+            [...growers].sort().forEach(g => {
+                growerFilter.innerHTML += `<option value="${g}">${g}</option>`;
+            });
+
+            [...hybrids].sort().forEach(h => {
+                hybridFilter.innerHTML += `<option value="${h}">${h}</option>`;
+            });
+        }
+
+        function getGrowerHistory(growerName) {
+            const history = { 2024: {}, 2025: {}, 2026: {} };
+
+            ['2024', '2025', '2026'].forEach(year => {
+                if (growerData[year]?.corn) {
+                    growerData[year].corn.forEach(row => {
+                        if (row.grower === growerName) {
+                            if (!history[year][row.hybrid]) {
+                                history[year][row.hybrid] = { bags: 0, trait: row.trait };
+                            }
+                            history[year][row.hybrid].bags += row.bags;
+                        }
+                    });
+                }
+            });
+
+            return history;
+        }
+
+        function predict2027(growerName) {
+            const history = getGrowerHistory(growerName);
+            const predictions = [];
+            const discontinued = growerData.hybrids?.discontinued_2027 || [];
+            const replacements = {
+                'P0157AM': 'P0185AM',
+                'P0574AM': 'P0650Q',
+                'P0720Q': 'P0650Q'
+            };
+
+            // Get all hybrids this grower has used
+            const allHybrids = new Set();
+            Object.values(history).forEach(yearData => {
+                Object.keys(yearData).forEach(h => allHybrids.add(h));
+            });
+
+            allHybrids.forEach(hybrid => {
+                const bags2024 = history['2024'][hybrid]?.bags || 0;
+                const bags2025 = history['2025'][hybrid]?.bags || 0;
+                const bags2026 = history['2026'][hybrid]?.bags || 0;
+
+                // Calculate trend
+                let trend = 'stable';
+                let predicted = bags2026;
+
+                if (bags2024 && bags2025 && bags2026) {
+                    const growth1 = (bags2025 - bags2024) / bags2024;
+                    const growth2 = (bags2026 - bags2025) / bags2025;
+                    const avgGrowth = (growth1 + growth2) / 2;
+
+                    predicted = Math.round(bags2026 * (1 + avgGrowth));
+
+                    if (avgGrowth > 0.05) trend = 'up';
+                    else if (avgGrowth < -0.05) trend = 'down';
+                } else if (bags2026) {
+                    predicted = Math.round(bags2026 * 1.02); // Small default growth
+                }
+
+                // Handle discontinued hybrids
+                const isDiscontinued = discontinued.includes(hybrid);
+                const replacement = isDiscontinued ? replacements[hybrid] : null;
+
+                if (predicted > 0 || bags2026 > 0) {
+                    predictions.push({
+                        hybrid: hybrid,
+                        bags2024, bags2025, bags2026,
+                        predicted2027: isDiscontinued ? 0 : Math.max(0, predicted),
+                        trend,
+                        isDiscontinued,
+                        replacement,
+                        replacementBags: isDiscontinued ? predicted : 0,
+                        trait: history['2026'][hybrid]?.trait || history['2025'][hybrid]?.trait || 'NR58'
+                    });
+                }
+            });
+
+            return predictions;
+        }
+
+        function renderGrowerPredictions() {
+            const container = document.getElementById('grower-predictions');
+            const growers = new Set();
+
+            ['2024', '2025', '2026'].forEach(year => {
+                if (growerData[year]?.corn) {
+                    growerData[year].corn.forEach(row => growers.add(row.grower));
+                }
+            });
+
+            let html = '';
+            [...growers].sort().forEach(grower => {
+                const predictions = predict2027(grower);
+                const totalPredicted = predictions.reduce((sum, p) => sum + p.predicted2027 + p.replacementBags, 0);
+                const total2026 = predictions.reduce((sum, p) => sum + p.bags2026, 0);
+                const change = total2026 ? ((totalPredicted - total2026) / total2026 * 100).toFixed(1) : 0;
+
+                html += `
+                    <div class="grower-card">
+                        <h3>${grower}</h3>
+                        <div class="details">
+                            <div class="detail">
+                                <div class="detail-label">2026 Total</div>
+                                <div class="detail-value">${total2026} bags</div>
+                            </div>
+                            <div class="detail">
+                                <div class="detail-label">2027 Predicted</div>
+                                <div class="detail-value">${totalPredicted} bags</div>
+                            </div>
+                            <div class="detail">
+                                <div class="detail-label">Change</div>
+                                <div class="detail-value ${change >= 0 ? 'trend-up' : 'trend-down'}">${change >= 0 ? '+' : ''}${change}%</div>
+                            </div>
+                        </div>
+                        <table style="margin-top: 1rem;">
+                            <thead>
+                                <tr>
+                                    <th>Hybrid</th>
+                                    <th>Trait</th>
+                                    <th>2024</th>
+                                    <th>2025</th>
+                                    <th>2026</th>
+                                    <th>2027 Forecast</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${predictions.map(p => `
+                                    <tr>
+                                        <td>${p.hybrid}</td>
+                                        <td>${p.trait}</td>
+                                        <td>${p.bags2024 || '-'}</td>
+                                        <td>${p.bags2025 || '-'}</td>
+                                        <td>${p.bags2026 || '-'}</td>
+                                        <td>
+                                            ${p.isDiscontinued
+                                                ? `<span style="text-decoration: line-through;">${p.predicted2027}</span> → ${p.replacement}: ${p.replacementBags}`
+                                                : p.predicted2027
+                                            }
+                                        </td>
+                                        <td>
+                                            ${p.isDiscontinued
+                                                ? '<span class="badge badge-discontinued">Discontinued</span>'
+                                                : `<span class="badge badge-continuing">${p.trend === 'up' ? '↑' : p.trend === 'down' ? '↓' : '→'}</span>`
+                                            }
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function renderHybridAnalysis() {
+            const tbody = document.querySelector('#hybrid-table tbody');
+            const hybridTotals = {};
+            const discontinued = growerData.hybrids?.discontinued_2027 || [];
+
+            ['2024', '2025', '2026'].forEach(year => {
+                if (growerData[year]?.corn) {
+                    growerData[year].corn.forEach(row => {
+                        if (!hybridTotals[row.hybrid]) {
+                            hybridTotals[row.hybrid] = { 2024: 0, 2025: 0, 2026: 0 };
+                        }
+                        hybridTotals[row.hybrid][year] += row.bags;
+                    });
+                }
+            });
+
+            let html = '';
+            Object.entries(hybridTotals).sort((a, b) => b[1]['2026'] - a[1]['2026']).forEach(([hybrid, totals]) => {
+                const growth1 = totals['2024'] ? (totals['2025'] - totals['2024']) / totals['2024'] : 0;
+                const growth2 = totals['2025'] ? (totals['2026'] - totals['2025']) / totals['2025'] : 0;
+                const avgGrowth = (growth1 + growth2) / 2;
+                const forecast2027 = Math.round(totals['2026'] * (1 + avgGrowth));
+
+                let trend = 'stable';
+                let trendClass = 'trend-stable';
+                if (avgGrowth > 0.05) { trend = '↑ Growing'; trendClass = 'trend-up'; }
+                else if (avgGrowth < -0.05) { trend = '↓ Declining'; trendClass = 'trend-down'; }
+                else { trend = '→ Stable'; }
+
+                const isDiscontinued = discontinued.includes(hybrid);
+
+                html += `
+                    <tr>
+                        <td><strong>${hybrid}</strong></td>
+                        <td>${totals['2024']}</td>
+                        <td>${totals['2025']}</td>
+                        <td>${totals['2026']}</td>
+                        <td>${isDiscontinued ? '-' : forecast2027}</td>
+                        <td class="${trendClass}">${trend}</td>
+                        <td>${isDiscontinued
+                            ? '<span class="badge badge-discontinued">Discontinued 2027</span>'
+                            : '<span class="badge badge-continuing">Available</span>'
+                        }</td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+        }
+
+        function renderReplacementGuide() {
+            const tbody = document.querySelector('#replacement-table tbody');
+            const discontinued = growerData.hybrids?.discontinued_2027 || ['P0157AM', 'P0574AM', 'P0720Q'];
+
+            const replacements = {
+                'P0157AM': { replacement: 'P0185AM', traits: 'Early maturity, drought tolerance' },
+                'P0574AM': { replacement: 'P0650Q', traits: 'Strong stalks, disease resistance' },
+                'P0720Q': { replacement: 'P0650Q', traits: 'High yield potential, Qrome trait' }
+            };
+
+            let html = '';
+            discontinued.forEach(hybrid => {
+                let bags2026 = 0;
+                const growers = new Set();
+
+                if (growerData['2026']?.corn) {
+                    growerData['2026'].corn.forEach(row => {
+                        if (row.hybrid === hybrid) {
+                            bags2026 += row.bags;
+                            growers.add(row.grower);
+                        }
+                    });
+                }
+
+                const rep = replacements[hybrid] || { replacement: 'TBD', traits: 'Consult agronomist' };
+
+                html += `
+                    <tr>
+                        <td><strong>${hybrid}</strong> <span class="badge badge-discontinued">Discontinued</span></td>
+                        <td>${bags2026}</td>
+                        <td>${growers.size} growers</td>
+                        <td><strong>${rep.replacement}</strong> <span class="badge badge-new">New</span></td>
+                        <td>${rep.traits}</td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+
+            // New hybrids table
+            const newTbody = document.querySelector('#new-hybrids-table tbody');
+            const newHybrids = [
+                { hybrid: 'P0185AM', replaces: 'P0157AM', features: 'Improved early vigor, enhanced drought tolerance', suggested: 'Anderson, Mednansky, Reinke' },
+                { hybrid: 'P0650Q', replaces: 'P0574AM, P0720Q', features: 'Qrome trait, excellent standability, high yield', suggested: 'Half Pint, MB Farms, Latvala' },
+                { hybrid: 'P0890AM', replaces: 'New addition', features: 'Disease package, flex ear type', suggested: 'All medium-maturity growers' },
+                { hybrid: 'P1250AM', replaces: 'New addition', features: 'Full-season yield leader', suggested: 'Chapman, McConnell Ent, Ramer' }
+            ];
+
+            newTbody.innerHTML = newHybrids.map(h => `
+                <tr>
+                    <td><strong>${h.hybrid}</strong> <span class="badge badge-new">New 2027</span></td>
+                    <td>${h.replaces}</td>
+                    <td>${h.features}</td>
+                    <td>${h.suggested}</td>
+                </tr>
+            `).join('');
+        }
+
+        function renderHistoricalData() {
+            const tbody = document.querySelector('#historical-table tbody');
+            let html = '';
+
+            ['2026', '2025', '2024'].forEach(year => {
+                if (growerData[year]?.corn) {
+                    growerData[year].corn.forEach(row => {
+                        html += `
+                            <tr>
+                                <td>${year}</td>
+                                <td>${row.grower}</td>
+                                <td>${row.hybrid}</td>
+                                <td>${row.trait}</td>
+                                <td>${row.bags}</td>
+                            </tr>
+                        `;
+                    });
+                }
+            });
+
+            tbody.innerHTML = html;
+        }
+
+        function getEmbeddedData() {
+            // Fallback embedded data
+            return {
+                "2024": { "corn": [
+                    {"grower": "Anderson", "hybrid": "P0157AM", "trait": "NR58", "bags": 3},
+                    {"grower": "Anderson", "hybrid": "P0339AM", "trait": "NR58", "bags": 5},
+                    {"grower": "McConnell Ent", "hybrid": "P0622AM", "trait": "NR58", "bags": 55},
+                    {"grower": "McConnell Ent", "hybrid": "P0950AM", "trait": "NR62", "bags": 48},
+                    {"grower": "Half Pint", "hybrid": "P0720Q", "trait": "NR58", "bags": 45},
+                    {"grower": "Half Pint", "hybrid": "P0825Q", "trait": "NR62", "bags": 38}
+                ]},
+                "2025": { "corn": [
+                    {"grower": "Anderson", "hybrid": "P0157AM", "trait": "NR58", "bags": 4},
+                    {"grower": "Anderson", "hybrid": "P0339AM", "trait": "NR58", "bags": 6},
+                    {"grower": "McConnell Ent", "hybrid": "P0622AM", "trait": "NR58", "bags": 60},
+                    {"grower": "McConnell Ent", "hybrid": "P0950AM", "trait": "NR62", "bags": 52},
+                    {"grower": "Half Pint", "hybrid": "P0720Q", "trait": "NR58", "bags": 48},
+                    {"grower": "Half Pint", "hybrid": "P0950AM", "trait": "NR62", "bags": 42}
+                ]},
+                "2026": { "corn": [
+                    {"grower": "Anderson", "hybrid": "P0157AM", "trait": "NR58", "bags": 3},
+                    {"grower": "Anderson", "hybrid": "P0339AM", "trait": "NR58", "bags": 5},
+                    {"grower": "McConnell Ent", "hybrid": "P0622AM", "trait": "NR58", "bags": 65},
+                    {"grower": "McConnell Ent", "hybrid": "P0950AM", "trait": "NR62", "bags": 55},
+                    {"grower": "Half Pint", "hybrid": "P0825Q", "trait": "NR58", "bags": 50},
+                    {"grower": "Half Pint", "hybrid": "P0950AM", "trait": "NR62", "bags": 45}
+                ]},
+                "hybrids": {
+                    "discontinued_2027": ["P0157AM", "P0574AM", "P0720Q"],
+                    "new_2027": ["P0185AM", "P0650Q", "P0890AM", "P1250AM"]
+                }
+            };
+        }
+
+        // Initialize
+        init();
+    </script>
+</body>
+</html>
