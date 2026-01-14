@@ -7,7 +7,6 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', sans-serif; background: #f5f5f5; }
-
         .header {
             background: linear-gradient(135deg, #1a5f2a, #134620);
             color: white;
@@ -17,8 +16,6 @@
             align-items: center;
         }
         .header h1 { font-size: 1.4rem; }
-        .header-buttons { display: flex; gap: 0.5rem; }
-
         .btn {
             padding: 0.5rem 1rem;
             border: none;
@@ -29,9 +26,7 @@
         .btn-primary { background: white; color: #1a5f2a; font-weight: 600; }
         .btn-secondary { background: rgba(255,255,255,0.2); color: white; }
         .btn:hover { opacity: 0.9; }
-
         .container { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
-
         .tabs {
             display: flex;
             gap: 0;
@@ -46,14 +41,9 @@
             font-size: 0.9rem;
             font-weight: 500;
         }
-        .tab.active {
-            background: #1a5f2a;
-            color: white;
-        }
-
+        .tab.active { background: #1a5f2a; color: white; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-
         .section {
             background: white;
             padding: 1.5rem;
@@ -68,7 +58,6 @@
             padding-bottom: 0.5rem;
             border-bottom: 2px solid #e8f5e9;
         }
-
         .summary-cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -85,108 +74,21 @@
         .summary-card .label { font-size: 0.8rem; opacity: 0.9; margin-bottom: 0.25rem; }
         .summary-card .value { font-size: 2rem; font-weight: bold; }
         .summary-card .sub { font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem; }
-
         table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
         th, td { padding: 0.6rem 0.75rem; text-align: left; border-bottom: 1px solid #eee; }
         th { background: #f8f8f8; font-weight: 600; color: #333; position: sticky; top: 0; }
         tr:hover { background: #f9f9f9; }
         .text-right { text-align: right; }
         .text-center { text-align: center; }
-
-        .grower-row { background: #f0f7f0; font-weight: 600; }
-        .grower-row td { border-top: 2px solid #1a5f2a; }
-
         .prediction { color: #1a5f2a; font-weight: 600; }
         .change-up { color: #28a745; }
         .change-down { color: #dc3545; }
-
-        /* Import Modal */
-        .modal {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .modal-content {
-            background: white;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 700px;
-            max-height: 85vh;
+        .data-table-container {
+            max-height: 500px;
             overflow-y: auto;
-        }
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid #eee;
-            background: #f8f8f8;
-        }
-        .modal-header h2 { font-size: 1.1rem; color: #1a5f2a; }
-        .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #666; }
-        .modal-body { padding: 1.5rem; }
-
-        .form-group { margin-bottom: 1rem; }
-        .form-group label { display: block; margin-bottom: 0.25rem; font-weight: 600; font-size: 0.85rem; }
-        .form-group select, .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #ddd;
+            border: 1px solid #eee;
             border-radius: 4px;
-            font-size: 0.9rem;
         }
-        .form-group textarea { font-family: monospace; font-size: 0.8rem; }
-
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-
-        .file-drop {
-            border: 2px dashed #1a5f2a;
-            border-radius: 8px;
-            padding: 2rem;
-            text-align: center;
-            background: #f8fff8;
-            cursor: pointer;
-        }
-        .file-drop:hover { background: #e8f5e9; }
-        .file-drop p { margin: 0.25rem 0; color: #666; font-size: 0.9rem; }
-
-        .status { padding: 0.75rem; border-radius: 4px; margin-top: 1rem; font-size: 0.85rem; white-space: pre-wrap; }
-        .status.success { background: #d4edda; color: #155724; }
-        .status.error { background: #f8d7da; color: #721c24; }
-        .status.info { background: #d1ecf1; color: #0c5460; }
-
-        .hybrid-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-        }
-        .hybrid-tag {
-            background: #e8f5e9;
-            color: #1a5f2a;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .hybrid-tag .remove {
-            background: none;
-            border: none;
-            color: #dc3545;
-            cursor: pointer;
-            font-size: 1rem;
-            line-height: 1;
-        }
-        .hybrid-tag.discontinued { background: #f8d7da; color: #721c24; text-decoration: line-through; }
-        .hybrid-tag.new { background: #d4edda; color: #155724; border: 2px solid #28a745; }
-
         .filter-row {
             display: flex;
             gap: 1rem;
@@ -199,29 +101,84 @@
             border-radius: 4px;
             font-size: 0.85rem;
         }
-
-        .data-table-container {
-            max-height: 500px;
-            overflow-y: auto;
-            border: 1px solid #eee;
+        /* 2027 New Hybrids Section */
+        .hybrid-card {
+            background: white;
+            border: 2px solid #1a5f2a;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .hybrid-card h3 {
+            color: #1a5f2a;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .hybrid-card .crm-badge {
+            background: #007bff;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        .hybrid-card .replaces {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        .hybrid-specs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .spec-item {
+            background: #f8f8f8;
+            padding: 0.75rem;
             border-radius: 4px;
         }
+        .spec-item .label { font-size: 0.75rem; color: #666; }
+        .spec-item .value { font-size: 1rem; font-weight: 600; color: #1a5f2a; }
+        .hybrid-notes {
+            margin-top: 1rem;
+        }
+        .hybrid-notes label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        .hybrid-notes textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            min-height: 80px;
+            resize: vertical;
+        }
+        .key-notes {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .key-notes h4 { color: #856404; margin-bottom: 0.5rem; }
+        .key-notes ul { margin-left: 1.5rem; color: #856404; }
     </style>
 </head>
 <body>
     <div class="header">
-        <div>
-            <h1>Pioneer 2027 Hybrid Quantity Forecast</h1>
-        </div>
-        <div class="header-buttons">
-            <button class="btn btn-secondary" onclick="showImportModal()">Import Data</button>
-            <button class="btn btn-secondary" onclick="showHybridModal()">Manage 2027 Hybrids</button>
+        <h1>Pioneer 2027 Hybrid Quantity Forecast</h1>
+        <div style="display:flex; gap:0.5rem;">
             <button class="btn btn-primary" onclick="exportData()">Export Forecast</button>
         </div>
     </div>
-
     <div class="container">
-        <!-- Summary Cards -->
         <div class="summary-cards">
             <div class="summary-card">
                 <div class="label">2024 Total</div>
@@ -244,15 +201,12 @@
                 <div class="sub">bags</div>
             </div>
         </div>
-
-        <!-- Tabs -->
         <div class="tabs">
             <button class="tab active" onclick="switchTab('by-operation')">By Operation</button>
             <button class="tab" onclick="switchTab('by-hybrid')">By Hybrid</button>
             <button class="tab" onclick="switchTab('detail')">Detail View</button>
+            <button class="tab" onclick="switchTab('new-hybrids')">2027 New Hybrids</button>
         </div>
-
-        <!-- By Operation Tab -->
         <div id="by-operation" class="tab-content active">
             <div class="section">
                 <h2>Quantity by Operation (Grower)</h2>
@@ -276,19 +230,11 @@
                 </div>
             </div>
         </div>
-
-        <!-- By Hybrid Tab -->
         <div id="by-hybrid" class="tab-content">
             <div class="section">
-                <h2>Quantity by Hybrid (Subproduct)</h2>
+                <h2>Quantity by Hybrid</h2>
                 <div class="filter-row">
                     <input type="text" id="filter-hybrid" placeholder="Filter hybrids..." oninput="renderByHybrid()">
-                    <select id="filter-hybrid-status" onchange="renderByHybrid()">
-                        <option value="all">All Hybrids</option>
-                        <option value="active">Active Only</option>
-                        <option value="discontinued">Discontinued</option>
-                        <option value="new">New for 2027</option>
-                    </select>
                 </div>
                 <div class="data-table-container">
                     <table>
@@ -300,7 +246,6 @@
                                 <th class="text-right">2026</th>
                                 <th class="text-right prediction">2027 Predicted</th>
                                 <th class="text-right">% of Total</th>
-                                <th class="text-center">Status</th>
                             </tr>
                         </thead>
                         <tbody id="hybrid-table"></tbody>
@@ -308,19 +253,11 @@
                 </div>
             </div>
         </div>
-
-        <!-- Detail View Tab -->
         <div id="detail" class="tab-content">
             <div class="section">
                 <h2>Detail: Quantity by Operation + Hybrid</h2>
                 <div class="filter-row">
                     <input type="text" id="filter-detail" placeholder="Filter..." oninput="renderDetail()">
-                    <select id="filter-detail-year" onchange="renderDetail()">
-                        <option value="all">All Years</option>
-                        <option value="2024">2024</option>
-                        <option value="2025">2025</option>
-                        <option value="2026">2026</option>
-                    </select>
                 </div>
                 <div class="data-table-container">
                     <table>
@@ -339,302 +276,928 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Import Modal -->
-    <div id="import-modal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Import Data</h2>
-                <button class="close-btn" onclick="hideImportModal()">&times;</button>
+        <div id="new-hybrids" class="tab-content">
+            <div class="key-notes">
+                <h4>2027 Planning Notes</h4>
+                <ul>
+                    <li><strong>RC Invoicing:</strong> 2027 invoicing 13% into RC invoicing</li>
+                    <li><strong>P05081:</strong> Will be 90% in PCUE and 10% of volume in AML</li>
+                </ul>
             </div>
-            <div class="modal-body">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Year:</label>
-                        <select id="import-year">
-                            <option value="2024">2024</option>
-                            <option value="2025">2025</option>
-                            <option value="2026" selected>2026</option>
-                        </select>
+            <div class="hybrid-card">
+                <h3>P96567V / P96567PCE <span class="crm-badge">96 CRM</span></h3>
+                <div class="replaces">Replaces: P95819V</div>
+                <div class="hybrid-specs">
+                    <div class="spec-item">
+                        <div class="label">Key Strength</div>
+                        <div class="value">Drought Tolerance</div>
                     </div>
-                    <div class="form-group">
-                        <label>Data Format:</label>
-                        <select id="import-format">
-                            <option value="auto">Auto-detect</option>
-                            <option value="powerbi">Power BI Export</option>
-                            <option value="simple">Simple (Grower, Hybrid, Bags)</option>
-                        </select>
+                    <div class="spec-item">
+                        <div class="label">Maturity</div>
+                        <div class="value">96 Days</div>
                     </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Upload File or Paste Data:</label>
-                    <div class="file-drop" id="drop-zone" onclick="document.getElementById('file-input').click()">
-                        <input type="file" id="file-input" accept=".csv,.txt,.tsv" onchange="handleFile(event)" style="display:none;">
-                        <p><strong>Click to upload or drag file here</strong></p>
-                        <p>CSV, TXT, TSV accepted</p>
+                    <div class="spec-item">
+                        <div class="label">Technology</div>
+                        <div class="value">V/PCE Options</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Best Fit</div>
+                        <div class="value">Dryland / Limited Irrigation</div>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <label>Or paste data directly:</label>
-                    <textarea id="paste-data" rows="8" placeholder="Paste your data here..."></textarea>
+                <div class="hybrid-notes">
+                    <label>My Notes:</label>
+                    <textarea id="notes-P96567" onchange="saveNotes('P96567', this.value)" placeholder="Add your notes about P96567V/PCE here..."></textarea>
                 </div>
-
-                <div class="form-group">
-                    <button class="btn btn-primary" onclick="importData()">Import Data</button>
-                    <button class="btn btn-secondary" onclick="viewCurrentData()">View Current Data</button>
-                    <button class="btn btn-secondary" onclick="clearData()">Clear All Data</button>
+            </div>
+            <div class="hybrid-card">
+                <h3>P99491V / P99491PCE <span class="crm-badge">99 CRM</span></h3>
+                <div class="replaces">Replaces: P9955V (corn-on-corn), P00549PCE (rotated acres)</div>
+                <div class="hybrid-specs">
+                    <div class="spec-item">
+                        <div class="label">Hi-Yield BLUP</div>
+                        <div class="value">~242 bu/a</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Stress BLUP</div>
+                        <div class="value">~208 bu/a</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Maturity</div>
+                        <div class="value">99 Days</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Performance</div>
+                        <div class="value">Top Quadrant (Stress + Yield)</div>
+                    </div>
                 </div>
-
-                <div id="import-status" class="status" style="display:none;"></div>
+                <p style="margin:1rem 0; color:#666; font-size:0.9rem;">
+                    <strong>vs Competition:</strong> Outperforms P9845PWE, P00549YHRCE, P03357PWUE, P0075YHRCR in Stress x Hi-Yield chart<br>
+                    <strong>vs P00549YHRCE:</strong> +15.0 bu/a, 82.4% wins (17 locations, p=0.02)
+                </p>
+                <div class="hybrid-notes">
+                    <label>My Notes:</label>
+                    <textarea id="notes-P99491" onchange="saveNotes('P99491', this.value)" placeholder="Add your notes about P99491V/PCE here..."></textarea>
+                </div>
+            </div>
+            <div class="hybrid-card">
+                <h3>P03802PCE <span class="crm-badge">103 CRM</span></h3>
+                <div class="replaces">Replaces: P03951PCE (under irrigation), P0487PCE (better dryland); Companion to P03357PCUE</div>
+                <div class="hybrid-specs">
+                    <div class="spec-item">
+                        <div class="label">Hi-Yield BLUP</div>
+                        <div class="value">~244 bu/a (Top)</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Plant Height</div>
+                        <div class="value">Taller Plant (5)</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Test Weight</div>
+                        <div class="value">Below Avg (4)</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Drought</div>
+                        <div class="value">7</div>
+                    </div>
+                </div>
+                <p style="margin:1rem 0; color:#666; font-size:0.9rem;">
+                    <strong>Key Strengths:</strong> Top-end yield on better dryland to high-yield irrigated, attractive relaxed canopy that shades rows well, strong roots, decent ear flex - nice chunky ears<br>
+                    <strong>Considerations:</strong> Below avg test weight, below avg head smut tolerance (avoid fields with smut history), will tiller in low pop<br>
+                    <strong>vs P03357PWUE:</strong> +4.3 bu/a, 68.8% wins (32 locations)
+                </p>
+                <div class="hybrid-notes">
+                    <label>My Notes:</label>
+                    <textarea id="notes-P03802" onchange="saveNotes('P03802', this.value)" placeholder="Your notes: Attractive plant, major player in good dryland to high yield. Goes over sand hills - take it to dryland to compete."></textarea>
+                </div>
+            </div>
+            <div class="hybrid-card">
+                <h3>P04651V <span class="crm-badge">104 CRM</span> <span style="background:#007bff;color:white;padding:0.25rem 0.5rem;border-radius:4px;font-size:0.7rem;margin-left:0.5rem;">AquaMax</span></h3>
+                <div class="replaces">Replaces: P0075Q, P0487Q, P0622Q; Companion to P03357PCUE, P03115V</div>
+                <div class="hybrid-specs">
+                    <div class="spec-item">
+                        <div class="label">Drought Rating</div>
+                        <div class="value" style="color:#28a745;">9 (Excellent)</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Best Environment</div>
+                        <div class="value">220-250 bu/a</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Staygreen</div>
+                        <div class="value">7 (Good)</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Head Smut</div>
+                        <div class="value">2 (Avoid history)</div>
+                    </div>
+                </div>
+                <p style="margin:1rem 0; color:#666; font-size:0.9rem;">
+                    <strong>Key Strengths:</strong> AquaMax Vorceed - top-notch drought tolerance, solid yield potential, durability and stability for tough to moderate acres, excellent drought observations in 2025<br>
+                    <strong>Positioning:</strong> Corn-on-corn dryland to full irrigation - shines in moderate acre down to dryland<br>
+                    <strong>Considerations:</strong> Tends to produce longer silks, below avg head smut tolerance, slightly below avg stress emergence
+                </p>
+                <div class="hybrid-notes">
+                    <label>My Notes:</label>
+                    <textarea id="notes-P04651" onchange="saveNotes('P04651', this.value)" placeholder="Your notes: AquaMax product. Will shine in moderate acre down to dryland. Really at home at 220-250 yield environment."></textarea>
+                </div>
+            </div>
+            <div class="hybrid-card">
+                <h3>P08215PCUE <span class="crm-badge">108 CRM</span> <span style="background:#007bff;color:white;padding:0.25rem 0.5rem;border-radius:4px;font-size:0.7rem;margin-left:0.5rem;">AquaMax</span></h3>
+                <div class="replaces">Targeted Replacement: P0995AM; Dryland companion: P05081PCUE, P11259PCE; Durability companion: P09076VPCE, P10625PCUE</div>
+                <div class="hybrid-specs">
+                    <div class="spec-item">
+                        <div class="label">Drought Rating</div>
+                        <div class="value" style="color:#28a745;">9 (Excellent)</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Stress BLUP</div>
+                        <div class="value" style="color:#28a745;">~168 bu/a (Top tier)</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Hi-Yield BLUP</div>
+                        <div class="value">~241 bu/a</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Test Weight</div>
+                        <div class="value">7 (Good)</div>
+                    </div>
+                </div>
+                <p style="margin:1rem 0; color:#666; font-size:0.9rem;">
+                    <strong>Key Strengths:</strong> AquaMax with excellent drought tolerance (9), good stability under stressful conditions, solid test weight and grain quality, PCUE brings western bean cutworm + corn earworm protection<br>
+                    <strong>Positioning:</strong> SUPER TOUGH PRODUCT - put in toughest plots, use for durability acres. Dryland to full irrigation. (If you want high yield, use P09076V instead)<br>
+                    <strong>Considerations:</strong> Tops will break out but lower stalk quality is really good late into fall. Tends to purple early in colder conditions, moderate tiller in low pop<br>
+                    <strong>Technology:</strong> PCUE, LL, RR2, Enlist, FOP
+                </p>
+                <div class="hybrid-notes">
+                    <label>My Notes:</label>
+                    <textarea id="notes-P08215" onchange="saveNotes('P08215', this.value)" placeholder="Your notes: Super tough product - goes into toughest plots, use for durability acres."></textarea>
+                </div>
+            </div>
+            <div class="hybrid-card" style="border-color:#ffc107;">
+                <h3>P10705V <span class="crm-badge">110 CRM</span> <span style="background:#ffc107;color:#000;padding:0.25rem 0.5rem;border-radius:4px;font-size:0.7rem;margin-left:0.5rem;">LIMITED LAUNCH</span></h3>
+                <div class="replaces">Triple companion TO P10300PCE; Companions: P10625V, P12517V (<strong>P12517V LOVES OUR AREA</strong> - major player, +10 bu/a over P10705V)</div>
+                <div class="hybrid-specs">
+                    <div class="spec-item">
+                        <div class="label">Positioning</div>
+                        <div class="value">Full Irrigation</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Yield Potential</div>
+                        <div class="value" style="color:#28a745;">Very High</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Drought</div>
+                        <div class="value">7</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Test Weight</div>
+                        <div class="value">5</div>
+                    </div>
+                </div>
+                <p style="margin:1rem 0; color:#666; font-size:0.9rem;">
+                    <strong>Key Strengths:</strong> 110 CRM Vorceed - top-end performance for irrigated acre, very high yield potential for well-managed acres, decent ear flex with chunky ear development, strong roots and mid-season brittle stalk. <strong style="color:#6c757d;">SILAGE: TOP PERFORMER in 108-112 CRM range! Best starch + yield (~28 t/a @ 35% DM)</strong><br>
+                    <strong>Positioning:</strong> LIMITED TO FULL IRRIGATION - verify toughness under limited water in 2026<br>
+                    <strong>Considerations:</strong> CONCERNS WITH EAR RETENTION - monitor closely. Avg BLS tolerance. Above avg rapid growth - LIMIT SU AND GROWTH REGULATORS. Tends to break tops at harvest, moderate tiller in low pop. WARNING: Stays green late - neighbors got burned by too much moisture at freeze<br>
+                    <strong>Technology:</strong> V, LL, RR2, Enlist, FOP
+                </p>
+                <div class="hybrid-notes">
+                    <label>My Notes:</label>
+                    <textarea id="notes-P10705" onchange="saveNotes('P10705', this.value)" placeholder="Your notes: Neighbors going hard into this - got burned by too green/moisture at freeze. DROP INTO HIGH YIELD PLOTS."></textarea>
+                </div>
+            </div>
+            <div class="hybrid-card">
+                <h3>P11259PCE <span class="crm-badge">111 CRM</span> <span style="background:#007bff;color:white;padding:0.25rem 0.5rem;border-radius:4px;font-size:0.7rem;margin-left:0.5rem;">AquaMax</span></h3>
+                <div class="replaces"><strong>GOING AFTER P1122AML ACRES</strong>; Companions: P10625PCUE, P12517PCUE</div>
+                <div class="hybrid-specs">
+                    <div class="spec-item">
+                        <div class="label">Drought Rating</div>
+                        <div class="value" style="color:#28a745;">9 (Excellent)</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Stress BLUP</div>
+                        <div class="value" style="color:#28a745;">~162 bu/a (BEST)</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Hi-Yield BLUP</div>
+                        <div class="value" style="color:#28a745;">~250 bu/a</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Test Weight</div>
+                        <div class="value">6</div>
+                    </div>
+                </div>
+                <p style="margin:1rem 0; color:#666; font-size:0.9rem;">
+                    <strong>Key Strengths:</strong> TOP RIGHT ON CHART - BEST stress tolerance AND excellent yield. AquaMax with outstanding drought (9). Excellent stability low to high yield. Big chunky ears, nice western agronomic package<br>
+                    <strong>Positioning:</strong> USE ON TOUGH TOUGH ACRES ALL THE WAY UP TO HIGH YIELD ENVIRONMENTS - dryland to full irrigation<br>
+                    <strong>Considerations:</strong> MAIN CONCERN: WEAK ON SOUTHERN RUST (4) - monitor in high-pressure environments. Head smut (4)<br>
+                    <strong>Technology:</strong> PCE, LL, RR2, Enlist, FOP
+                </p>
+                <div class="hybrid-notes">
+                    <label>My Notes:</label>
+                    <textarea id="notes-P11259" onchange="saveNotes('P11259', this.value)" placeholder="Your notes: AquaMax - tough acre to top end..."></textarea>
+                </div>
+            </div>
+            <div class="hybrid-card">
+                <h3>P14270V/PCE <span class="crm-badge">114 CRM</span> <span style="background:#6c757d;color:white;padding:0.25rem 0.5rem;border-radius:4px;font-size:0.7rem;margin-left:0.5rem;">SILAGE</span></h3>
+                <div class="replaces">Targeted Replacement: P14830AML (<strong>+2 Goss's improvement!</strong>), <strong>TAKING OUT P1828AM</strong>; Companion: P14364PCUE; Silage companions: P12517V, P12904V, P13777V, P15517V</div>
+                <div class="hybrid-specs">
+                    <div class="spec-item">
+                        <div class="label">Stress BLUP</div>
+                        <div class="value" style="color:#28a745;">~193 bu/a (BEST)</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Hi-Yield BLUP</div>
+                        <div class="value">~240 bu/a</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Goss' Wilt</div>
+                        <div class="value" style="color:#28a745;">7 (Outstanding)</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Drought</div>
+                        <div class="value">8</div>
+                    </div>
+                </div>
+                <p style="margin:1rem 0; color:#666; font-size:0.9rem;">
+                    <strong>Key Strengths:</strong> SILAGE PRODUCT - BIG BEAUTIFUL PLANT for silage. DUAL PURPOSE product with high quality silage. Great late-season staygreen. Solid drought (8), nice stability. Outstanding Goss' wilt for corn-on-corn. Above avg BLS. <strong>MORE STABLE PRODUCT THAN P13777V. +10.3 bu/a yield advantage over P14830AML!</strong><br>
+                    <strong>Positioning:</strong> Wheat stubble dryland to full irrigation - verify dryland utility in 2026. Better in Valent Sands<br>
+                    <strong>Considerations:</strong> Ears can be nosy under higher population - test populations in 2026. Heavier tiller in low pop<br>
+                    <strong>Technology:</strong> V/PCE, LL, RR2, Enlist, FOP
+                </p>
+                <div class="hybrid-notes">
+                    <label>My Notes:</label>
+                    <textarea id="notes-P14270" onchange="saveNotes('P14270', this.value)" placeholder="Your notes: Silage product..."></textarea>
+                </div>
+            </div>
+            <div class="hybrid-card">
+                <h3>P15517V <span class="crm-badge">115 CRM</span> <span style="background:#6c757d;color:white;padding:0.25rem 0.5rem;border-radius:4px;font-size:0.7rem;margin-left:0.5rem;">SILAGE</span></h3>
+                <div class="replaces"><strong>Targeted Replacement: P1828AM</strong>; Silage companion to: P12904V, P12517V, P13777V, P14270V</div>
+                <div class="hybrid-specs">
+                    <div class="spec-item">
+                        <div class="label">Drought</div>
+                        <div class="value" style="color:#dc3545;">5 (WEAKNESS)</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Goss' Wilt</div>
+                        <div class="value" style="color:#28a745;">7</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Silage Yield</div>
+                        <div class="value" style="color:#28a745;">8</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Milk/Beef Per Acre</div>
+                        <div class="value" style="color:#28a745;">8/8</div>
+                    </div>
+                </div>
+                <p style="margin:1rem 0; color:#666; font-size:0.9rem;">
+                    <strong>Key Strengths:</strong> <strong style="color:#dc3545;">SILAGE SILAGE SILAGE - THIS IS A SILAGE PRODUCT!</strong> 115 CRM. Good stress emergence for EARLY PLANTING. Good Goss's wilt (7). Sturdy western agronomic package (solid brittle 6, stress emergence 6, staygreen 6). Good late-season staygreen and intactness, solid late stalks. Acceptable plant/ear height for silage. HIGH QUALITY SILAGE. Fiber Digestibility 8, Starch+Sugar 7. <strong style="color:#dc3545;">DROUGHT IS A 5 - HAS TO HAS TO HAS TO HAVE WATER!</strong><br>
+                    <strong>Positioning:</strong> <strong>KEEP IT ON THE BETTER ACRES!</strong> Better corn-on-corn dryland to full irrigation - verify dryland utility in 2026<br>
+                    <strong>Considerations:</strong> Slightly below Pioneer standard for test weight. Slightly below avg Gray Leaf Spot (4) and Southern Rust (4) - monitor high pressure environments. Avg to slightly below avg BLS observed in 2025. <strong>For silage plant/ear height: P14270V might be better - TEST IT</strong><br>
+                    <strong>Technology:</strong> V, LL, RR2, Enlist, FOP
+                </p>
+                <div class="hybrid-notes">
+                    <label>My Notes:</label>
+                    <textarea id="notes-P15517" onchange="saveNotes('P15517', this.value)" placeholder="Your notes: Silage companion..."></textarea>
+                </div>
+            </div>
+            <div class="hybrid-card">
+                <h3>P18512V/PCE <span class="crm-badge">118 CRM</span> <span style="background:#28a745;color:white;padding:0.25rem 0.5rem;border-radius:4px;font-size:0.7rem;margin-left:0.5rem;">GRAIN</span></h3>
+                <div class="replaces">TBD</div>
+                <div class="hybrid-specs">
+                    <div class="spec-item">
+                        <div class="label">Stress BLUP (V)</div>
+                        <div class="value">~185 bu/a</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Stress BLUP (PCE)</div>
+                        <div class="value">~175 bu/a</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Hi-Yield BLUP</div>
+                        <div class="value">~232-234 bu/a</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Drought</div>
+                        <div class="value">TBD</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Goss' Wilt</div>
+                        <div class="value">TBD</div>
+                    </div>
+                </div>
+                <p style="margin:1rem 0; color:#666; font-size:0.9rem;">
+                    <strong>Key Strengths:</strong> GRAIN PRODUCT but <strong style="color:#6c757d;">ALSO TOP SILAGE PERFORMER in 112-118 CRM! (~28.5 t/a @ 35% DM - BEST in class!)</strong> Long season triple for silage<br>
+                    <strong>Positioning:</strong> Dual purpose - grain OR silage<br>
+                    <strong>Considerations:</strong> Awaiting full specs<br>
+                    <strong>Technology:</strong> V, LL, RR2, Enlist, FOP
+                </p>
+                <div class="hybrid-notes">
+                    <label>My Notes:</label>
+                    <textarea id="notes-P18512" onchange="saveNotes('P18512', this.value)" placeholder="Your notes: Grain product..."></textarea>
+                </div>
             </div>
         </div>
     </div>
-
-    <!-- Hybrid Management Modal -->
-    <div id="hybrid-modal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Manage 2027 Available Hybrids</h2>
-                <button class="close-btn" onclick="hideHybridModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="section" style="box-shadow: none; padding: 1rem; background: #f8f8f8;">
-                    <h2 style="font-size: 1rem;">Discontinued for 2027</h2>
-                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">These hybrids will NOT be available in 2027. Predicted quantity = 0.</p>
-                    <div class="hybrid-list" id="discontinued-list"></div>
-                    <div class="form-row" style="margin-top: 1rem;">
-                        <input type="text" id="add-discontinued" placeholder="Add discontinued hybrid (e.g., P0622AM)">
-                        <button class="btn btn-secondary" onclick="addDiscontinued()">Add Discontinued</button>
-                    </div>
-                </div>
-
-                <div class="section" style="box-shadow: none; padding: 1rem; background: #f8f8f8; margin-top: 1rem;">
-                    <h2 style="font-size: 1rem;">New for 2027</h2>
-                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">New hybrids available for purchase in 2027.</p>
-                    <div class="hybrid-list" id="new-list"></div>
-                    <div class="form-row" style="margin-top: 1rem;">
-                        <input type="text" id="add-new" placeholder="Add new hybrid (e.g., P0890AM)">
-                        <button class="btn btn-secondary" onclick="addNewHybrid()">Add New Hybrid</button>
-                    </div>
-                </div>
-
-                <div class="form-group" style="margin-top: 1rem;">
-                    <label>Or paste a list of 2027 available hybrids (one per line):</label>
-                    <textarea id="paste-hybrids" rows="5" placeholder="P0622AM&#10;P0950AM&#10;P1093AM&#10;..."></textarea>
-                    <button class="btn btn-primary" onclick="importHybridList()" style="margin-top: 0.5rem;">Set as 2027 Available Hybrids</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // ============================================
-        // DATA STORAGE
-        // ============================================
-        let data = {
-            records: [], // {operation, hybrid, year, bags}
-            discontinued2027: [],
-            new2027: []
-        };
-
-        // Default sample data - will be used if no localStorage data exists
-        const defaultData = {
+        // EMBEDDED REAL DATA - 574 records from 2024-2026
+        const data = {
             records: [
-                // 2024 Data
-                {operation: "Anderson", hybrid: "P0157AM", year: 2024, bags: 3},
-                {operation: "Anderson", hybrid: "P0339AM", year: 2024, bags: 5},
-                {operation: "Anderson", hybrid: "P0574AM", year: 2024, bags: 8},
-                {operation: "Arrow Acres", hybrid: "P0339AM", year: 2024, bags: 12},
-                {operation: "Arrow Acres", hybrid: "P0574AM", year: 2024, bags: 6},
-                {operation: "Barnhart Farms", hybrid: "P0622AM", year: 2024, bags: 17},
-                {operation: "Barnhart Farms", hybrid: "P0720Q", year: 2024, bags: 10},
-                {operation: "Barnhart Farms", hybrid: "P0825Q", year: 2024, bags: 15},
-                {operation: "Chapman", hybrid: "P0950AM", year: 2024, bags: 25},
-                {operation: "Chapman", hybrid: "P1093AM", year: 2024, bags: 18},
-                {operation: "Crosswhite", hybrid: "P0622AM", year: 2024, bags: 20},
-                {operation: "Crosswhite", hybrid: "P0825Q", year: 2024, bags: 12},
-                {operation: "Douglas A Rhem", hybrid: "P0950AM", year: 2024, bags: 8},
-                {operation: "Douglas A Rhem", hybrid: "P1093AM", year: 2024, bags: 14},
-                {operation: "Garms Inc", hybrid: "P0339AM", year: 2024, bags: 22},
-                {operation: "Garms Inc", hybrid: "P0574AM", year: 2024, bags: 30},
-                {operation: "Half Pint", hybrid: "P0720Q", year: 2024, bags: 45},
-                {operation: "Half Pint", hybrid: "P0825Q", year: 2024, bags: 38},
-                {operation: "Hirschman Farms", hybrid: "P0622AM", year: 2024, bags: 16},
-                {operation: "Hirschman Farms", hybrid: "P0950AM", year: 2024, bags: 24},
-                {operation: "Knouse", hybrid: "P1093AM", year: 2024, bags: 35},
-                {operation: "Knouse", hybrid: "P0157AM", year: 2024, bags: 28},
-                {operation: "Latvala", hybrid: "P0339AM", year: 2024, bags: 19},
-                {operation: "Latvala", hybrid: "P0574AM", year: 2024, bags: 11},
-                {operation: "MB Farms", hybrid: "P0720Q", year: 2024, bags: 42},
-                {operation: "MB Farms", hybrid: "P0825Q", year: 2024, bags: 33},
-                {operation: "McConnell Ent", hybrid: "P0622AM", year: 2024, bags: 55},
-                {operation: "McConnell Ent", hybrid: "P0950AM", year: 2024, bags: 48},
-                {operation: "Mednansky", hybrid: "P1093AM", year: 2024, bags: 12},
-                {operation: "Mednansky", hybrid: "P0157AM", year: 2024, bags: 9},
-                {operation: "Moore", hybrid: "P0339AM", year: 2024, bags: 27},
-                {operation: "Moore", hybrid: "P0574AM", year: 2024, bags: 21},
-                {operation: "Moser", hybrid: "P0720Q", year: 2024, bags: 15},
-                {operation: "Moser", hybrid: "P0825Q", year: 2024, bags: 18},
-                {operation: "Ramer", hybrid: "P0950AM", year: 2024, bags: 32},
-                {operation: "Ramer", hybrid: "P1093AM", year: 2024, bags: 26},
-                {operation: "Reinke", hybrid: "P0157AM", year: 2024, bags: 14},
-                {operation: "Reinke", hybrid: "P0339AM", year: 2024, bags: 19},
-                {operation: "Ryan Ohlde", hybrid: "P0574AM", year: 2024, bags: 23},
-                {operation: "Ryan Ohlde", hybrid: "P0720Q", year: 2024, bags: 17},
-                {operation: "Strobel/Econ", hybrid: "P0825Q", year: 2024, bags: 29},
-                {operation: "Strobel/Econ", hybrid: "P0622AM", year: 2024, bags: 34},
-                {operation: "Tayer", hybrid: "P0950AM", year: 2024, bags: 11},
-                {operation: "Tayer", hybrid: "P1093AM", year: 2024, bags: 16},
-                {operation: "Vanderweide", hybrid: "P0157AM", year: 2024, bags: 7},
-                {operation: "Vanderweide", hybrid: "P0339AM", year: 2024, bags: 13},
-                {operation: "Voelker Implement", hybrid: "P0574AM", year: 2024, bags: 9},
-                {operation: "Zimmerman", hybrid: "P0720Q", year: 2024, bags: 21},
-                {operation: "Zimmerman", hybrid: "P0825Q", year: 2024, bags: 18},
-                // 2025 Data
-                {operation: "Anderson", hybrid: "P0157AM", year: 2025, bags: 4},
-                {operation: "Anderson", hybrid: "P0339AM", year: 2025, bags: 6},
-                {operation: "Anderson", hybrid: "P0622AM", year: 2025, bags: 5},
-                {operation: "Arrow Acres", hybrid: "P0339AM", year: 2025, bags: 14},
-                {operation: "Arrow Acres", hybrid: "P0622AM", year: 2025, bags: 8},
-                {operation: "Barnhart Farms", hybrid: "P0622AM", year: 2025, bags: 19},
-                {operation: "Barnhart Farms", hybrid: "P0720Q", year: 2025, bags: 12},
-                {operation: "Barnhart Farms", hybrid: "P0950AM", year: 2025, bags: 14},
-                {operation: "Chapman", hybrid: "P0950AM", year: 2025, bags: 28},
-                {operation: "Chapman", hybrid: "P1093AM", year: 2025, bags: 20},
-                {operation: "Chapman", hybrid: "P1197AM", year: 2025, bags: 15},
-                {operation: "Crosswhite", hybrid: "P0622AM", year: 2025, bags: 22},
-                {operation: "Crosswhite", hybrid: "P0950AM", year: 2025, bags: 16},
-                {operation: "Douglas A Rhem", hybrid: "P0950AM", year: 2025, bags: 10},
-                {operation: "Douglas A Rhem", hybrid: "P1197AM", year: 2025, bags: 12},
-                {operation: "Garms Inc", hybrid: "P0339AM", year: 2025, bags: 25},
-                {operation: "Garms Inc", hybrid: "P0622AM", year: 2025, bags: 35},
-                {operation: "Half Pint", hybrid: "P0720Q", year: 2025, bags: 48},
-                {operation: "Half Pint", hybrid: "P0950AM", year: 2025, bags: 42},
-                {operation: "Hirschman Farms", hybrid: "P0622AM", year: 2025, bags: 18},
-                {operation: "Hirschman Farms", hybrid: "P1093AM", year: 2025, bags: 22},
-                {operation: "Knouse", hybrid: "P1093AM", year: 2025, bags: 38},
-                {operation: "Knouse", hybrid: "P0622AM", year: 2025, bags: 30},
-                {operation: "Latvala", hybrid: "P0339AM", year: 2025, bags: 21},
-                {operation: "Latvala", hybrid: "P0720Q", year: 2025, bags: 14},
-                {operation: "MB Farms", hybrid: "P0720Q", year: 2025, bags: 45},
-                {operation: "MB Farms", hybrid: "P0950AM", year: 2025, bags: 38},
-                {operation: "McConnell Ent", hybrid: "P0622AM", year: 2025, bags: 60},
-                {operation: "McConnell Ent", hybrid: "P0950AM", year: 2025, bags: 52},
-                {operation: "McConnell Ent", hybrid: "P1197AM", year: 2025, bags: 25},
-                {operation: "Mednansky", hybrid: "P1093AM", year: 2025, bags: 14},
-                {operation: "Mednansky", hybrid: "P0622AM", year: 2025, bags: 11},
-                {operation: "Moore", hybrid: "P0339AM", year: 2025, bags: 30},
-                {operation: "Moore", hybrid: "P0720Q", year: 2025, bags: 24},
-                {operation: "Moser", hybrid: "P0720Q", year: 2025, bags: 17},
-                {operation: "Moser", hybrid: "P0950AM", year: 2025, bags: 20},
-                {operation: "Ramer", hybrid: "P0950AM", year: 2025, bags: 35},
-                {operation: "Ramer", hybrid: "P1197AM", year: 2025, bags: 28},
-                {operation: "Reinke", hybrid: "P0622AM", year: 2025, bags: 16},
-                {operation: "Reinke", hybrid: "P0339AM", year: 2025, bags: 22},
-                {operation: "Ryan Ohlde", hybrid: "P0720Q", year: 2025, bags: 25},
-                {operation: "Ryan Ohlde", hybrid: "P0950AM", year: 2025, bags: 19},
-                {operation: "Strobel/Econ", hybrid: "P0950AM", year: 2025, bags: 32},
-                {operation: "Strobel/Econ", hybrid: "P0622AM", year: 2025, bags: 38},
-                {operation: "Tayer", hybrid: "P1093AM", year: 2025, bags: 13},
-                {operation: "Tayer", hybrid: "P1197AM", year: 2025, bags: 18},
-                {operation: "Vanderweide", hybrid: "P0622AM", year: 2025, bags: 9},
-                {operation: "Vanderweide", hybrid: "P0339AM", year: 2025, bags: 15},
-                {operation: "Voelker Implement", hybrid: "P0720Q", year: 2025, bags: 11},
-                {operation: "Zimmerman", hybrid: "P0720Q", year: 2025, bags: 24},
-                {operation: "Zimmerman", hybrid: "P0950AM", year: 2025, bags: 20},
-                // 2026 Data
-                {operation: "Anderson", hybrid: "P0157AM", year: 2026, bags: 3},
-                {operation: "Anderson", hybrid: "P0339AM", year: 2026, bags: 5},
-                {operation: "Anderson", hybrid: "P0622AM", year: 2026, bags: 7},
-                {operation: "Arrow Acres", hybrid: "P0339AM", year: 2026, bags: 15},
-                {operation: "Arrow Acres", hybrid: "P0622AM", year: 2026, bags: 10},
-                {operation: "Barnhart Farms", hybrid: "P0622AM", year: 2026, bags: 20},
-                {operation: "Barnhart Farms", hybrid: "P0825Q", year: 2026, bags: 14},
-                {operation: "Barnhart Farms", hybrid: "P0950AM", year: 2026, bags: 16},
-                {operation: "Chapman", hybrid: "P0950AM", year: 2026, bags: 30},
-                {operation: "Chapman", hybrid: "P1093AM", year: 2026, bags: 22},
-                {operation: "Chapman", hybrid: "P1197AM", year: 2026, bags: 18},
-                {operation: "Crosswhite", hybrid: "P0622AM", year: 2026, bags: 24},
-                {operation: "Crosswhite", hybrid: "P0950AM", year: 2026, bags: 18},
-                {operation: "Douglas A Rhem", hybrid: "P0950AM", year: 2026, bags: 12},
-                {operation: "Douglas A Rhem", hybrid: "P1197AM", year: 2026, bags: 14},
-                {operation: "Garms Inc", hybrid: "P0339AM", year: 2026, bags: 28},
-                {operation: "Garms Inc", hybrid: "P0622AM", year: 2026, bags: 38},
-                {operation: "Half Pint", hybrid: "P0825Q", year: 2026, bags: 50},
-                {operation: "Half Pint", hybrid: "P0950AM", year: 2026, bags: 45},
-                {operation: "Hirschman Farms", hybrid: "P0622AM", year: 2026, bags: 20},
-                {operation: "Hirschman Farms", hybrid: "P1093AM", year: 2026, bags: 25},
-                {operation: "Knouse", hybrid: "P1093AM", year: 2026, bags: 40},
-                {operation: "Knouse", hybrid: "P0622AM", year: 2026, bags: 32},
-                {operation: "Latvala", hybrid: "P0339AM", year: 2026, bags: 23},
-                {operation: "Latvala", hybrid: "P0825Q", year: 2026, bags: 16},
-                {operation: "MB Farms", hybrid: "P0825Q", year: 2026, bags: 48},
-                {operation: "MB Farms", hybrid: "P0950AM", year: 2026, bags: 40},
-                {operation: "McConnell Ent", hybrid: "P0622AM", year: 2026, bags: 65},
-                {operation: "McConnell Ent", hybrid: "P0950AM", year: 2026, bags: 55},
-                {operation: "McConnell Ent", hybrid: "P1197AM", year: 2026, bags: 30},
-                {operation: "Mednansky", hybrid: "P1093AM", year: 2026, bags: 15},
-                {operation: "Mednansky", hybrid: "P0622AM", year: 2026, bags: 12},
-                {operation: "Moore", hybrid: "P0339AM", year: 2026, bags: 32},
-                {operation: "Moore", hybrid: "P0825Q", year: 2026, bags: 26},
-                {operation: "Moser", hybrid: "P0825Q", year: 2026, bags: 19},
-                {operation: "Moser", hybrid: "P0950AM", year: 2026, bags: 22},
-                {operation: "Ramer", hybrid: "P0950AM", year: 2026, bags: 38},
-                {operation: "Ramer", hybrid: "P1197AM", year: 2026, bags: 30},
-                {operation: "Reinke", hybrid: "P0622AM", year: 2026, bags: 18},
-                {operation: "Reinke", hybrid: "P0339AM", year: 2026, bags: 24},
-                {operation: "Ryan Ohlde", hybrid: "P0825Q", year: 2026, bags: 27},
-                {operation: "Ryan Ohlde", hybrid: "P0950AM", year: 2026, bags: 21},
-                {operation: "Strobel/Econ", hybrid: "P0950AM", year: 2026, bags: 35},
-                {operation: "Strobel/Econ", hybrid: "P0622AM", year: 2026, bags: 40},
-                {operation: "Tayer", hybrid: "P1093AM", year: 2026, bags: 15},
-                {operation: "Tayer", hybrid: "P1197AM", year: 2026, bags: 20},
-                {operation: "Vanderweide", hybrid: "P0622AM", year: 2026, bags: 10},
-                {operation: "Vanderweide", hybrid: "P0339AM", year: 2026, bags: 17},
-                {operation: "Voelker Implement", hybrid: "P0825Q", year: 2026, bags: 13},
-                {operation: "Zimmerman", hybrid: "P0825Q", year: 2026, bags: 26},
-                {operation: "Zimmerman", hybrid: "P0950AM", year: 2026, bags: 22}
+                {operation: "Anderson Wheat Farms", hybrid: "P0075AM", year: 2024, bags: 112},
+                {operation: "Anderson Wheat Farms", hybrid: "P0075AM", year: 2025, bags: 50},
+                {operation: "Anderson Wheat Farms", hybrid: "P0075AM", year: 2026, bags: 83},
+                {operation: "Anderson Wheat Farms", hybrid: "P0075Q", year: 2024, bags: 80},
+                {operation: "Anderson Wheat Farms", hybrid: "P0075Q", year: 2025, bags: 3},
+                {operation: "Anderson Wheat Farms", hybrid: "P03115PCE", year: 2024, bags: 2},
+                {operation: "Anderson Wheat Farms", hybrid: "P03115V", year: 2025, bags: 85},
+                {operation: "Anderson Wheat Farms", hybrid: "P03115V", year: 2026, bags: 43},
+                {operation: "Anderson Wheat Farms", hybrid: "P0339Q", year: 2024, bags: 85},
+                {operation: "Anderson Wheat Farms", hybrid: "P05466Q", year: 2024, bags: 58},
+                {operation: "Anderson Wheat Farms", hybrid: "P05466V", year: 2024, bags: 2},
+                {operation: "Anderson Wheat Farms", hybrid: "P05466V", year: 2025, bags: 132},
+                {operation: "Anderson Wheat Farms", hybrid: "P05466V", year: 2026, bags: 53},
+                {operation: "Anderson Wheat Farms", hybrid: "P07340Q", year: 2024, bags: 2},
+                {operation: "Anderson Wheat Farms", hybrid: "P08527V", year: 2024, bags: 2},
+                {operation: "Anderson Wheat Farms", hybrid: "P0859AM", year: 2024, bags: 54},
+                {operation: "Anderson Wheat Farms", hybrid: "P0859AM", year: 2025, bags: 55},
+                {operation: "Anderson Wheat Farms", hybrid: "P0924Q", year: 2024, bags: 2},
+                {operation: "Anderson Wheat Farms", hybrid: "P13777V", year: 2025, bags: 45},
+                {operation: "Anderson Wheat Farms", hybrid: "P13777V", year: 2026, bags: 53},
+                {operation: "Anderson Wheat Farms", hybrid: "P1828Q", year: 2024, bags: 60},
+                {operation: "Anderson Wheat Farms", hybrid: "P9489AM", year: 2024, bags: 32},
+                {operation: "Anderson Wheat Farms", hybrid: "P9489AM", year: 2025, bags: 50},
+                {operation: "Arrow Head", hybrid: "P0339Q", year: 2024, bags: 50},
+                {operation: "Arrow Head", hybrid: "P05081AML", year: 2026, bags: 50},
+                {operation: "Arrow Head", hybrid: "P05466V", year: 2025, bags: 52},
+                {operation: "Arrow Head", hybrid: "P0622AML", year: 2024, bags: 48},
+                {operation: "Arrow Head", hybrid: "P08527V", year: 2026, bags: 100},
+                {operation: "Bamford Farms", hybrid: "P0075AM", year: 2024, bags: 40},
+                {operation: "Bamford Farms", hybrid: "P0075AM", year: 2025, bags: 40},
+                {operation: "Bamford Farms", hybrid: "P0075AM", year: 2026, bags: 37},
+                {operation: "Bamford Farms", hybrid: "P0157AMXT", year: 2026, bags: 77},
+                {operation: "Bamford Farms", hybrid: "P03115V", year: 2025, bags: 52},
+                {operation: "Bamford Farms", hybrid: "P0339Q", year: 2024, bags: 53},
+                {operation: "Bamford Farms", hybrid: "P05081AML", year: 2025, bags: 50},
+                {operation: "Bamford Farms", hybrid: "P05081AML", year: 2026, bags: 50},
+                {operation: "Bamford Farms", hybrid: "P05466V", year: 2025, bags: 41},
+                {operation: "Bamford Farms", hybrid: "P0622AML", year: 2024, bags: 52},
+                {operation: "Bamford Farms", hybrid: "P0622AML", year: 2025, bags: 50},
+                {operation: "Bamford Farms", hybrid: "P08527V", year: 2025, bags: 54},
+                {operation: "Bamford Farms", hybrid: "P08527V", year: 2026, bags: 44},
+                {operation: "Bamford Farms", hybrid: "P0924Q", year: 2024, bags: 42},
+                {operation: "Bamford Farms", hybrid: "P1089AMXT", year: 2024, bags: 42},
+                {operation: "Bamford Farms", hybrid: "P1122AML", year: 2026, bags: 55},
+                {operation: "Bamford Farms", hybrid: "P1244AM", year: 2026, bags: 15},
+                {operation: "Bamford Farms", hybrid: "P12517V", year: 2026, bags: 25},
+                {operation: "Bamford Farms", hybrid: "P1548AM", year: 2026, bags: 15},
+                {operation: "Bamford Farms", hybrid: "P9845AM", year: 2024, bags: 10},
+                {operation: "Bamford Farms", hybrid: "P9845PCE", year: 2025, bags: 66},
+                {operation: "Boerner - Dryland Farms LLC", hybrid: "35F50AM", year: 2024, bags: 16},
+                {operation: "Boerner - Dryland Farms LLC", hybrid: "P0075AM", year: 2024, bags: 19},
+                {operation: "Boerner - Dryland Farms LLC", hybrid: "P0075AM", year: 2025, bags: 28},
+                {operation: "Boerner - Dryland Farms LLC", hybrid: "P0075AM", year: 2026, bags: 30},
+                {operation: "Boerner - Dryland Farms LLC", hybrid: "P1151AM", year: 2025, bags: 16},
+                {operation: "Boerner Farms", hybrid: "P0075AM", year: 2024, bags: 43},
+                {operation: "Boerner Farms", hybrid: "P0075AM", year: 2025, bags: 9},
+                {operation: "Boerner Farms", hybrid: "P0157AMXT", year: 2025, bags: 26},
+                {operation: "Boerner Farms", hybrid: "P0157AMXT", year: 2026, bags: 30},
+                {operation: "Boerner Farms", hybrid: "P0339Q", year: 2024, bags: 6},
+                {operation: "Boerner Farms", hybrid: "P0487Q", year: 2024, bags: 20},
+                {operation: "Boerner Farms", hybrid: "P0487Q", year: 2026, bags: 30},
+                {operation: "Boerner Farms", hybrid: "P05081AML", year: 2026, bags: 10},
+                {operation: "Boerner Farms", hybrid: "P0622AML", year: 2024, bags: 36},
+                {operation: "Boerner Farms", hybrid: "P0622AML", year: 2025, bags: 36},
+                {operation: "Boerner Farms", hybrid: "P0622AML", year: 2026, bags: 30},
+                {operation: "Boerner Farms", hybrid: "P1151AM", year: 2025, bags: 36},
+                {operation: "Boerner Inc.", hybrid: "P0075AM", year: 2024, bags: 4},
+                {operation: "Boerner Inc.", hybrid: "P0075Q", year: 2024, bags: 100},
+                {operation: "Boerner Inc.", hybrid: "P0075Q", year: 2025, bags: 50},
+                {operation: "Boerner Inc.", hybrid: "P0075Q", year: 2026, bags: 50},
+                {operation: "Boerner Inc.", hybrid: "P0157AMXT", year: 2026, bags: 50},
+                {operation: "Boerner Inc.", hybrid: "P03115V", year: 2026, bags: 50},
+                {operation: "Boerner Inc.", hybrid: "P0339Q", year: 2025, bags: 100},
+                {operation: "Boerner Inc.", hybrid: "P0487Q", year: 2024, bags: 40},
+                {operation: "Boerner Inc.", hybrid: "P05081AML", year: 2026, bags: 50},
+                {operation: "Boerner Inc.", hybrid: "P05466Q", year: 2024, bags: 50},
+                {operation: "Boerner Inc.", hybrid: "P05466V", year: 2025, bags: 50},
+                {operation: "Boerner Inc.", hybrid: "P0622AML", year: 2024, bags: 200},
+                {operation: "Boerner Inc.", hybrid: "P0622AML", year: 2025, bags: 169},
+                {operation: "Boerner Inc.", hybrid: "P0622AML", year: 2026, bags: 50},
+                {operation: "Boerner Inc.", hybrid: "P07340Q", year: 2024, bags: 50},
+                {operation: "Boerner Inc.", hybrid: "P07340Q", year: 2025, bags: 50},
+                {operation: "Boerner Inc.", hybrid: "P08527V", year: 2026, bags: 50},
+                {operation: "Boerner Inc.", hybrid: "P1122AML", year: 2026, bags: 50},
+                {operation: "Boerner Inc.", hybrid: "P1244AM", year: 2026, bags: 3},
+                {operation: "Boerner Inc.", hybrid: "P1366Q", year: 2025, bags: 50},
+                {operation: "Boerner Inc.", hybrid: "P13777V", year: 2026, bags: 50},
+                {operation: "Burton Operation", hybrid: "P0075AM", year: 2024, bags: 28},
+                {operation: "Burton Operation", hybrid: "P0075AM", year: 2025, bags: 20},
+                {operation: "Burton Operation", hybrid: "P0075AM", year: 2026, bags: 31},
+                {operation: "Burton Operation", hybrid: "P0622AML", year: 2025, bags: 11},
+                {operation: "Burton Operation", hybrid: "P1122AML", year: 2026, bags: 15},
+                {operation: "Burton Operation", hybrid: "P1151AM", year: 2025, bags: 27},
+                {operation: "Burton Operation", hybrid: "P1244AM", year: 2026, bags: 15},
+                {operation: "Burton Operation", hybrid: "P9489AM", year: 2024, bags: 24},
+                {operation: "Carlson", hybrid: "P0075AM", year: 2024, bags: 50},
+                {operation: "Carlson", hybrid: "P0075AM", year: 2026, bags: 50},
+                {operation: "Carlson", hybrid: "P0075Q", year: 2024, bags: 100},
+                {operation: "Carlson", hybrid: "P0075Q", year: 2025, bags: 105},
+                {operation: "Carlson", hybrid: "P0075Q", year: 2026, bags: 100},
+                {operation: "Carlson", hybrid: "P0157AMXT", year: 2026, bags: 50},
+                {operation: "Carlson", hybrid: "P03115V", year: 2025, bags: 67},
+                {operation: "Carlson", hybrid: "P03115V", year: 2026, bags: 50},
+                {operation: "Carlson", hybrid: "P0339Q", year: 2024, bags: 100},
+                {operation: "Carlson", hybrid: "P05081AML", year: 2025, bags: 50},
+                {operation: "Carlson", hybrid: "P05081AML", year: 2026, bags: 50},
+                {operation: "Carlson", hybrid: "P05466Q", year: 2024, bags: 50},
+                {operation: "Carlson", hybrid: "P05466V", year: 2025, bags: 50},
+                {operation: "Carlson", hybrid: "P05466V", year: 2026, bags: 100},
+                {operation: "Carlson", hybrid: "P0622AML", year: 2024, bags: 150},
+                {operation: "Carlson", hybrid: "P0622AML", year: 2025, bags: 100},
+                {operation: "Carlson", hybrid: "P0622AML", year: 2026, bags: 50},
+                {operation: "Carlson", hybrid: "P07340Q", year: 2024, bags: 50},
+                {operation: "Carlson", hybrid: "P07340Q", year: 2025, bags: 100},
+                {operation: "Carlson", hybrid: "P08527V", year: 2026, bags: 50},
+                {operation: "Carlson", hybrid: "P0859AM", year: 2024, bags: 50},
+                {operation: "Carlson", hybrid: "P0924Q", year: 2024, bags: 50},
+                {operation: "Carlson", hybrid: "P10625V", year: 2026, bags: 22},
+                {operation: "Carlson", hybrid: "P1122AML", year: 2025, bags: 50},
+                {operation: "Carlson", hybrid: "P1151AM", year: 2024, bags: 100},
+                {operation: "Carlson", hybrid: "P1151AM", year: 2025, bags: 150},
+                {operation: "Carlson", hybrid: "P1244AM", year: 2026, bags: 100},
+                {operation: "Carlson", hybrid: "P1366Q", year: 2024, bags: 50},
+                {operation: "Carlson", hybrid: "P1366Q", year: 2025, bags: 50},
+                {operation: "Carlson", hybrid: "P13777V", year: 2026, bags: 50},
+                {operation: "Carlson", hybrid: "P1548AM", year: 2026, bags: 50},
+                {operation: "Chapman; Keith", hybrid: "P0075Q", year: 2024, bags: 12},
+                {operation: "Chapman; Keith", hybrid: "P0075Q", year: 2025, bags: 4},
+                {operation: "Chapman; Keith", hybrid: "P0075Q", year: 2026, bags: 4},
+                {operation: "Chapman; Keith", hybrid: "P0487Q", year: 2024, bags: 24},
+                {operation: "Chapman; Keith", hybrid: "P05466V", year: 2025, bags: 28},
+                {operation: "Chapman; Keith", hybrid: "P05466V", year: 2026, bags: 27},
+                {operation: "Chapman; Keith", hybrid: "P0622Q", year: 2024, bags: 27},
+                {operation: "Chapman; Keith", hybrid: "P07340Q", year: 2025, bags: 28},
+                {operation: "Chapman; Keith", hybrid: "P0817Q", year: 2024, bags: 27},
+                {operation: "Chapman; Keith", hybrid: "P0817Q", year: 2025, bags: 28},
+                {operation: "Chapman; Keith", hybrid: "P08527V", year: 2025, bags: 28},
+                {operation: "Chapman; Keith", hybrid: "P08527V", year: 2026, bags: 53},
+                {operation: "Chapman; Keith", hybrid: "P1089AMXT", year: 2024, bags: 15},
+                {operation: "Chapman; Keith", hybrid: "P12517V", year: 2026, bags: 26},
+                {operation: "Chapman; Keith", hybrid: "P12904Q", year: 2024, bags: 12},
+                {operation: "Chapman; Keith", hybrid: "P12904V", year: 2025, bags: 24},
+                {operation: "Chapman; Keith", hybrid: "P12904V", year: 2026, bags: 26},
+                {operation: "Chapman; Keith", hybrid: "P1366Q", year: 2024, bags: 27},
+                {operation: "Crossland Farms", hybrid: "P0075AM", year: 2024, bags: 37},
+                {operation: "Crossland Farms", hybrid: "P0075AM", year: 2025, bags: 50},
+                {operation: "Crossland Farms", hybrid: "P0075AM", year: 2026, bags: 40},
+                {operation: "Crossland Farms", hybrid: "P0075Q", year: 2024, bags: 50},
+                {operation: "Crossland Farms", hybrid: "P0075Q", year: 2025, bags: 50},
+                {operation: "Crossland Farms", hybrid: "P03115V", year: 2025, bags: 5},
+                {operation: "Crossland Farms", hybrid: "P0339Q", year: 2024, bags: 26},
+                {operation: "Crossland Farms", hybrid: "P05081AML", year: 2024, bags: 1},
+                {operation: "Crossland Farms", hybrid: "P05081AML", year: 2026, bags: 40},
+                {operation: "Crossland Farms", hybrid: "P05466Q", year: 2024, bags: 50},
+                {operation: "Crossland Farms", hybrid: "P0622AML", year: 2026, bags: 10},
+                {operation: "Crossland Farms", hybrid: "P0622Q", year: 2024, bags: 24},
+                {operation: "Crossland Farms", hybrid: "P0622Q", year: 2025, bags: 59},
+                {operation: "Crossland Farms", hybrid: "P07340Q", year: 2024, bags: 36},
+                {operation: "Crossland Farms", hybrid: "P07340Q", year: 2025, bags: 24},
+                {operation: "Crossland Farms", hybrid: "P08527V", year: 2026, bags: 74},
+                {operation: "Crossland Farms", hybrid: "P1089AMXT", year: 2024, bags: 50},
+                {operation: "Crossland Farms", hybrid: "P1151AM", year: 2024, bags: 30},
+                {operation: "Crossland Farms", hybrid: "P1151AM", year: 2025, bags: 25},
+                {operation: "Crossland Farms", hybrid: "P1278Q", year: 2024, bags: 50},
+                {operation: "Crossland Farms", hybrid: "P12904Q", year: 2025, bags: 12},
+                {operation: "Crossland Farms", hybrid: "P1366Q", year: 2025, bags: 12},
+                {operation: "Crossland Farms", hybrid: "P13777V", year: 2026, bags: 74},
+                {operation: "Dickinson Farm", hybrid: "P0075Q", year: 2024, bags: 24},
+                {operation: "Dickinson Farm", hybrid: "P0622Q", year: 2024, bags: 26},
+                {operation: "Dickinson Farm", hybrid: "P0622Q", year: 2026, bags: 25},
+                {operation: "Dickinson Farm", hybrid: "P07340Q", year: 2025, bags: 26},
+                {operation: "Dickinson Farm", hybrid: "P08527V", year: 2026, bags: 3},
+                {operation: "Double A Farms", hybrid: "P0075AM", year: 2026, bags: 30},
+                {operation: "Double A Farms", hybrid: "P0622AML", year: 2024, bags: 50},
+                {operation: "Double A Farms", hybrid: "P0622AML", year: 2025, bags: 50},
+                {operation: "Double A Farms", hybrid: "P1122AML", year: 2026, bags: 30},
+                {operation: "Double A Farms", hybrid: "P1151AM", year: 2024, bags: 50},
+                {operation: "Double A Farms", hybrid: "P1151AM", year: 2025, bags: 50},
+                {operation: "Ensminger Farms", hybrid: "P0075AM", year: 2025, bags: 12},
+                {operation: "Ensminger Farms", hybrid: "P05081AML", year: 2025, bags: 7},
+                {operation: "Ensminger Farms", hybrid: "P05081AML", year: 2026, bags: 30},
+                {operation: "Ensminger Farms", hybrid: "P0622AML", year: 2025, bags: 12},
+                {operation: "Ensminger Farms", hybrid: "P1122AML", year: 2026, bags: 30},
+                {operation: "Ensminger Farms", hybrid: "P1151AM", year: 2025, bags: 12},
+                {operation: "Firme - 4 Mile Ag LLC", hybrid: "P0075AM", year: 2024, bags: 8},
+                {operation: "Firme - 4 Mile Ag LLC", hybrid: "P0075AM", year: 2026, bags: 20},
+                {operation: "Firme - 4 Mile Ag LLC", hybrid: "P0622AML", year: 2024, bags: 38},
+                {operation: "Firme - 4 Mile Ag LLC", hybrid: "P0622AML", year: 2025, bags: 78},
+                {operation: "Firme - 4 Mile Ag LLC", hybrid: "P0995AM", year: 2026, bags: 30},
+                {operation: "Firme - 4 Mile Ag LLC", hybrid: "P1122AML", year: 2026, bags: 30},
+                {operation: "Firme - 4 Mile Ag LLC", hybrid: "P1151AM", year: 2024, bags: 58},
+                {operation: "Firme - 4 Mile Ag LLC", hybrid: "P1151AM", year: 2025, bags: 30},
+                {operation: "Firme - 7 Rd", hybrid: "35F50AM", year: 2024, bags: 6},
+                {operation: "Firme - 7 Rd", hybrid: "P0075AM", year: 2025, bags: 32},
+                {operation: "Firme - 7 Rd", hybrid: "P0075AM", year: 2026, bags: 32},
+                {operation: "Firme - 7 Rd", hybrid: "P0157AMXT", year: 2024, bags: 56},
+                {operation: "Firme - 7 Rd", hybrid: "P0157AMXT", year: 2025, bags: 12},
+                {operation: "Firme - 7 Rd", hybrid: "P0157AMXT", year: 2026, bags: 52},
+                {operation: "Firme - 7 Rd", hybrid: "P03115V", year: 2025, bags: 12},
+                {operation: "Firme - 7 Rd", hybrid: "P0339Q", year: 2024, bags: 98},
+                {operation: "Firme - 7 Rd", hybrid: "P0339Q", year: 2025, bags: 112},
+                {operation: "Firme - 7 Rd", hybrid: "P05081AML", year: 2026, bags: 13},
+                {operation: "Firme - 7 Rd", hybrid: "P05466V", year: 2025, bags: 16},
+                {operation: "Firme - 7 Rd", hybrid: "P05466V", year: 2026, bags: 26},
+                {operation: "Firme - 7 Rd", hybrid: "P0622AML", year: 2025, bags: 12},
+                {operation: "Firme - 7 Rd", hybrid: "P0622AML", year: 2026, bags: 38},
+                {operation: "Firme - 7 Rd", hybrid: "P0622Q", year: 2024, bags: 8},
+                {operation: "Firme - 7 Rd", hybrid: "P0622Q", year: 2025, bags: 20},
+                {operation: "Firme - 7 Rd", hybrid: "P07340Q", year: 2025, bags: 12},
+                {operation: "Firme - 7 Rd", hybrid: "P08527V", year: 2026, bags: 26},
+                {operation: "Firme - 7 Rd", hybrid: "P1151AM", year: 2024, bags: 32},
+                {operation: "Fryrear Farms", hybrid: "P05081AML", year: 2026, bags: 5},
+                {operation: "Goddard Farms", hybrid: "P00549PCE", year: 2026, bags: 22},
+                {operation: "Goddard Farms", hybrid: "P0075AM", year: 2024, bags: 14},
+                {operation: "Goddard Farms", hybrid: "P0075AM", year: 2025, bags: 40},
+                {operation: "Goddard Farms", hybrid: "P0075AM", year: 2026, bags: 40},
+                {operation: "Goddard Farms", hybrid: "P0075Q", year: 2024, bags: 22},
+                {operation: "Goddard Farms", hybrid: "P0075Q", year: 2025, bags: 21},
+                {operation: "Goddard Farms", hybrid: "P0157AMXT", year: 2026, bags: 22},
+                {operation: "Goddard Farms", hybrid: "P0339Q", year: 2024, bags: 10},
+                {operation: "Goddard Farms", hybrid: "P05081AML", year: 2025, bags: 24},
+                {operation: "Goddard Farms", hybrid: "P05081AML", year: 2026, bags: 22},
+                {operation: "Goddard Farms", hybrid: "P05466V", year: 2025, bags: 10},
+                {operation: "Goddard Farms", hybrid: "P05466V", year: 2026, bags: 20},
+                {operation: "Goddard Farms", hybrid: "P0817Q", year: 2024, bags: 25},
+                {operation: "Goddard Farms", hybrid: "P0817Q", year: 2025, bags: 20},
+                {operation: "Goddard Farms", hybrid: "P08527V", year: 2026, bags: 12},
+                {operation: "Goddard Farms", hybrid: "P0924Q", year: 2024, bags: 20},
+                {operation: "Goddard Farms", hybrid: "P1122AML", year: 2026, bags: 22},
+                {operation: "Goddard Farms", hybrid: "P1151AM", year: 2024, bags: 40},
+                {operation: "Goddard Farms", hybrid: "P9489AM", year: 2024, bags: 9},
+                {operation: "Goddard Farms", hybrid: "P9489AM", year: 2025, bags: 42},
+                {operation: "HALEY     HARMS", hybrid: "P0075AM", year: 2026, bags: 12},
+                {operation: "HBF Inc.", hybrid: "P0075AM", year: 2024, bags: 77},
+                {operation: "HBF Inc.", hybrid: "P0075AM", year: 2025, bags: 52},
+                {operation: "HBF Inc.", hybrid: "P03115V", year: 2026, bags: 12},
+                {operation: "HBF Inc.", hybrid: "P0487Q", year: 2024, bags: 102},
+                {operation: "HBF Inc.", hybrid: "P05081AML", year: 2026, bags: 40},
+                {operation: "HBF Inc.", hybrid: "P05466Q", year: 2024, bags: 35},
+                {operation: "HBF Inc.", hybrid: "P05466V", year: 2025, bags: 56},
+                {operation: "HBF Inc.", hybrid: "P05466V", year: 2026, bags: 46},
+                {operation: "HBF Inc.", hybrid: "P0622AML", year: 2024, bags: 83},
+                {operation: "HBF Inc.", hybrid: "P0622AML", year: 2025, bags: 45},
+                {operation: "HBF Inc.", hybrid: "P0622AML", year: 2026, bags: 65},
+                {operation: "HBF Inc.", hybrid: "P0622Q", year: 2024, bags: 17},
+                {operation: "HBF Inc.", hybrid: "P07340Q", year: 2024, bags: 3},
+                {operation: "HBF Inc.", hybrid: "P07340Q", year: 2025, bags: 53},
+                {operation: "HBF Inc.", hybrid: "P0817Q", year: 2024, bags: 26},
+                {operation: "HBF Inc.", hybrid: "P08527V", year: 2025, bags: 56},
+                {operation: "HBF Inc.", hybrid: "P08527V", year: 2026, bags: 166},
+                {operation: "HBF Inc.", hybrid: "P0859AM", year: 2025, bags: 97},
+                {operation: "HBF Inc.", hybrid: "P0859AM", year: 2026, bags: 145},
+                {operation: "HBF Inc.", hybrid: "P0908AML", year: 2024, bags: 14},
+                {operation: "HBF Inc.", hybrid: "P0908AML", year: 2025, bags: 65},
+                {operation: "HBF Inc.", hybrid: "P0924Q", year: 2024, bags: 138},
+                {operation: "HBF Inc.", hybrid: "P0924Q", year: 2025, bags: 42},
+                {operation: "HBF Inc.", hybrid: "P0995AM", year: 2024, bags: 3},
+                {operation: "HBF Inc.", hybrid: "P0995AM", year: 2026, bags: 52},
+                {operation: "HBF Inc.", hybrid: "P10300PCE", year: 2026, bags: 8},
+                {operation: "HBF Inc.", hybrid: "P10625V", year: 2025, bags: 11},
+                {operation: "HBF Inc.", hybrid: "P10625V", year: 2026, bags: 96},
+                {operation: "HBF Inc.", hybrid: "P1089AMXT", year: 2024, bags: 99},
+                {operation: "HBF Inc.", hybrid: "P1089AMXT", year: 2025, bags: 32},
+                {operation: "HBF Inc.", hybrid: "P1122AML", year: 2026, bags: 86},
+                {operation: "HBF Inc.", hybrid: "P1151AM", year: 2024, bags: 116},
+                {operation: "HBF Inc.", hybrid: "P1151AM", year: 2025, bags: 58},
+                {operation: "HBF Inc.", hybrid: "P12517V", year: 2026, bags: 12},
+                {operation: "HBF Inc.", hybrid: "P1278Q", year: 2024, bags: 52},
+                {operation: "HBF Inc.", hybrid: "P12904AML", year: 2025, bags: 71},
+                {operation: "HBF Inc.", hybrid: "P12904AML", year: 2026, bags: 52},
+                {operation: "HBF Inc.", hybrid: "P1366Q", year: 2024, bags: 36},
+                {operation: "HBF Inc.", hybrid: "P1366Q", year: 2025, bags: 28},
+                {operation: "HBF Inc.", hybrid: "P13777V", year: 2025, bags: 56},
+                {operation: "HBF Inc.", hybrid: "P13777V", year: 2026, bags: 64},
+                {operation: "HBF Inc.", hybrid: "P1828Q", year: 2024, bags: 28},
+                {operation: "Ham; Rodney", hybrid: "P1122AML", year: 2026, bags: 12},
+                {operation: "Hensley; Curt", hybrid: "P00549PCE", year: 2024, bags: 2},
+                {operation: "Hensley; Curt", hybrid: "P00549V", year: 2024, bags: 2},
+                {operation: "Hensley; Curt", hybrid: "P0075Q", year: 2024, bags: 2},
+                {operation: "Hensley; Curt", hybrid: "P0487Q", year: 2024, bags: 38},
+                {operation: "Hensley; Curt", hybrid: "P05466V", year: 2024, bags: 2},
+                {operation: "Hensley; Curt", hybrid: "P07340Q", year: 2024, bags: 12},
+                {operation: "Hensley; Curt", hybrid: "P0908AML", year: 2024, bags: 24},
+                {operation: "Hensley; Curt", hybrid: "P0924Q", year: 2024, bags: 2},
+                {operation: "Hensley; Curt", hybrid: "P10625V", year: 2024, bags: 2},
+                {operation: "Hensley; Curt", hybrid: "P1089AMXT", year: 2024, bags: 36},
+                {operation: "Hethcote Farms", hybrid: "P03115V", year: 2026, bags: 50},
+                {operation: "Hethcote Farms", hybrid: "P05081AML", year: 2025, bags: 106},
+                {operation: "Hethcote Farms", hybrid: "P05081AML", year: 2026, bags: 50},
+                {operation: "Hethcote Farms", hybrid: "P0622AML", year: 2024, bags: 135},
+                {operation: "Hethcote Farms", hybrid: "P0622AML", year: 2025, bags: 160},
+                {operation: "Hethcote Farms", hybrid: "P0622AML", year: 2026, bags: 50},
+                {operation: "Hethcote Farms", hybrid: "P08527V", year: 2026, bags: 50},
+                {operation: "Hethcote Farms", hybrid: "P1122AML", year: 2026, bags: 50},
+                {operation: "Hethcote Farms", hybrid: "P12904Q", year: 2025, bags: 50},
+                {operation: "Hethcote Farms", hybrid: "P1366AML", year: 2025, bags: 50},
+                {operation: "Hethcote Farms", hybrid: "P13777V", year: 2026, bags: 50},
+                {operation: "Hofmeister AG LLC", hybrid: "P0075AM", year: 2024, bags: 126},
+                {operation: "Hofmeister AG LLC", hybrid: "P0075AM", year: 2025, bags: 183},
+                {operation: "Hofmeister AG LLC", hybrid: "P0075AM", year: 2026, bags: 150},
+                {operation: "Hofmeister AG LLC", hybrid: "P03115V", year: 2026, bags: 50},
+                {operation: "Hofmeister AG LLC", hybrid: "P05081AML", year: 2025, bags: 50},
+                {operation: "Hofmeister AG LLC", hybrid: "P05466Q", year: 2024, bags: 6},
+                {operation: "Hofmeister AG LLC", hybrid: "P0622AML", year: 2024, bags: 115},
+                {operation: "Hofmeister AG LLC", hybrid: "P0622AML", year: 2025, bags: 50},
+                {operation: "Hofmeister AG LLC", hybrid: "P0622AML", year: 2026, bags: 100},
+                {operation: "Hofmeister AG LLC", hybrid: "P0622Q", year: 2024, bags: 50},
+                {operation: "Hofmeister AG LLC", hybrid: "P0622Q", year: 2025, bags: 55},
+                {operation: "Hofmeister AG LLC", hybrid: "P07340Q", year: 2024, bags: 6},
+                {operation: "Hofmeister AG LLC", hybrid: "P1122AML", year: 2026, bags: 50},
+                {operation: "Hofmeister AG LLC", hybrid: "P1151AM", year: 2025, bags: 50},
+                {operation: "Jenik", hybrid: "P0075AM", year: 2024, bags: 50},
+                {operation: "Jenik", hybrid: "P0157AMXT", year: 2025, bags: 50},
+                {operation: "Jenik", hybrid: "P0487Q", year: 2026, bags: 50},
+                {operation: "Jenik", hybrid: "P0622AML", year: 2025, bags: 50},
+                {operation: "Krogmeier Farms", hybrid: "P0075Q", year: 2025, bags: 50},
+                {operation: "Krogmeier Farms", hybrid: "P0157AMXT", year: 2024, bags: 50},
+                {operation: "Krogmeier Farms", hybrid: "P0157AMXT", year: 2025, bags: 50},
+                {operation: "Krogmeier Farms", hybrid: "P0622Q", year: 2024, bags: 50},
+                {operation: "Krogmeier Farms", hybrid: "P9845AM", year: 2026, bags: 100},
+                {operation: "Kross; Mark", hybrid: "P0075AM", year: 2025, bags: 20},
+                {operation: "Kross; Mark", hybrid: "P0075AM", year: 2026, bags: 15},
+                {operation: "Kross; Mark", hybrid: "P0075Q", year: 2024, bags: 113},
+                {operation: "Kross; Mark", hybrid: "P0075Q", year: 2025, bags: 41},
+                {operation: "Kross; Mark", hybrid: "P0487Q", year: 2024, bags: 105},
+                {operation: "Kross; Mark", hybrid: "P05466Q", year: 2024, bags: 156},
+                {operation: "Kross; Mark", hybrid: "P05466V", year: 2026, bags: 214},
+                {operation: "Kross; Mark", hybrid: "P07340Q", year: 2025, bags: 81},
+                {operation: "Kross; Mark", hybrid: "P0859AM", year: 2024, bags: 106},
+                {operation: "Kross; Mark", hybrid: "P0859AM", year: 2025, bags: 142},
+                {operation: "Kross; Mark", hybrid: "P0859AM", year: 2026, bags: 180},
+                {operation: "Kross; Mark", hybrid: "P1151Q", year: 2025, bags: 109},
+                {operation: "Kross; Mark", hybrid: "P1366AML", year: 2024, bags: 112},
+                {operation: "Kross; Mark", hybrid: "P1366Q", year: 2024, bags: 155},
+                {operation: "Kross; Mark", hybrid: "P1366Q", year: 2025, bags: 396},
+                {operation: "Kross; Mark", hybrid: "P1366Q", year: 2026, bags: 85},
+                {operation: "Kross; Mark", hybrid: "P9489Q", year: 2024, bags: 27},
+                {operation: "Kurtzer LLC", hybrid: "P0075AM", year: 2024, bags: 150},
+                {operation: "Kurtzer LLC", hybrid: "P0075AM", year: 2025, bags: 166},
+                {operation: "Kurtzer LLC", hybrid: "P0075AM", year: 2026, bags: 50},
+                {operation: "Kurtzer LLC", hybrid: "P05081AML", year: 2026, bags: 50},
+                {operation: "Kurtzer LLC", hybrid: "P1122AML", year: 2025, bags: 50},
+                {operation: "Kurtzer LLC", hybrid: "P1122AML", year: 2026, bags: 100},
+                {operation: "Kurtzer LLC", hybrid: "P1151AM", year: 2024, bags: 50},
+                {operation: "Kurtzer LLC", hybrid: "P1244AM", year: 2024, bags: 50},
+                {operation: "Kurtzer LLC", hybrid: "P1244AM", year: 2025, bags: 50},
+                {operation: "Kurtzer LLC", hybrid: "P1244AM", year: 2026, bags: 100},
+                {operation: "Larson Family Farms", hybrid: "P0075AM", year: 2024, bags: 27},
+                {operation: "Larson Family Farms", hybrid: "P0075AM", year: 2025, bags: 21},
+                {operation: "Larson Family Farms", hybrid: "P0487Q", year: 2024, bags: 50},
+                {operation: "Larson Family Farms", hybrid: "P05081AML", year: 2025, bags: 50},
+                {operation: "Larson Family Farms", hybrid: "P05466V", year: 2025, bags: 50},
+                {operation: "Larson Family Farms", hybrid: "P05466V", year: 2026, bags: 50},
+                {operation: "Larson Family Farms", hybrid: "P0622AML", year: 2024, bags: 158},
+                {operation: "Larson Family Farms", hybrid: "P0622AML", year: 2026, bags: 100},
+                {operation: "Larson Family Farms", hybrid: "P0622Q", year: 2024, bags: 100},
+                {operation: "Larson Family Farms", hybrid: "P07340Q", year: 2024, bags: 1},
+                {operation: "Larson Family Farms", hybrid: "P07340Q", year: 2025, bags: 50},
+                {operation: "Larson Family Farms", hybrid: "P08527V", year: 2026, bags: 100},
+                {operation: "Larson Family Farms", hybrid: "P0859AM", year: 2025, bags: 50},
+                {operation: "Larson Family Farms", hybrid: "P0859AM", year: 2026, bags: 50},
+                {operation: "Larson Family Farms", hybrid: "P0924Q", year: 2025, bags: 50},
+                {operation: "Larson Family Farms", hybrid: "P1089AMXT", year: 2024, bags: 100},
+                {operation: "Larson Family Farms", hybrid: "P1122AML", year: 2025, bags: 50},
+                {operation: "Larson Family Farms", hybrid: "P1122AML", year: 2026, bags: 100},
+                {operation: "Larson Family Farms", hybrid: "P1151AM", year: 2024, bags: 175},
+                {operation: "Larson Family Farms", hybrid: "P1151AM", year: 2025, bags: 250},
+                {operation: "Larson Family Farms", hybrid: "P12904AML", year: 2026, bags: 50},
+                {operation: "Larson Family Farms", hybrid: "P1366Q", year: 2025, bags: 50},
+                {operation: "MS Enterprises", hybrid: "P00549V", year: 2024, bags: 2},
+                {operation: "MS Enterprises", hybrid: "P0075AM", year: 2024, bags: 1},
+                {operation: "MS Enterprises", hybrid: "P0075Q", year: 2024, bags: 204},
+                {operation: "MS Enterprises", hybrid: "P0075Q", year: 2025, bags: 150},
+                {operation: "MS Enterprises", hybrid: "P0075Q", year: 2026, bags: 200},
+                {operation: "MS Enterprises", hybrid: "P03115PCE", year: 2024, bags: 2},
+                {operation: "MS Enterprises", hybrid: "P0487PCE", year: 2024, bags: 2},
+                {operation: "MS Enterprises", hybrid: "P0487Q", year: 2024, bags: 24},
+                {operation: "MS Enterprises", hybrid: "P05466Q", year: 2024, bags: 12},
+                {operation: "MS Enterprises", hybrid: "P05466V", year: 2024, bags: 2},
+                {operation: "MS Enterprises", hybrid: "P05466V", year: 2025, bags: 50},
+                {operation: "MS Enterprises", hybrid: "P05466V", year: 2026, bags: 230},
+                {operation: "MS Enterprises", hybrid: "P0622Q", year: 2024, bags: 200},
+                {operation: "MS Enterprises", hybrid: "P0622Q", year: 2025, bags: 50},
+                {operation: "MS Enterprises", hybrid: "P07340Q", year: 2024, bags: 12},
+                {operation: "MS Enterprises", hybrid: "P07340Q", year: 2025, bags: 186},
+                {operation: "MS Enterprises", hybrid: "P07340Q", year: 2026, bags: 50},
+                {operation: "MS Enterprises", hybrid: "P08527V", year: 2024, bags: 2},
+                {operation: "MS Enterprises", hybrid: "P08527V", year: 2025, bags: 50},
+                {operation: "MS Enterprises", hybrid: "P08527V", year: 2026, bags: 100},
+                {operation: "MS Enterprises", hybrid: "P10625PCUE", year: 2024, bags: 2},
+                {operation: "MS Enterprises", hybrid: "P1151Q", year: 2024, bags: 40},
+                {operation: "MS Enterprises", hybrid: "P1151Q", year: 2025, bags: 40},
+                {operation: "MS Enterprises", hybrid: "P12393V", year: 2024, bags: 2},
+                {operation: "MS Enterprises", hybrid: "P12517V", year: 2026, bags: 50},
+                {operation: "MS Enterprises", hybrid: "P1366Q", year: 2024, bags: 90},
+                {operation: "MS Enterprises", hybrid: "P1366Q", year: 2025, bags: 100},
+                {operation: "MS Enterprises", hybrid: "P1366Q", year: 2026, bags: 50},
+                {operation: "MS Enterprises", hybrid: "P9489Q", year: 2024, bags: 47},
+                {operation: "Majesta Farms LLC", hybrid: "P0075AM", year: 2024, bags: 60},
+                {operation: "Majesta Farms LLC", hybrid: "P0075AM", year: 2025, bags: 56},
+                {operation: "Majesta Farms LLC", hybrid: "P0075AM", year: 2026, bags: 44},
+                {operation: "Majesta Farms LLC", hybrid: "P0157AMXT", year: 2026, bags: 46},
+                {operation: "Majesta Farms LLC", hybrid: "P02405V", year: 2026, bags: 4},
+                {operation: "Majesta Farms LLC", hybrid: "P03357PCUE", year: 2026, bags: 22},
+                {operation: "Majesta Farms LLC", hybrid: "P0339Q", year: 2024, bags: 54},
+                {operation: "Majesta Farms LLC", hybrid: "P05081AML", year: 2025, bags: 8},
+                {operation: "Majesta Farms LLC", hybrid: "P05081AML", year: 2026, bags: 19},
+                {operation: "Majesta Farms LLC", hybrid: "P05466V", year: 2025, bags: 12},
+                {operation: "Majesta Farms LLC", hybrid: "P05466V", year: 2026, bags: 44},
+                {operation: "Majesta Farms LLC", hybrid: "P0622AML", year: 2024, bags: 248},
+                {operation: "Majesta Farms LLC", hybrid: "P0622AML", year: 2025, bags: 223},
+                {operation: "Majesta Farms LLC", hybrid: "P0622AML", year: 2026, bags: 171},
+                {operation: "Majesta Farms LLC", hybrid: "P07340Q", year: 2024, bags: 12},
+                {operation: "Majesta Farms LLC", hybrid: "P07340Q", year: 2025, bags: 111},
+                {operation: "Majesta Farms LLC", hybrid: "P0817Q", year: 2024, bags: 87},
+                {operation: "Majesta Farms LLC", hybrid: "P0817Q", year: 2025, bags: 69},
+                {operation: "Majesta Farms LLC", hybrid: "P08527V", year: 2025, bags: 22},
+                {operation: "Majesta Farms LLC", hybrid: "P08527V", year: 2026, bags: 234},
+                {operation: "Majesta Farms LLC", hybrid: "P0859AM", year: 2024, bags: 90},
+                {operation: "Majesta Farms LLC", hybrid: "P0859AM", year: 2025, bags: 60},
+                {operation: "Majesta Farms LLC", hybrid: "P0908AML", year: 2024, bags: 86},
+                {operation: "Majesta Farms LLC", hybrid: "P0908AML", year: 2025, bags: 64},
+                {operation: "Majesta Farms LLC", hybrid: "P0924Q", year: 2024, bags: 34},
+                {operation: "Majesta Farms LLC", hybrid: "P0924Q", year: 2026, bags: 25},
+                {operation: "Majesta Farms LLC", hybrid: "P10625V", year: 2025, bags: 14},
+                {operation: "Majesta Farms LLC", hybrid: "P1122AML", year: 2024, bags: 12},
+                {operation: "Majesta Farms LLC", hybrid: "P1122AML", year: 2025, bags: 73},
+                {operation: "Majesta Farms LLC", hybrid: "P1122AML", year: 2026, bags: 259},
+                {operation: "Majesta Farms LLC", hybrid: "P12393V", year: 2025, bags: 8},
+                {operation: "Majesta Farms LLC", hybrid: "P1244AM", year: 2024, bags: 123},
+                {operation: "Majesta Farms LLC", hybrid: "P1244AM", year: 2025, bags: 73},
+                {operation: "Majesta Farms LLC", hybrid: "P12517V", year: 2026, bags: 14},
+                {operation: "Majesta Farms LLC", hybrid: "P1278Q", year: 2024, bags: 24},
+                {operation: "Majesta Farms LLC", hybrid: "P1366Q", year: 2024, bags: 40},
+                {operation: "Majesta Farms LLC", hybrid: "P1366Q", year: 2025, bags: 47},
+                {operation: "Majesta Farms LLC", hybrid: "P13777PCUE", year: 2026, bags: 45},
+                {operation: "Majesta Farms LLC", hybrid: "P1548AM", year: 2026, bags: 6},
+                {operation: "McConnell Enterprises", hybrid: "P0075AM", year: 2024, bags: 79},
+                {operation: "McConnell Enterprises", hybrid: "P0075AM", year: 2025, bags: 12},
+                {operation: "McConnell Enterprises", hybrid: "P0075AM", year: 2026, bags: 21},
+                {operation: "McConnell Enterprises", hybrid: "P0075Q", year: 2024, bags: 2},
+                {operation: "McConnell Enterprises", hybrid: "P0157AMXT", year: 2025, bags: 14},
+                {operation: "McConnell Enterprises", hybrid: "P0339Q", year: 2024, bags: 60},
+                {operation: "McConnell Enterprises", hybrid: "P0339Q", year: 2025, bags: 7},
+                {operation: "McConnell Enterprises", hybrid: "P0404AM", year: 2025, bags: 7},
+                {operation: "McConnell Enterprises", hybrid: "P0487PCE", year: 2025, bags: 7},
+                {operation: "McConnell Enterprises", hybrid: "P0487Q", year: 2024, bags: 2},
+                {operation: "McConnell Enterprises", hybrid: "P05081AML", year: 2024, bags: 4},
+                {operation: "McConnell Enterprises", hybrid: "P05081AML", year: 2025, bags: 14},
+                {operation: "McConnell Enterprises", hybrid: "P05081AML", year: 2026, bags: 21},
+                {operation: "McConnell Enterprises", hybrid: "P05466V", year: 2025, bags: 53},
+                {operation: "McConnell Enterprises", hybrid: "P0622AML", year: 2024, bags: 62},
+                {operation: "McConnell Enterprises", hybrid: "P0622AML", year: 2025, bags: 14},
+                {operation: "McConnell Enterprises", hybrid: "P0622AML", year: 2026, bags: 21},
+                {operation: "McConnell Enterprises", hybrid: "P0859AM", year: 2024, bags: 2},
+                {operation: "McConnell Enterprises", hybrid: "P0859AM", year: 2025, bags: 7},
+                {operation: "McConnell Enterprises", hybrid: "P0995AM", year: 2025, bags: 7},
+                {operation: "McConnell Enterprises", hybrid: "P0995AM", year: 2026, bags: 14},
+                {operation: "McConnell Enterprises", hybrid: "P10625V", year: 2024, bags: 2},
+                {operation: "McConnell Enterprises", hybrid: "P1122AML", year: 2025, bags: 14},
+                {operation: "McConnell Enterprises", hybrid: "P1122AML", year: 2026, bags: 28},
+                {operation: "McConnell Enterprises", hybrid: "P1151AM", year: 2025, bags: 15},
+                {operation: "McConnell Enterprises", hybrid: "P1244AM", year: 2025, bags: 7},
+                {operation: "McConnell Enterprises", hybrid: "P1244AM", year: 2026, bags: 7},
+                {operation: "McConnell Enterprises", hybrid: "P13841PWUE", year: 2026, bags: 7},
+                {operation: "McConnell Enterprises", hybrid: "P1413AM", year: 2025, bags: 14},
+                {operation: "McConnell Enterprises", hybrid: "P14830AML", year: 2026, bags: 7},
+                {operation: "McConnell Enterprises", hybrid: "P1548AM", year: 2025, bags: 14},
+                {operation: "McConnell Enterprises", hybrid: "P1548AM", year: 2026, bags: 21},
+                {operation: "McConnell Enterprises", hybrid: "P9489AM", year: 2025, bags: 7},
+                {operation: "McConnell Enterprises", hybrid: "P9845PCE", year: 2024, bags: 1},
+                {operation: "McConnell Enterprises", hybrid: "P9845PCE", year: 2025, bags: 7},
+                {operation: "Michael Farms", hybrid: "P05081AML", year: 2025, bags: 50},
+                {operation: "Michael Farms", hybrid: "P0622AML", year: 2024, bags: 150},
+                {operation: "Michael Farms", hybrid: "P0622AML", year: 2025, bags: 150},
+                {operation: "Michael Farms", hybrid: "P0622AML", year: 2026, bags: 100},
+                {operation: "Michael Farms", hybrid: "P0622Q", year: 2026, bags: 50},
+                {operation: "Michael Farms", hybrid: "P0817Q", year: 2025, bags: 55},
+                {operation: "Michael Farms", hybrid: "P1122AML", year: 2024, bags: 30},
+                {operation: "Michael Farms", hybrid: "P1151AM", year: 2024, bags: 150},
+                {operation: "Michael Farms", hybrid: "P1151AM", year: 2025, bags: 50},
+                {operation: "Michael Farms", hybrid: "P1244AM", year: 2026, bags: 50},
+                {operation: "Michael Farms", hybrid: "P1278Q", year: 2024, bags: 50},
+                {operation: "Michael Farms", hybrid: "P1366Q", year: 2024, bags: 50},
+                {operation: "Michael Farms", hybrid: "P1366Q", year: 2025, bags: 26},
+                {operation: "Michael Farms", hybrid: "P1548AM", year: 2026, bags: 50},
+                {operation: "On The Brink", hybrid: "P08527V", year: 2026, bags: 50},
+                {operation: "Otto Eugene Lueking Jr. Estate", hybrid: "P0075Q", year: 2024, bags: 100},
+                {operation: "Otto Eugene Lueking Jr. Estate", hybrid: "P05466Q", year: 2024, bags: 50},
+                {operation: "Otto Eugene Lueking Jr. Estate", hybrid: "P0622AML", year: 2024, bags: 50},
+                {operation: "Otto Eugene Lueking Jr. Estate", hybrid: "P0622Q", year: 2024, bags: 50},
+                {operation: "Otto Eugene Lueking Jr. Estate", hybrid: "P1089AMXT", year: 2024, bags: 40},
+                {operation: "PRO AGRONOMICS", hybrid: "35F50AM", year: 2024, bags: 46},
+                {operation: "Peterson;Mike", hybrid: "P0075", year: 2024, bags: 30},
+                {operation: "R&W Kurtzer Farms", hybrid: "P0075AM", year: 2024, bags: 61},
+                {operation: "R&W Kurtzer Farms", hybrid: "P0075AM", year: 2025, bags: 30},
+                {operation: "R&W Kurtzer Farms", hybrid: "P0075AM", year: 2026, bags: 12},
+                {operation: "R&W Kurtzer Farms", hybrid: "P0622AML", year: 2024, bags: 18},
+                {operation: "R&W Kurtzer Farms", hybrid: "P0622AML", year: 2026, bags: 12},
+                {operation: "R&W Kurtzer Farms", hybrid: "P1151AM", year: 2024, bags: 50},
+                {operation: "R&W Kurtzer Farms", hybrid: "P1151AM", year: 2025, bags: 63},
+                {operation: "Rober; George", hybrid: "P0075AM", year: 2024, bags: 13},
+                {operation: "Rober; George", hybrid: "P0075AM", year: 2026, bags: 12},
+                {operation: "Rober; George", hybrid: "P0075Q", year: 2024, bags: 20},
+                {operation: "Rober; George", hybrid: "P0622AML", year: 2024, bags: 6},
+                {operation: "Rober; George", hybrid: "P0622AML", year: 2025, bags: 5},
+                {operation: "Rober; George", hybrid: "P07340Q", year: 2025, bags: 18},
+                {operation: "Rober; George", hybrid: "P1151AM", year: 2025, bags: 15},
+                {operation: "Ryan Oliver", hybrid: "P0075AM", year: 2026, bags: 47},
+                {operation: "Ryan Oliver", hybrid: "P0157AMXT", year: 2026, bags: 30},
+                {operation: "Seger Operations", hybrid: "P0075AM", year: 2025, bags: 47},
+                {operation: "Seger Operations", hybrid: "P0075AM", year: 2026, bags: 75},
+                {operation: "Seger Operations", hybrid: "P05081AML", year: 2025, bags: 4},
+                {operation: "Seger Operations", hybrid: "P0622AML", year: 2025, bags: 76},
+                {operation: "Seger Operations", hybrid: "P0622AML", year: 2026, bags: 50},
+                {operation: "Seger Operations", hybrid: "P1122AML", year: 2026, bags: 25},
+                {operation: "Starkebaum Farms", hybrid: "P0075AM", year: 2024, bags: 50},
+                {operation: "Starkebaum Farms", hybrid: "P0622AML", year: 2024, bags: 50},
+                {operation: "Starkebaum Farms", hybrid: "P0622AML", year: 2025, bags: 50},
+                {operation: "Starkebaum Farms", hybrid: "P1122AML", year: 2026, bags: 50},
+                {operation: "Starkebaum Farms", hybrid: "P1244AM", year: 2026, bags: 50},
+                {operation: "Starkebaum Farms", hybrid: "P9845PCE", year: 2025, bags: 24},
+                {operation: "Toyne; David", hybrid: "P0075Q", year: 2024, bags: 17},
+                {operation: "Toyne; David", hybrid: "P03115V", year: 2026, bags: 6},
+                {operation: "Toyne; David", hybrid: "P0487Q", year: 2024, bags: 12},
+                {operation: "Toyne; David", hybrid: "P05466V", year: 2025, bags: 12},
+                {operation: "Toyne; David", hybrid: "P05466V", year: 2026, bags: 12},
+                {operation: "Toyne; David", hybrid: "P07340Q", year: 2024, bags: 12},
+                {operation: "Toyne; David", hybrid: "P07340Q", year: 2025, bags: 30},
+                {operation: "Toyne; David", hybrid: "P07340Q", year: 2026, bags: 24},
+                {operation: "Toyne; David", hybrid: "P10625V", year: 2026, bags: 12},
+                {operation: "Toyne; David", hybrid: "P1089AMXT", year: 2024, bags: 24},
+                {operation: "Toyne; David", hybrid: "P1089AMXT", year: 2025, bags: 21},
+                {operation: "Toyne; Glenn", hybrid: "P0075Q", year: 2024, bags: 100},
+                {operation: "Toyne; Glenn", hybrid: "P0487Q", year: 2024, bags: 63},
+                {operation: "Toyne; Glenn", hybrid: "P0622Q", year: 2024, bags: 72},
+                {operation: "Toyne; Jan", hybrid: "P0075Q", year: 2024, bags: 6},
+                {operation: "Toyne; Jan", hybrid: "P0924Q", year: 2026, bags: 12},
+                {operation: "Toyne; Jan", hybrid: "P1089AMXT", year: 2024, bags: 42},
+                {operation: "Toyne; Jan", hybrid: "P1089AMXT", year: 2025, bags: 11},
+                {operation: "Toyne; Jan", hybrid: "P1278Q", year: 2024, bags: 12},
+                {operation: "Vandenbark Bros", hybrid: "P0075AM", year: 2024, bags: 212},
+                {operation: "Vandenbark Bros", hybrid: "P0075AM", year: 2025, bags: 196},
+                {operation: "Vandenbark Bros", hybrid: "P0075AM", year: 2026, bags: 44},
+                {operation: "Vandenbark Bros", hybrid: "P05081AML", year: 2025, bags: 31},
+                {operation: "Vandenbark Bros", hybrid: "P05081AML", year: 2026, bags: 229},
+                {operation: "Vandenbark Bros", hybrid: "P0622AML", year: 2024, bags: 120},
+                {operation: "Vandenbark Bros", hybrid: "P0622AML", year: 2025, bags: 78},
+                {operation: "Vandenbark Bros", hybrid: "P0622AML", year: 2026, bags: 40},
+                {operation: "Vandenbark Bros", hybrid: "P1122AML", year: 2026, bags: 9},
+                {operation: "Wernsman; Gary", hybrid: "35F50AM", year: 2024, bags: 9},
+                {operation: "Wernsman; Gary", hybrid: "P0075Q", year: 2024, bags: 120},
+                {operation: "Wernsman; Gary", hybrid: "P0075Q", year: 2025, bags: 119},
+                {operation: "Wernsman; Gary", hybrid: "P0157AMXT", year: 2024, bags: 9},
+                {operation: "Wernsman; Gary", hybrid: "P0157AMXT", year: 2025, bags: 16},
+                {operation: "Wernsman; Gary", hybrid: "P0157AMXT", year: 2026, bags: 50},
+                {operation: "Wernsman; Gary", hybrid: "P03115V", year: 2025, bags: 36},
+                {operation: "Wernsman; Gary", hybrid: "P0339Q", year: 2024, bags: 60},
+                {operation: "Wernsman; Gary", hybrid: "P0339Q", year: 2025, bags: 50},
+                {operation: "Wernsman; Gary", hybrid: "P0404Q", year: 2024, bags: 30},
+                {operation: "Wernsman; Gary", hybrid: "P0487Q", year: 2024, bags: 60},
+                {operation: "Wernsman; Gary", hybrid: "P0487Q", year: 2025, bags: 46},
+                {operation: "Wernsman; Gary", hybrid: "P05466V", year: 2025, bags: 26},
+                {operation: "Wernsman; Gary", hybrid: "P05466V", year: 2026, bags: 50},
+                {operation: "Wernsman; Gary", hybrid: "P07340Q", year: 2026, bags: 50},
+                {operation: "Wernsman; Gary", hybrid: "P08527V", year: 2026, bags: 50},
+                {operation: "Wernsman; Gary", hybrid: "P0924Q", year: 2026, bags: 50},
+                {operation: "Wernsman; Gary", hybrid: "P10625V", year: 2026, bags: 50},
+                {operation: "zc - Sundance", hybrid: "P0075AM", year: 2024, bags: 9},
+                {operation: "zc - Sundance", hybrid: "P0622AML", year: 2024, bags: 38},
+                {operation: "zzz - Seger; Lynn", hybrid: "P0075AM", year: 2024, bags: 33},
+                {operation: "zzz - Seger; Lynn", hybrid: "P0622AML", year: 2024, bags: 50},
+                {operation: "zzz- Seger; Leland", hybrid: "P0075AM", year: 2024, bags: 35},
+                {operation: "zzz- Seger; Leland", hybrid: "P0622AML", year: 2024, bags: 50}
             ],
-            discontinued2027: ["P0157AM", "P0574AM", "P0720Q"],
-            new2027: ["P0185AM", "P0650Q", "P0890AM", "P1250AM"]
+            new2027: ['P96567V', 'P96567PCE', 'P99491V', 'P99491PCE', 'P03802PCE', 'P04651V', 'P08215PCUE', 'P10705V', 'P11259PCE', 'P14270V', 'P14270PCE', 'P15517V', 'P18512V', 'P18512PCE'],
+            hybridNotes: {}
         };
 
-        // ============================================
-        // INITIALIZATION
-        // ============================================
-        function init() {
-            loadFromStorage();
-            renderAll();
+        // Load notes from localStorage
+        const savedNotes = localStorage.getItem('pioneerHybridNotes');
+        if (savedNotes) {
+            data.hybridNotes = JSON.parse(savedNotes);
+            document.querySelectorAll('textarea[id^="notes-"]').forEach(ta => {
+                const key = ta.id.replace('notes-', '');
+                if (data.hybridNotes[key]) ta.value = data.hybridNotes[key];
+            });
         }
 
-        function loadFromStorage() {
-            const saved = localStorage.getItem('pioneerForecastData');
-            if (saved) {
-                try {
-                    data = JSON.parse(saved);
-                    if (!data.records) data.records = [];
-                    if (!data.discontinued2027) data.discontinued2027 = [];
-                    if (!data.new2027) data.new2027 = [];
-                } catch (e) {
-                    console.error('Error loading data:', e);
-                    data = JSON.parse(JSON.stringify(defaultData));
-                }
-            } else {
-                // No saved data - use default sample data
-                data = JSON.parse(JSON.stringify(defaultData));
-            }
+        function saveNotes(hybrid, value) {
+            data.hybridNotes[hybrid] = value;
+            localStorage.setItem('pioneerHybridNotes', JSON.stringify(data.hybridNotes));
         }
 
-        function saveToStorage() {
-            localStorage.setItem('pioneerForecastData', JSON.stringify(data));
-        }
-
-        // ============================================
-        // TAB SWITCHING
-        // ============================================
         function switchTab(tabId) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
@@ -642,9 +1205,6 @@
             document.getElementById(tabId).classList.add('active');
         }
 
-        // ============================================
-        // RENDERING
-        // ============================================
         function renderAll() {
             renderSummary();
             renderByOperation();
@@ -655,27 +1215,11 @@
         function renderSummary() {
             const totals = {2024: 0, 2025: 0, 2026: 0};
             data.records.forEach(r => {
-                if (totals[r.year] !== undefined) {
-                    totals[r.year] += r.bags;
-                }
+                if (totals[r.year] !== undefined) totals[r.year] += r.bags;
             });
-
-            // Calculate 2027 prediction
             let total2027 = 0;
             const hybridTotals = getHybridTotals();
-            Object.keys(hybridTotals).forEach(hybrid => {
-                if (!data.discontinued2027.includes(hybrid)) {
-                    total2027 += hybridTotals[hybrid].predicted;
-                }
-            });
-            // Add new hybrids (estimate based on average)
-            const avgPerHybrid = total2027 / Math.max(Object.keys(hybridTotals).length, 1);
-            data.new2027.forEach(h => {
-                if (!hybridTotals[h]) {
-                    total2027 += Math.round(avgPerHybrid * 0.5); // New hybrids start at 50% of average
-                }
-            });
-
+            Object.keys(hybridTotals).forEach(h => { total2027 += hybridTotals[h].predicted; });
             document.getElementById('total-2024').textContent = totals[2024].toLocaleString();
             document.getElementById('total-2025').textContent = totals[2025].toLocaleString();
             document.getElementById('total-2026').textContent = totals[2026].toLocaleString();
@@ -683,166 +1227,69 @@
         }
 
         function renderByOperation() {
-            const filter = document.getElementById('filter-operation').value.toLowerCase();
+            const filter = (document.getElementById('filter-operation')?.value || '').toLowerCase();
             const operations = getOperationTotals();
             const tbody = document.getElementById('operation-table');
-
             let html = '';
             Object.keys(operations).sort().forEach(op => {
                 if (filter && !op.toLowerCase().includes(filter)) return;
-
                 const d = operations[op];
                 const change = d.y2026 > 0 ? ((d.predicted - d.y2026) / d.y2026 * 100).toFixed(1) : 0;
                 const changeClass = change >= 0 ? 'change-up' : 'change-down';
-
-                html += `<tr>
-                    <td><strong>${op}</strong></td>
-                    <td class="text-right">${d.y2024 || '-'}</td>
-                    <td class="text-right">${d.y2025 || '-'}</td>
-                    <td class="text-right">${d.y2026 || '-'}</td>
-                    <td class="text-right prediction">${d.predicted}</td>
-                    <td class="text-right ${changeClass}">${change >= 0 ? '+' : ''}${change}%</td>
-                </tr>`;
+                html += `<tr><td><strong>${op}</strong></td><td class="text-right">${d.y2024 || '-'}</td><td class="text-right">${d.y2025 || '-'}</td><td class="text-right">${d.y2026 || '-'}</td><td class="text-right prediction">${d.predicted}</td><td class="text-right ${changeClass}">${change >= 0 ? '+' : ''}${change}%</td></tr>`;
             });
-
-            tbody.innerHTML = html || '<tr><td colspan="6" style="text-align:center; color:#666;">No data. Click "Import Data" to add records.</td></tr>';
+            tbody.innerHTML = html || '<tr><td colspan="6">No data</td></tr>';
         }
 
         function renderByHybrid() {
-            const filter = document.getElementById('filter-hybrid').value.toLowerCase();
-            const statusFilter = document.getElementById('filter-hybrid-status').value;
+            const filter = (document.getElementById('filter-hybrid')?.value || '').toLowerCase();
             const hybrids = getHybridTotals();
             const tbody = document.getElementById('hybrid-table');
-
-            // Calculate total for percentage
             let grandTotal = 0;
-            Object.values(hybrids).forEach(h => {
-                if (!data.discontinued2027.includes(h.hybrid)) {
-                    grandTotal += h.predicted;
-                }
-            });
-
+            Object.values(hybrids).forEach(h => { grandTotal += h.predicted; });
             let html = '';
             Object.keys(hybrids).sort().forEach(hybrid => {
                 if (filter && !hybrid.toLowerCase().includes(filter)) return;
-
-                const isDiscontinued = data.discontinued2027.includes(hybrid);
-                const isNew = data.new2027.includes(hybrid);
-
-                if (statusFilter === 'active' && (isDiscontinued || isNew)) return;
-                if (statusFilter === 'discontinued' && !isDiscontinued) return;
-                if (statusFilter === 'new' && !isNew) return;
-
                 const d = hybrids[hybrid];
-                const predicted = isDiscontinued ? 0 : d.predicted;
-                const pct = grandTotal > 0 ? (predicted / grandTotal * 100).toFixed(1) : 0;
-
-                let status = '<span style="color:#28a745;">Active</span>';
-                if (isDiscontinued) status = '<span style="color:#dc3545;">Discontinued</span>';
-                if (isNew) status = '<span style="color:#007bff;">New 2027</span>';
-
-                html += `<tr ${isDiscontinued ? 'style="opacity:0.5;"' : ''}>
-                    <td><strong>${hybrid}</strong></td>
-                    <td class="text-right">${d.y2024 || '-'}</td>
-                    <td class="text-right">${d.y2025 || '-'}</td>
-                    <td class="text-right">${d.y2026 || '-'}</td>
-                    <td class="text-right prediction">${predicted}</td>
-                    <td class="text-right">${pct}%</td>
-                    <td class="text-center">${status}</td>
-                </tr>`;
+                const pct = grandTotal > 0 ? (d.predicted / grandTotal * 100).toFixed(1) : 0;
+                html += `<tr><td><strong>${hybrid}</strong></td><td class="text-right">${d.y2024 || '-'}</td><td class="text-right">${d.y2025 || '-'}</td><td class="text-right">${d.y2026 || '-'}</td><td class="text-right prediction">${d.predicted}</td><td class="text-right">${pct}%</td></tr>`;
             });
-
-            // Add new hybrids with no history
-            data.new2027.forEach(hybrid => {
-                if (hybrids[hybrid]) return; // Already shown
-                if (filter && !hybrid.toLowerCase().includes(filter)) return;
-                if (statusFilter === 'active' || statusFilter === 'discontinued') return;
-
-                const avgPredicted = Math.round(grandTotal / Math.max(Object.keys(hybrids).length, 1) * 0.5);
-                html += `<tr>
-                    <td><strong>${hybrid}</strong></td>
-                    <td class="text-right">-</td>
-                    <td class="text-right">-</td>
-                    <td class="text-right">-</td>
-                    <td class="text-right prediction">${avgPredicted}</td>
-                    <td class="text-right">-</td>
-                    <td class="text-center"><span style="color:#007bff;">New 2027</span></td>
-                </tr>`;
-            });
-
-            tbody.innerHTML = html || '<tr><td colspan="7" style="text-align:center; color:#666;">No data.</td></tr>';
+            tbody.innerHTML = html || '<tr><td colspan="6">No data</td></tr>';
         }
 
         function renderDetail() {
-            const filter = document.getElementById('filter-detail').value.toLowerCase();
-            const yearFilter = document.getElementById('filter-detail-year').value;
+            const filter = (document.getElementById('filter-detail')?.value || '').toLowerCase();
             const details = getDetailData();
             const tbody = document.getElementById('detail-table');
-
             let html = '';
             details.forEach(d => {
                 if (filter && !d.operation.toLowerCase().includes(filter) && !d.hybrid.toLowerCase().includes(filter)) return;
-
-                const showRow = yearFilter === 'all' ||
-                    (yearFilter === '2024' && d.y2024 > 0) ||
-                    (yearFilter === '2025' && d.y2025 > 0) ||
-                    (yearFilter === '2026' && d.y2026 > 0);
-
-                if (!showRow) return;
-
-                const isDiscontinued = data.discontinued2027.includes(d.hybrid);
-                const predicted = isDiscontinued ? 0 : d.predicted;
-
-                html += `<tr ${isDiscontinued ? 'style="opacity:0.5;"' : ''}>
-                    <td>${d.operation}</td>
-                    <td>${d.hybrid}</td>
-                    <td class="text-right">${d.y2024 || '-'}</td>
-                    <td class="text-right">${d.y2025 || '-'}</td>
-                    <td class="text-right">${d.y2026 || '-'}</td>
-                    <td class="text-right prediction">${predicted}</td>
-                </tr>`;
+                html += `<tr><td>${d.operation}</td><td>${d.hybrid}</td><td class="text-right">${d.y2024 || '-'}</td><td class="text-right">${d.y2025 || '-'}</td><td class="text-right">${d.y2026 || '-'}</td><td class="text-right prediction">${d.predicted}</td></tr>`;
             });
-
-            tbody.innerHTML = html || '<tr><td colspan="6" style="text-align:center; color:#666;">No data.</td></tr>';
+            tbody.innerHTML = html || '<tr><td colspan="6">No data</td></tr>';
         }
 
-        // ============================================
-        // DATA AGGREGATION
-        // ============================================
         function getOperationTotals() {
             const ops = {};
             data.records.forEach(r => {
-                if (!ops[r.operation]) {
-                    ops[r.operation] = {y2024: 0, y2025: 0, y2026: 0, predicted: 0};
-                }
-                if (r.year === 2024 || r.year === '2024') ops[r.operation].y2024 += r.bags;
-                if (r.year === 2025 || r.year === '2025') ops[r.operation].y2025 += r.bags;
-                if (r.year === 2026 || r.year === '2026') ops[r.operation].y2026 += r.bags;
+                if (!ops[r.operation]) ops[r.operation] = {y2024: 0, y2025: 0, y2026: 0, predicted: 0};
+                if (r.year === 2024) ops[r.operation].y2024 += r.bags;
+                if (r.year === 2025) ops[r.operation].y2025 += r.bags;
+                if (r.year === 2026) ops[r.operation].y2026 += r.bags;
             });
-
-            // Calculate predictions per operation
-            Object.keys(ops).forEach(op => {
-                ops[op].predicted = predictValue(ops[op].y2024, ops[op].y2025, ops[op].y2026);
-            });
-
+            Object.keys(ops).forEach(op => { ops[op].predicted = predictValue(ops[op].y2024, ops[op].y2025, ops[op].y2026); });
             return ops;
         }
 
         function getHybridTotals() {
             const hybrids = {};
             data.records.forEach(r => {
-                if (!hybrids[r.hybrid]) {
-                    hybrids[r.hybrid] = {hybrid: r.hybrid, y2024: 0, y2025: 0, y2026: 0, predicted: 0};
-                }
-                if (r.year === 2024 || r.year === '2024') hybrids[r.hybrid].y2024 += r.bags;
-                if (r.year === 2025 || r.year === '2025') hybrids[r.hybrid].y2025 += r.bags;
-                if (r.year === 2026 || r.year === '2026') hybrids[r.hybrid].y2026 += r.bags;
+                if (!hybrids[r.hybrid]) hybrids[r.hybrid] = {y2024: 0, y2025: 0, y2026: 0, predicted: 0};
+                if (r.year === 2024) hybrids[r.hybrid].y2024 += r.bags;
+                if (r.year === 2025) hybrids[r.hybrid].y2025 += r.bags;
+                if (r.year === 2026) hybrids[r.hybrid].y2026 += r.bags;
             });
-
-            Object.keys(hybrids).forEach(h => {
-                hybrids[h].predicted = predictValue(hybrids[h].y2024, hybrids[h].y2025, hybrids[h].y2026);
-            });
-
+            Object.keys(hybrids).forEach(h => { hybrids[h].predicted = predictValue(hybrids[h].y2024, hybrids[h].y2025, hybrids[h].y2026); });
             return hybrids;
         }
 
@@ -850,14 +1297,11 @@
             const detail = {};
             data.records.forEach(r => {
                 const key = `${r.operation}|${r.hybrid}`;
-                if (!detail[key]) {
-                    detail[key] = {operation: r.operation, hybrid: r.hybrid, y2024: 0, y2025: 0, y2026: 0};
-                }
-                if (r.year === 2024 || r.year === '2024') detail[key].y2024 += r.bags;
-                if (r.year === 2025 || r.year === '2025') detail[key].y2025 += r.bags;
-                if (r.year === 2026 || r.year === '2026') detail[key].y2026 += r.bags;
+                if (!detail[key]) detail[key] = {operation: r.operation, hybrid: r.hybrid, y2024: 0, y2025: 0, y2026: 0};
+                if (r.year === 2024) detail[key].y2024 += r.bags;
+                if (r.year === 2025) detail[key].y2025 += r.bags;
+                if (r.year === 2026) detail[key].y2026 += r.bags;
             });
-
             return Object.values(detail).map(d => {
                 d.predicted = predictValue(d.y2024, d.y2025, d.y2026);
                 return d;
@@ -865,272 +1309,23 @@
         }
 
         function predictValue(y2024, y2025, y2026) {
-            // Simple trend-based prediction
             if (y2024 && y2025 && y2026) {
                 const growth1 = y2024 > 0 ? (y2025 - y2024) / y2024 : 0;
                 const growth2 = y2025 > 0 ? (y2026 - y2025) / y2025 : 0;
                 const avgGrowth = (growth1 + growth2) / 2;
                 return Math.max(0, Math.round(y2026 * (1 + avgGrowth)));
-            } else if (y2026) {
-                return Math.round(y2026 * 1.02); // 2% default growth
-            } else if (y2025) {
-                return Math.round(y2025);
-            } else if (y2024) {
-                return Math.round(y2024);
-            }
+            } else if (y2026) return Math.round(y2026 * 1.02);
+            else if (y2025) return Math.round(y2025);
+            else if (y2024) return Math.round(y2024);
             return 0;
         }
 
-        // ============================================
-        // IMPORT FUNCTIONS
-        // ============================================
-        function showImportModal() {
-            document.getElementById('import-modal').style.display = 'flex';
-        }
-
-        function hideImportModal() {
-            document.getElementById('import-modal').style.display = 'none';
-        }
-
-        function handleFile(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('paste-data').value = e.target.result;
-                showStatus('import-status', 'File loaded. Click "Import Data" to process.', 'info');
-            };
-            reader.readAsText(file);
-        }
-
-        function importData() {
-            const content = document.getElementById('paste-data').value.trim();
-            if (!content) {
-                showStatus('import-status', 'Please paste data or upload a file first.', 'error');
-                return;
-            }
-
-            const year = document.getElementById('import-year').value;
-            const result = parseData(content, year);
-
-            if (result.records.length > 0) {
-                // Add to existing data
-                result.records.forEach(r => {
-                    // Check if exists, update if so
-                    const existing = data.records.find(
-                        e => e.operation === r.operation && e.hybrid === r.hybrid && e.year == r.year
-                    );
-                    if (existing) {
-                        existing.bags = r.bags;
-                    } else {
-                        data.records.push(r);
-                    }
-                });
-
-                saveToStorage();
-                renderAll();
-                showStatus('import-status', `Successfully imported ${result.records.length} records for ${year}!\n\n${result.debug}`, 'success');
-            } else {
-                showStatus('import-status', `No valid records found.\n\n${result.debug}`, 'error');
-            }
-        }
-
-        function parseData(content, year) {
-            const lines = content.split('\n').filter(l => l.trim());
-            if (lines.length === 0) return {records: [], debug: 'No data lines found'};
-
-            let debug = '';
-            const records = [];
-
-            // Detect delimiter
-            const firstLine = lines[0];
-            const tabs = (firstLine.match(/\t/g) || []).length;
-            const commas = (firstLine.match(/,/g) || []).length;
-            const delimiter = tabs > commas ? '\t' : ',';
-            debug += `Delimiter: ${delimiter === '\t' ? 'TAB' : 'COMMA'}\n`;
-
-            // Parse headers
-            const headers = firstLine.split(delimiter).map(h => h.trim().toLowerCase().replace(/['"]/g, ''));
-            debug += `Columns: ${headers.length}\n`;
-            debug += `Headers: ${headers.slice(0, 5).join(', ')}${headers.length > 5 ? '...' : ''}\n`;
-
-            // Find columns
-            let opCol = headers.findIndex(h => h.includes('operation') || h.includes('account') || h.includes('grower') || h.includes('customer') || h.includes('farm'));
-            // For hybrid: prefer "product" column (not "product line"), avoid "subproduct"
-            let hybridCol = headers.findIndex(h => h === 'product' || (h.includes('product') && !h.includes('line') && !h.includes('sub')));
-            if (hybridCol === -1) hybridCol = headers.findIndex(h => h.includes('hybrid') || h.includes('variety'));
-            // For quantity: look for invoiced, delivered, bags, quantity, etc.
-            let bagsCol = headers.findIndex(h => h.includes('invoiced') || h.includes('delivered') || h.includes('bags') || h.includes('quantity') || h.includes('qty') || h.includes('total physical') || h.includes('regular'));
-
-            debug += `Mapped: Operation=${opCol}, Hybrid=${hybridCol}, Bags=${bagsCol}\n`;
-
-            if (opCol === -1 || hybridCol === -1 || bagsCol === -1) {
-                debug += '\nERROR: Could not find required columns.\n';
-                debug += 'Need: Operation (or Account/Grower), Subproduct (or Hybrid), Delivered (or Bags/Quantity)\n';
-                return {records: [], debug};
-            }
-
-            // Parse data rows
-            for (let i = 1; i < lines.length; i++) {
-                const values = lines[i].split(delimiter).map(v => v.trim().replace(/^["']|["']$/g, ''));
-                if (values.length <= Math.max(opCol, hybridCol, bagsCol)) continue;
-
-                const operation = values[opCol] || '';
-                let hybrid = values[hybridCol] || '';
-                let bags = values[bagsCol] || '0';
-
-                // Clean hybrid - extract P#### pattern
-                const match = hybrid.match(/P\d{3,4}[A-Z]*/i);
-                if (match) hybrid = match[0].toUpperCase();
-                else hybrid = hybrid.toUpperCase();
-
-                // Clean bags
-                bags = parseInt(bags.replace(/,/g, '').replace(/[^\d.-]/g, '')) || 0;
-
-                if (operation && hybrid && bags > 0) {
-                    records.push({operation, hybrid, year: parseInt(year), bags});
-                }
-            }
-
-            debug += `\nParsed ${records.length} valid records\n`;
-            if (records.length > 0) {
-                debug += `Sample: ${records[0].operation} | ${records[0].hybrid} | ${records[0].bags} bags`;
-            }
-
-            return {records, debug};
-        }
-
-        function showStatus(id, message, type) {
-            const el = document.getElementById(id);
-            el.style.display = 'block';
-            el.className = 'status ' + type;
-            el.textContent = message;
-        }
-
-        function viewCurrentData() {
-            const counts = {2024: 0, 2025: 0, 2026: 0};
-            data.records.forEach(r => {
-                if (counts[r.year] !== undefined) counts[r.year]++;
-            });
-            const msg = `Current data:\n2024: ${counts[2024]} records\n2025: ${counts[2025]} records\n2026: ${counts[2026]} records\n\nTotal: ${data.records.length} records`;
-            showStatus('import-status', msg, 'info');
-        }
-
-        function clearData() {
-            if (confirm('Clear ALL data? This cannot be undone.')) {
-                data.records = [];
-                saveToStorage();
-                renderAll();
-                showStatus('import-status', 'All data cleared.', 'info');
-            }
-        }
-
-        // ============================================
-        // HYBRID MANAGEMENT
-        // ============================================
-        function showHybridModal() {
-            document.getElementById('hybrid-modal').style.display = 'flex';
-            renderHybridLists();
-        }
-
-        function hideHybridModal() {
-            document.getElementById('hybrid-modal').style.display = 'none';
-        }
-
-        function renderHybridLists() {
-            // Discontinued
-            const discList = document.getElementById('discontinued-list');
-            discList.innerHTML = data.discontinued2027.map(h =>
-                `<span class="hybrid-tag discontinued">${h} <button class="remove" onclick="removeDiscontinued('${h}')">&times;</button></span>`
-            ).join('') || '<span style="color:#666;">None</span>';
-
-            // New
-            const newList = document.getElementById('new-list');
-            newList.innerHTML = data.new2027.map(h =>
-                `<span class="hybrid-tag new">${h} <button class="remove" onclick="removeNew('${h}')">&times;</button></span>`
-            ).join('') || '<span style="color:#666;">None</span>';
-        }
-
-        function addDiscontinued() {
-            const input = document.getElementById('add-discontinued');
-            const hybrid = input.value.trim().toUpperCase();
-            if (hybrid && !data.discontinued2027.includes(hybrid)) {
-                data.discontinued2027.push(hybrid);
-                saveToStorage();
-                renderHybridLists();
-                renderAll();
-            }
-            input.value = '';
-        }
-
-        function removeDiscontinued(hybrid) {
-            data.discontinued2027 = data.discontinued2027.filter(h => h !== hybrid);
-            saveToStorage();
-            renderHybridLists();
-            renderAll();
-        }
-
-        function addNewHybrid() {
-            const input = document.getElementById('add-new');
-            const hybrid = input.value.trim().toUpperCase();
-            if (hybrid && !data.new2027.includes(hybrid)) {
-                data.new2027.push(hybrid);
-                saveToStorage();
-                renderHybridLists();
-                renderAll();
-            }
-            input.value = '';
-        }
-
-        function removeNew(hybrid) {
-            data.new2027 = data.new2027.filter(h => h !== hybrid);
-            saveToStorage();
-            renderHybridLists();
-            renderAll();
-        }
-
-        function importHybridList() {
-            const content = document.getElementById('paste-hybrids').value.trim();
-            if (!content) return;
-
-            const hybrids = content.split('\n')
-                .map(h => h.trim().toUpperCase())
-                .filter(h => h.match(/P\d{3,4}/));
-
-            // Get all current hybrids from data
-            const currentHybrids = [...new Set(data.records.map(r => r.hybrid))];
-
-            // Hybrids in current data but NOT in 2027 list = discontinued
-            const discontinued = currentHybrids.filter(h => !hybrids.includes(h));
-            // Hybrids in 2027 list but NOT in current data = new
-            const newOnes = hybrids.filter(h => !currentHybrids.includes(h));
-
-            data.discontinued2027 = discontinued;
-            data.new2027 = newOnes;
-            saveToStorage();
-            renderHybridLists();
-            renderAll();
-
-            alert(`Updated!\nDiscontinued: ${discontinued.length}\nNew for 2027: ${newOnes.length}`);
-        }
-
-        // ============================================
-        // EXPORT
-        // ============================================
         function exportData() {
-            let csv = 'Operation,Hybrid,2024,2025,2026,2027 Predicted,Status\n';
-
+            let csv = 'Operation,Hybrid,2024,2025,2026,2027 Predicted\n';
             const details = getDetailData();
             details.forEach(d => {
-                const isDisc = data.discontinued2027.includes(d.hybrid);
-                const isNew = data.new2027.includes(d.hybrid);
-                const predicted = isDisc ? 0 : d.predicted;
-                const status = isDisc ? 'Discontinued' : (isNew ? 'New' : 'Active');
-
-                csv += `"${d.operation}","${d.hybrid}",${d.y2024 || 0},${d.y2025 || 0},${d.y2026 || 0},${predicted},${status}\n`;
+                csv += `"${d.operation}","${d.hybrid}",${d.y2024 || 0},${d.y2025 || 0},${d.y2026 || 0},${d.predicted}\n`;
             });
-
             const blob = new Blob([csv], {type: 'text/csv'});
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -1139,8 +1334,7 @@
             a.click();
         }
 
-        // Initialize
-        init();
+        renderAll();
     </script>
 </body>
 </html>
