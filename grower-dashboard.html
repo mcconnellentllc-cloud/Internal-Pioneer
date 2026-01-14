@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pioneer Analytics - Grower Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Additional styles for grower dashboard */
+        .hidden { display: none !important; }
+
+        .login-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a5f2a, #134620);
+        }
+
+        .login-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-container h1 {
+            color: #1a5f2a;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-container input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .login-container input:focus {
+            border-color: #1a5f2a;
+            outline: none;
+        }
+
+        .login-container button {
+            width: 100%;
+            padding: 0.75rem;
+            background: #1a5f2a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .login-container button:hover {
+            background: #134620;
+        }
+
+        .login-error {
+            color: #dc3545;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .api-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        .api-status .indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .api-status .indicator.online { background: #28a745; }
+        .api-status .indicator.offline { background: #dc3545; }
+
+        .dashboard-header {
+            background: linear-gradient(135deg, #1a5f2a, #2d8a42);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-header h1 {
+            font-size: 1.4rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .tabs-container {
+            display: flex;
+            gap: 0;
+            border-bottom: 3px solid #1a5f2a;
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            background: #e8e8e8;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active {
+            background: #1a5f2a;
+            color: white;
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: #d0d0d0;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #1a5f2a, #2d8a42);
+            color: white;
+            padding: 1.25rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-card .label {
+            font-size: 0.8rem;
+            opacity: 0.9;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-card .value {
+            font-size: 1.75rem;
+            font-weight: bold;
+        }
+
+        .stat-change {
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+        }
+
+        .stat-change.positive { color: #90EE90; }
+        .stat-change.negative { color: #FFB6C1; }
+
+        .section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .section h2 {
+            font-size: 1.1rem;
+            color: #1a5f2a;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e8f5e9;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        .charts-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .filter-group label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: #1a5f2a;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        th, td {
+            padding: 0.6rem 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #f8f8f8;
+            font-weight: 600;
+            color: #333;
+            position: sticky;
+            top: 0;
+        }
+
+        tr:hover {
+            background: #f9f9f9;
+        }
+
+        .data-table-container {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #eee;
+            border-radius: 4px;
+        }
+
+        .status-active { color: #28a745; font-weight: 600; }
+        .status-inactive { color: #dc3545; }
+
+        /* Data Management Tab */
+        .upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        .upload-area:hover,
+        .upload-area.dragover {
+            border-color: #1a5f2a;
+            background: #f8fff8;
+        }
+
+        .upload-area i {
+            font-size: 3rem;
+            color: #1a5f2a;
+            margin-bottom: 1rem;
+        }
+
+        .manual-entry-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        /* Toast notifications */
+        #toast-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+
+        .toast {
+            padding: 1rem 1.5rem;
+            border-radius: 6px;
+            color: white;
+            margin-top: 0.5rem;
+            animation: slideIn 0.3s ease;
+        }
+
+        .toast.success { background: #28a745; }
+        .toast.error { background: #dc3545; }
+        .toast.warning { background: #ffc107; color: #333; }
+        .toast.info { background: #17a2b8; }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .import-status {
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        .import-status.success { background: #d4edda; color: #155724; }
+        .import-status.error { background: #f8d7da; color: #721c24; }
+
+        .data-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .data-summary-item {
+            text-align: center;
+        }
+
+        .data-summary-item .value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1a5f2a;
+        }
+
+        .data-summary-item .label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-screen">
+        <div class="login-container">
+            <h1>Pioneer Analytics</h1>
+            <p style="color: #666; margin-bottom: 1.5rem;">Grower Dashboard</p>
+            <form id="login-form">
+                <input type="password" id="access-code" placeholder="Enter Access Code" required>
+                <button type="submit">Sign In</button>
+                <p id="login-error" class="login-error"></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="hidden">
+        <!-- Header -->
+        <header class="dashboard-header">
+            <h1>Pioneer Analytics - Grower Dashboard</h1>
+            <div class="header-actions">
+                <div class="api-status">
+                    <span class="indicator" id="api-indicator"></span>
+                    <span id="api-status-text">Checking...</span>
+                </div>
+                <span id="current-date"></span>
+                <button id="logout-btn" class="btn btn-secondary">Logout</button>
+            </div>
+        </header>
+
+        <div class="container" style="max-width: 1400px; margin: 0 auto; padding: 1.5rem;">
+            <!-- Tabs -->
+            <div class="tabs-container">
+                <button class="tab-btn active" data-tab="overview">Overview</button>
+                <button class="tab-btn" data-tab="historical">Historical Analysis</button>
+                <button class="tab-btn" data-tab="forecast">Forecasting</button>
+                <button class="tab-btn" data-tab="growers">Grower Analysis</button>
+                <button class="tab-btn" data-tab="products">Product Mix</button>
+                <button class="tab-btn" data-tab="data">Data Management</button>
+            </div>
+
+            <!-- Overview Tab -->
+            <div id="overview-tab" class="tab-content active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="label">Total Revenue (YTD)</div>
+                        <div class="value" id="total-revenue">$0</div>
+                        <div class="stat-change" id="revenue-change">+0%</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">Active Growers</div>
+                        <div class="value" id="total-growers">0</div>
+                        <div class="stat-change" id="growers-change">+0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">Total Orders</div>
+                        <div class="value" id="total-orders">0</div>
+                        <div class="stat-change" id="orders-change">+0%</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">Retention Rate</div>
+                        <div class="value" id="retention-rate">0%</div>
+                    </div>
+                </div>
+
+                <div class="charts-row">
+                    <div class="section">
+                        <h2>Revenue Trend</h2>
+                        <div class="chart-container">
+                            <canvas id="overview-revenue-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="section">
+                        <h2>Product Distribution</h2>
+                        <div class="chart-container">
+                            <canvas id="overview-product-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Monthly Revenue (Current Year)</h2>
+                    <div class="chart-container">
+                        <canvas id="overview-monthly-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Historical Analysis Tab -->
+            <div id="historical-tab" class="tab-content">
+                <div class="section">
+                    <h2>Filters</h2>
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label>Start Year</label>
+                            <select id="hist-year-start">
+                                <option value="2022">2022</option>
+                                <option value="2023">2023</option>
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                                <option value="2026">2026</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>End Year</label>
+                            <select id="hist-year-end">
+                                <option value="2022">2022</option>
+                                <option value="2023">2023</option>
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                                <option value="2026" selected>2026</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Product</label>
+                            <select id="hist-product">
+                                <option value="all">All Products</option>
+                                <option value="Corn Seed">Corn Seed</option>
+                                <option value="Soybean Seed">Soybean Seed</option>
+                                <option value="Sorghum">Sorghum</option>
+                                <option value="Alfalfa">Alfalfa</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" id="apply-hist-filter">Apply Filter</button>
+                    </div>
+                </div>
+
+                <div class="charts-row">
+                    <div class="section">
+                        <h2>Yearly Revenue</h2>
+                        <div class="chart-container">
+                            <canvas id="historical-revenue-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="section">
+                        <h2>Year-over-Year Comparison</h2>
+                        <div class="chart-container">
+                            <canvas id="yoy-comparison-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Growth Rate by Year</h2>
+                    <div class="chart-container">
+                        <canvas id="growth-rate-chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Historical Summary</h2>
+                    <div class="data-table-container">
+                        <table id="historical-summary-table">
+                            <thead>
+                                <tr>
+                                    <th>Year</th>
+                                    <th>Revenue</th>
+                                    <th>Orders</th>
+                                    <th>Growers</th>
+                                    <th>Avg Order Value</th>
+                                    <th>YoY Growth</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Forecasting Tab -->
+            <div id="forecast-tab" class="tab-content">
+                <div class="section">
+                    <h2>Forecast Settings</h2>
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label>Forecast Method</label>
+                            <select id="forecast-method">
+                                <option value="linear">Linear Regression</option>
+                                <option value="growth">Growth Rate</option>
+                                <option value="weighted">Weighted Average</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Confidence Level</label>
+                            <select id="confidence-level">
+                                <option value="0.80">80%</option>
+                                <option value="0.90" selected>90%</option>
+                                <option value="0.95">95%</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" id="run-forecast">Generate Forecast</button>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="label">2027 Projected Revenue</div>
+                        <div class="value" id="forecast-revenue">$0</div>
+                        <div class="stat-change" id="forecast-range">Range: $0 - $0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">Projected Growers</div>
+                        <div class="value" id="forecast-growers">0</div>
+                        <div class="stat-change" id="forecast-growers-range">Range: 0 - 0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">Expected Growth</div>
+                        <div class="value" id="forecast-growth">+0%</div>
+                        <div class="stat-change" id="forecast-growth-range">vs 2026</div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Revenue Forecast</h2>
+                    <div class="chart-container">
+                        <canvas id="forecast-chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="charts-row">
+                    <div class="section">
+                        <h2>Product Forecast</h2>
+                        <div class="chart-container">
+                            <canvas id="product-forecast-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="section">
+                        <h2>Monthly Distribution</h2>
+                        <div class="chart-container">
+                            <canvas id="monthly-forecast-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Grower Analysis Tab -->
+            <div id="growers-tab" class="tab-content">
+                <div class="section">
+                    <h2>Filters</h2>
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label>Year</label>
+                            <select id="grower-year">
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                                <option value="2026" selected>2026</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Sort By</label>
+                            <select id="grower-sort">
+                                <option value="revenue">Revenue</option>
+                                <option value="orders">Orders</option>
+                                <option value="name">Name</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Search</label>
+                            <input type="text" id="grower-search" placeholder="Search grower...">
+                        </div>
+                        <button class="btn btn-primary" id="apply-grower-filter">Apply</button>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="label">New Growers</div>
+                        <div class="value" id="new-growers">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">Returning Growers</div>
+                        <div class="value" id="returning-growers">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">Lost Growers</div>
+                        <div class="value" id="lost-growers">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="label">Retention Rate</div>
+                        <div class="value" id="grower-retention">0%</div>
+                    </div>
+                </div>
+
+                <div class="charts-row">
+                    <div class="section">
+                        <h2>Retention Trend</h2>
+                        <div class="chart-container">
+                            <canvas id="retention-trend-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="section">
+                        <h2>Top Growers by Revenue</h2>
+                        <div class="chart-container">
+                            <canvas id="top-growers-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Grower Details</h2>
+                    <div class="data-table-container">
+                        <table id="grower-table">
+                            <thead>
+                                <tr>
+                                    <th>Grower</th>
+                                    <th>Revenue</th>
+                                    <th>Orders</th>
+                                    <th>Products</th>
+                                    <th>First Purchase</th>
+                                    <th>Last Purchase</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Mix Tab -->
+            <div id="products-tab" class="tab-content">
+                <div class="section">
+                    <h2>Filters</h2>
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label>Year</label>
+                            <select id="product-year">
+                                <option value="all">All Years</option>
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                                <option value="2026" selected>2026</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" id="apply-product-filter">Apply</button>
+                    </div>
+                </div>
+
+                <div class="charts-row">
+                    <div class="section">
+                        <h2>Revenue by Product</h2>
+                        <div class="chart-container">
+                            <canvas id="product-revenue-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="section">
+                        <h2>Units Sold by Product</h2>
+                        <div class="chart-container">
+                            <canvas id="product-units-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Product Trend (Top 5)</h2>
+                    <div class="chart-container">
+                        <canvas id="product-trend-chart"></canvas>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>Product Details</h2>
+                    <div class="data-table-container">
+                        <table id="product-table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Revenue</th>
+                                    <th>Units</th>
+                                    <th>Avg Price</th>
+                                    <th>% of Total</th>
+                                    <th>YoY Change</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Management Tab -->
+            <div id="data-tab" class="tab-content">
+                <div class="data-summary">
+                    <div class="data-summary-item">
+                        <div class="value" id="total-records">0</div>
+                        <div class="label">Total Records</div>
+                    </div>
+                    <div class="data-summary-item">
+                        <div class="value" id="data-date-range">No data</div>
+                        <div class="label">Date Range</div>
+                    </div>
+                    <div class="data-summary-item">
+                        <div class="value" id="unique-growers">0</div>
+                        <div class="label">Unique Growers</div>
+                    </div>
+                    <div class="data-summary-item">
+                        <div class="value" id="last-updated">Never</div>
+                        <div class="label">Last Updated</div>
+                    </div>
+                </div>
+
+                <div class="charts-row">
+                    <!-- CSV Upload -->
+                    <div class="section">
+                        <h2>CSV Upload</h2>
+                        <div class="upload-area" id="csv-upload-area">
+                            <p style="font-size: 2rem; color: #1a5f2a;">&#128196;</p>
+                            <p>Drag & drop CSV file here</p>
+                            <p style="color: #999; font-size: 0.85rem;">or</p>
+                            <button class="btn btn-primary" id="browse-csv">Browse Files</button>
+                            <input type="file" id="csv-file" accept=".csv" style="display: none;">
+                        </div>
+                        <div id="csv-preview" class="hidden" style="margin-top: 1rem;">
+                            <h3 style="margin-bottom: 0.5rem;">Preview</h3>
+                            <div class="data-table-container" style="max-height: 200px;">
+                                <table id="csv-preview-table"></table>
+                            </div>
+                            <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                                <button class="btn btn-primary" id="import-csv">Import Data</button>
+                                <button class="btn btn-secondary" id="cancel-csv">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Manual Entry -->
+                    <div class="section">
+                        <h2>Manual Entry</h2>
+                        <form id="manual-entry-form" class="manual-entry-form">
+                            <div class="form-group">
+                                <label>Date</label>
+                                <input type="date" id="entry-date" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Invoice #</label>
+                                <input type="text" id="entry-invoice" placeholder="INV-001">
+                            </div>
+                            <div class="form-group">
+                                <label>Grower Name</label>
+                                <input type="text" id="entry-grower" placeholder="Grower name" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Product</label>
+                                <select id="entry-product" required>
+                                    <option value="">Select...</option>
+                                    <option value="Corn Seed">Corn Seed</option>
+                                    <option value="Soybean Seed">Soybean Seed</option>
+                                    <option value="Sorghum">Sorghum</option>
+                                    <option value="Alfalfa">Alfalfa</option>
+                                    <option value="Herbicide">Herbicide</option>
+                                    <option value="Fungicide">Fungicide</option>
+                                    <option value="Insecticide">Insecticide</option>
+                                    <option value="Fertilizer">Fertilizer</option>
+                                    <option value="Equipment">Equipment</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Quantity</label>
+                                <input type="number" id="entry-quantity" placeholder="0" min="0">
+                            </div>
+                            <div class="form-group">
+                                <label>Amount ($)</label>
+                                <input type="number" id="entry-amount" placeholder="0.00" min="0" step="0.01">
+                            </div>
+                            <div class="form-group" style="justify-content: flex-end;">
+                                <button type="submit" class="btn btn-primary">Add Entry</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Bulk Paste -->
+                <div class="section">
+                    <h2>Bulk Paste</h2>
+                    <p style="color: #666; font-size: 0.85rem; margin-bottom: 0.5rem;">
+                        Paste data from Excel/CSV. Format: date, invoice, grower, product, quantity, amount
+                    </p>
+                    <textarea id="bulk-paste" rows="5" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-family: monospace;" placeholder="2024-03-15, INV-001, Johnson Farms, Corn Seed, 50, 14000"></textarea>
+                    <div style="margin-top: 0.5rem; display: flex; gap: 0.5rem;">
+                        <button class="btn btn-primary" id="parse-bulk">Parse Data</button>
+                        <button class="btn btn-primary" id="import-bulk" disabled>Import</button>
+                    </div>
+                    <div id="bulk-preview" class="hidden" style="margin-top: 1rem;">
+                        <h3 style="margin-bottom: 0.5rem;">Preview</h3>
+                        <div class="data-table-container" style="max-height: 200px;">
+                            <table id="bulk-preview-table"></table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pioneer Data Import -->
+                <div class="section">
+                    <h2>Pioneer Data Import</h2>
+                    <p style="color: #666; font-size: 0.85rem; margin-bottom: 0.5rem;">
+                        Paste Pioneer sales data directly from reports or Power BI exports.
+                    </p>
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label>Year Override</label>
+                            <select id="pioneer-year">
+                                <option value="auto">Auto-detect</option>
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                                <option value="2026">2026</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Product Type</label>
+                            <select id="pioneer-product-type">
+                                <option value="auto">Auto-detect</option>
+                                <option value="Corn Seed">Corn Seed</option>
+                                <option value="Soybean Seed">Soybean Seed</option>
+                                <option value="Sorghum">Sorghum</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label>Price/Unit ($)</label>
+                            <input type="number" id="pioneer-price" value="280" min="0" step="10">
+                        </div>
+                    </div>
+                    <textarea id="pioneer-paste" rows="5" style="width: 100%; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; font-family: monospace;" placeholder="Paste Pioneer data here..."></textarea>
+                    <div style="margin-top: 0.5rem; display: flex; gap: 0.5rem; align-items: center;">
+                        <button class="btn btn-primary" id="parse-pioneer">Parse Data</button>
+                        <button class="btn btn-primary" id="import-pioneer" disabled>Import</button>
+                        <span id="pioneer-status" class="import-status"></span>
+                    </div>
+                    <div id="pioneer-preview" class="hidden" style="margin-top: 1rem;">
+                        <div style="display: flex; gap: 1rem; margin-bottom: 0.5rem;">
+                            <span><strong>Records:</strong> <span id="pioneer-record-count">0</span></span>
+                            <span><strong>Growers:</strong> <span id="pioneer-grower-count">0</span></span>
+                            <span><strong>Units:</strong> <span id="pioneer-unit-count">0</span></span>
+                            <span><strong>Est. Value:</strong> <span id="pioneer-value-count">$0</span></span>
+                        </div>
+                        <div class="data-table-container" style="max-height: 200px;">
+                            <table id="pioneer-preview-table"></table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Export & Clear -->
+                <div class="section">
+                    <h2>Export & Manage Data</h2>
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <label>Export Year</label>
+                            <select id="export-year">
+                                <option value="all">All Years</option>
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                                <option value="2026">2026</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" id="export-csv">Export CSV</button>
+                        <button class="btn btn-secondary" id="sync-data">Sync to Server</button>
+                        <button class="btn btn-danger" id="clear-data">Clear All Data</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="api-client.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
