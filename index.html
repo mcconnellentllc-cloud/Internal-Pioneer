@@ -206,6 +206,7 @@
             <button class="tab" onclick="switchTab('by-hybrid')">By Hybrid</button>
             <button class="tab" onclick="switchTab('detail')">Detail View</button>
             <button class="tab" onclick="switchTab('new-hybrids')">2027 New Hybrids</button>
+            <button class="tab" onclick="switchTab('competitive')">Competitive</button>
         </div>
         <div id="by-operation" class="tab-content active">
             <div class="section">
@@ -604,6 +605,200 @@
                 <h3 style="margin-bottom:1rem; color:#666;">Other Crops</h3>
                 <a href="sorghum.html" style="display:inline-block; padding:0.75rem 1.5rem; background:#8b4513; color:white; text-decoration:none; border-radius:4px; margin:0.5rem; font-weight:600;">Sorghum Hybrids</a>
                 <a href="soybeans.html" style="display:inline-block; padding:0.75rem 1.5rem; background:#228b22; color:white; text-decoration:none; border-radius:4px; margin:0.5rem; font-weight:600;">Soybean Varieties</a>
+            </div>
+        </div>
+        <div id="competitive" class="tab-content">
+            <div class="section">
+                <h2>Product Performance by Yield Zone</h2>
+                <p style="color:#666; margin-bottom:1rem;">2025-2023, District CD, Pioneer vs Competition, +/- 3 CRM, <strong style="color:#1a5f2a;">>10 Comparisons per cell</strong></p>
+                <div class="key-notes" style="background:#e8f5e9; border-color:#1a5f2a;">
+                    <h4 style="color:#1a5f2a;">How to Read This Table</h4>
+                    <ul style="color:#333;">
+                        <li><strong style="color:#28a745;">Green (75%+):</strong> Strong performer - leads in this yield environment</li>
+                        <li><strong style="color:#ffc107;">Yellow (50-74%):</strong> Competitive - holds its own vs competition</li>
+                        <li><strong style="color:#dc3545;">Red (<50%):</strong> Weak spot - consider alternatives for this environment</li>
+                    </ul>
+                </div>
+                <div class="data-table-container" style="max-height:none;">
+                    <table id="yield-zone-table">
+                        <thead>
+                            <tr>
+                                <th>Hybrid</th>
+                                <th class="text-center">&lt;150 bu/a<br><span style="font-weight:normal;font-size:0.75rem;">%Wins</span></th>
+                                <th class="text-center">150-200 bu/a<br><span style="font-weight:normal;font-size:0.75rem;">%Wins</span></th>
+                                <th class="text-center">200-250 bu/a<br><span style="font-weight:normal;font-size:0.75rem;">%Wins</span></th>
+                                <th class="text-center">&gt;250 bu/a<br><span style="font-weight:normal;font-size:0.75rem;">%Wins</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>P00549</strong></td>
+                                <td class="text-center" style="background:#fff3cd;">63%</td>
+                                <td class="text-center" style="background:#f8f9fa;">N/A</td>
+                                <td class="text-center" style="background:#d4edda;">82%</td>
+                                <td class="text-center" style="background:#fff3cd;">73%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P02405</strong></td>
+                                <td class="text-center" style="background:#f8d7da;">48%</td>
+                                <td class="text-center" style="background:#fff3cd;">73%</td>
+                                <td class="text-center" style="background:#fff3cd;">61%</td>
+                                <td class="text-center" style="background:#d4edda;">80%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P03115</strong></td>
+                                <td class="text-center" style="background:#fff3cd;">65%</td>
+                                <td class="text-center" style="background:#f8d7da;">38%</td>
+                                <td class="text-center" style="background:#f8d7da;">41%</td>
+                                <td class="text-center" style="background:#f8d7da;">41%</td>
+                            </tr>
+                            <tr style="background:#f0fff0;">
+                                <td><strong>P03357</strong> ⭐</td>
+                                <td class="text-center" style="background:#f8d7da;">47%</td>
+                                <td class="text-center" style="background:#fff3cd;">63%</td>
+                                <td class="text-center" style="background:#d4edda;">79%</td>
+                                <td class="text-center" style="background:#28a745;color:white;font-weight:bold;">100%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P03951</strong></td>
+                                <td class="text-center" style="background:#f8d7da;">43%</td>
+                                <td class="text-center" style="background:#fff3cd;">63%</td>
+                                <td class="text-center" style="background:#fff3cd;">61%</td>
+                                <td class="text-center" style="background:#d4edda;">89%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P05081</strong></td>
+                                <td class="text-center" style="background:#fff3cd;">51%</td>
+                                <td class="text-center" style="background:#fff3cd;">66%</td>
+                                <td class="text-center" style="background:#fff3cd;">74%</td>
+                                <td class="text-center" style="background:#fff3cd;">70%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P05466</strong></td>
+                                <td class="text-center" style="background:#dc3545;color:white;">18%</td>
+                                <td class="text-center" style="background:#d4edda;">88%</td>
+                                <td class="text-center" style="background:#fff3cd;">70%</td>
+                                <td class="text-center" style="background:#d4edda;">80%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P08527</strong></td>
+                                <td class="text-center" style="background:#fff3cd;">60%</td>
+                                <td class="text-center" style="background:#d4edda;">78%</td>
+                                <td class="text-center" style="background:#fff3cd;">72%</td>
+                                <td class="text-center" style="background:#d4edda;">75%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P0859</strong></td>
+                                <td class="text-center" style="background:#fff3cd;">60%</td>
+                                <td class="text-center" style="background:#d4edda;">83%</td>
+                                <td class="text-center" style="background:#fff3cd;">74%</td>
+                                <td class="text-center" style="background:#d4edda;">79%</td>
+                            </tr>
+                            <tr style="background:#f0fff0;">
+                                <td><strong>P09076</strong> ⭐</td>
+                                <td class="text-center" style="background:#d4edda;">82%</td>
+                                <td class="text-center" style="background:#d4edda;">77%</td>
+                                <td class="text-center" style="background:#d4edda;">90%</td>
+                                <td class="text-center" style="background:#fff3cd;">64%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P0995</strong></td>
+                                <td class="text-center" style="background:#fff3cd;">56%</td>
+                                <td class="text-center" style="background:#fff3cd;">71%</td>
+                                <td class="text-center" style="background:#fff3cd;">61%</td>
+                                <td class="text-center" style="background:#fff3cd;">69%</td>
+                            </tr>
+                            <tr style="background:#f0fff0;">
+                                <td><strong>P10300</strong> ⭐</td>
+                                <td class="text-center" style="background:#fff3cd;">63%</td>
+                                <td class="text-center" style="background:#d4edda;">80%</td>
+                                <td class="text-center" style="background:#d4edda;">89%</td>
+                                <td class="text-center" style="background:#d4edda;">82%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P10625</strong></td>
+                                <td class="text-center" style="background:#fff3cd;">60%</td>
+                                <td class="text-center" style="background:#fff3cd;">72%</td>
+                                <td class="text-center" style="background:#d4edda;">75%</td>
+                                <td class="text-center" style="background:#fff3cd;">74%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P1122</strong></td>
+                                <td class="text-center" style="background:#fff3cd;">63%</td>
+                                <td class="text-center" style="background:#fff3cd;">58%</td>
+                                <td class="text-center" style="background:#fff3cd;">57%</td>
+                                <td class="text-center" style="background:#fff3cd;">68%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P12393</strong></td>
+                                <td class="text-center" style="background:#dc3545;color:white;">33%</td>
+                                <td class="text-center" style="background:#d4edda;">90%</td>
+                                <td class="text-center" style="background:#fff3cd;">68%</td>
+                                <td class="text-center" style="background:#d4edda;">83%</td>
+                            </tr>
+                            <tr style="background:#f0fff0;">
+                                <td><strong>P12517</strong> ⭐</td>
+                                <td class="text-center" style="background:#f8d7da;">46%</td>
+                                <td class="text-center" style="background:#d4edda;">75%</td>
+                                <td class="text-center" style="background:#d4edda;">85%</td>
+                                <td class="text-center" style="background:#d4edda;">91%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P12904</strong></td>
+                                <td class="text-center" style="background:#dc3545;color:white;">17%</td>
+                                <td class="text-center" style="background:#fff3cd;">67%</td>
+                                <td class="text-center" style="background:#fff3cd;">56%</td>
+                                <td class="text-center" style="background:#fff3cd;">69%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P13777</strong></td>
+                                <td class="text-center" style="background:#f8d7da;">45%</td>
+                                <td class="text-center" style="background:#f8d7da;">46%</td>
+                                <td class="text-center" style="background:#d4edda;">79%</td>
+                                <td class="text-center" style="background:#d4edda;">78%</td>
+                            </tr>
+                            <tr style="background:#f0fff0;">
+                                <td><strong>P14364</strong> ⭐</td>
+                                <td class="text-center" style="background:#d4edda;">80%</td>
+                                <td class="text-center" style="background:#28a745;color:white;font-weight:bold;">100%</td>
+                                <td class="text-center" style="background:#d4edda;">85%</td>
+                                <td class="text-center" style="background:#d4edda;">89%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P14830</strong></td>
+                                <td class="text-center" style="background:#dc3545;color:white;">20%</td>
+                                <td class="text-center" style="background:#fff3cd;">72%</td>
+                                <td class="text-center" style="background:#d4edda;">88%</td>
+                                <td class="text-center" style="background:#fff3cd;">74%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P1548</strong></td>
+                                <td class="text-center" style="background:#f8f9fa;">N/A</td>
+                                <td class="text-center" style="background:#f8d7da;">47%</td>
+                                <td class="text-center" style="background:#fff3cd;">54%</td>
+                                <td class="text-center" style="background:#dc3545;color:white;">27%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P1742</strong></td>
+                                <td class="text-center" style="background:#f8f9fa;">N/A</td>
+                                <td class="text-center" style="background:#d4edda;">86%</td>
+                                <td class="text-center" style="background:#fff3cd;">71%</td>
+                                <td class="text-center" style="background:#d4edda;">82%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="margin-top:1.5rem; padding:1rem; background:#fff3cd; border:1px solid #ffc107; border-radius:8px;">
+                    <h4 style="color:#856404; margin-bottom:0.5rem;">Key Takeaways</h4>
+                    <ul style="color:#856404; margin-left:1.5rem;">
+                        <li><strong>P03357:</strong> 100% wins at >250 bu/a - DOMINANT in high-yield environments</li>
+                        <li><strong>P14364:</strong> 100% wins at 150-200 bu/a, strong across ALL zones (80%+ everywhere)</li>
+                        <li><strong>P09076:</strong> Best dryland performer (82% at <150), excellent mid-range (90% at 200-250)</li>
+                        <li><strong>P12517:</strong> Strong high-yield (91% at >250, 85% at 200-250)</li>
+                        <li><strong>P10300:</strong> Consistent performer - 80%+ in top 3 yield zones</li>
+                        <li><strong style="color:#dc3545;">Avoid P03115, P1548 in high-yield environments</strong></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
