@@ -417,6 +417,7 @@
                     <button class="tab-btn active" onclick="switchImportTab('upload')">Upload File</button>
                     <button class="tab-btn" onclick="switchImportTab('paste')">Paste Data</button>
                     <button class="tab-btn" onclick="switchImportTab('manual')">Manual Entry</button>
+                    <button class="tab-btn" onclick="switchImportTab('view')">View Loaded Data</button>
                 </div>
 
                 <div id="upload-tab" class="import-tab-content">
@@ -514,6 +515,22 @@ The system will auto-detect the format and extract relevant columns."></textarea
                         </div>
                     </div>
                     <div id="manual-entries-list" class="entries-list"></div>
+                </div>
+
+                <div id="view-tab" class="import-tab-content" style="display: none;">
+                    <div class="form-group">
+                        <label>Select Year to View:</label>
+                        <select id="view-year" onchange="renderViewData()">
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                            <option value="2026" selected>2026</option>
+                        </select>
+                    </div>
+                    <div id="view-data-container" class="entries-list" style="max-height: 400px;"></div>
+                    <div style="margin-top: 1rem;">
+                        <button class="btn btn-secondary" onclick="clearYearData()">Clear This Year's Data</button>
+                        <button class="btn btn-secondary" onclick="clearAllData()">Clear All Data</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1125,6 +1142,11 @@ The system will auto-detect the format and extract relevant columns."></textarea
             document.getElementById('upload-tab').style.display = tab === 'upload' ? 'block' : 'none';
             document.getElementById('paste-tab').style.display = tab === 'paste' ? 'block' : 'none';
             document.getElementById('manual-tab').style.display = tab === 'manual' ? 'block' : 'none';
+            document.getElementById('view-tab').style.display = tab === 'view' ? 'block' : 'none';
+
+            if (tab === 'view') {
+                renderViewData();
+            }
         }
 
         function setupDragAndDrop() {
@@ -1172,7 +1194,11 @@ The system will auto-detect the format and extract relevant columns."></textarea
 
                 // Parse preview
                 const parsed = parseDataContent(content);
-                showStatus('upload-status', `Found ${parsed.length} records. Click "Confirm Import" to import.`, 'info');
+                if (parsed.records.length > 0) {
+                    showStatus('upload-status', `Found ${parsed.records.length} records. Click "Confirm Import" to import.\n\n${parsed.debug}`, 'info');
+                } else {
+                    showStatus('upload-status', `No records found.\n\n${parsed.debug}`, 'error');
+                }
             };
             reader.readAsText(file);
         }
@@ -1210,62 +1236,85 @@ The system will auto-detect the format and extract relevant columns."></textarea
 
         function parseDataContent(content) {
             const lines = content.split('\n').filter(l => l.trim());
-            if (lines.length === 0) return [];
+            if (lines.length === 0) return { records: [], debug: 'No data lines found' };
 
             const records = [];
-            let headers = [];
+            let debugInfo = '';
 
             // Detect delimiter (tab or comma)
             const firstLine = lines[0];
-            const delimiter = firstLine.includes('\t') ? '\t' : ',';
+            const tabCount = (firstLine.match(/\t/g) || []).length;
+            const commaCount = (firstLine.match(/,/g) || []).length;
+            const delimiter = tabCount > commaCount ? '\t' : ',';
+            debugInfo += `Delimiter: ${delimiter === '\t' ? 'TAB' : 'COMMA'}\n`;
 
             // Parse header line
-            headers = firstLine.split(delimiter).map(h => h.trim().toLowerCase());
+            const headers = firstLine.split(delimiter).map(h => h.trim().toLowerCase().replace(/['"]/g, ''));
+            debugInfo += `Headers found: ${headers.join(' | ')}\n`;
 
-            // Detect format type
-            const isDemandPlanFormat = headers.some(h =>
-                h.includes('operation') || h.includes('account') || h.includes('subproduct') || h.includes('delivered')
+            // Find column indices - try multiple variations
+            let growerCol = headers.findIndex(h =>
+                h.includes('operation') || h.includes('account') || h.includes('grower') ||
+                h.includes('customer') || h.includes('name') || h.includes('farm')
             );
-            const isSimpleFormat = headers.some(h =>
-                h.includes('grower') || h.includes('hybrid') || h.includes('bags')
+            let hybridCol = headers.findIndex(h =>
+                h.includes('subproduct') || h.includes('hybrid') || h.includes('variety') ||
+                h.includes('product') && !h.includes('line')
+            );
+            let traitCol = headers.findIndex(h =>
+                h.includes('trait') || h.includes('treatment') || h.includes('segment')
+            );
+            let bagsCol = headers.findIndex(h =>
+                h.includes('delivered') || h.includes('bags') || h.includes('quantity') ||
+                h.includes('qty') || h.includes('total physical') || h.includes('regular in') ||
+                h.includes('total invoice')
             );
 
-            // Map column indices based on format
-            let growerCol, hybridCol, traitCol, bagsCol;
+            // If no headers matched, try positional (for headerless data)
+            if (growerCol === -1 && hybridCol === -1) {
+                // Check if first line looks like data (contains P followed by numbers)
+                if (firstLine.match(/P\d{4}/i)) {
+                    debugInfo += 'No headers detected, treating first line as data\n';
+                    growerCol = 0;
+                    hybridCol = 1;
+                    traitCol = 2;
+                    bagsCol = 3;
+                    // Re-process including first line
+                    lines.unshift(''); // Add dummy header so loop starts at index 0
+                }
+            }
 
-            if (isDemandPlanFormat) {
-                // Power BI Demand Plan format
-                growerCol = headers.findIndex(h => h.includes('operation') || h.includes('account'));
-                hybridCol = headers.findIndex(h => h.includes('subproduct') || h.includes('product'));
-                traitCol = headers.findIndex(h => h.includes('trait'));
-                bagsCol = headers.findIndex(h => h.includes('delivered') || h.includes('total'));
-            } else if (isSimpleFormat) {
-                // Simple format
-                growerCol = headers.findIndex(h => h.includes('grower') || h.includes('customer') || h.includes('name'));
-                hybridCol = headers.findIndex(h => h.includes('hybrid') || h.includes('variety') || h.includes('product'));
-                traitCol = headers.findIndex(h => h.includes('trait') || h.includes('treatment'));
-                bagsCol = headers.findIndex(h => h.includes('bags') || h.includes('quantity') || h.includes('qty'));
-            } else {
-                // Fallback - assume columns in order: grower, hybrid, trait, bags
-                growerCol = 0;
-                hybridCol = 1;
-                traitCol = 2;
-                bagsCol = 3;
+            debugInfo += `Column mapping: Grower=${growerCol}, Hybrid=${hybridCol}, Trait=${traitCol}, Bags=${bagsCol}\n`;
+
+            if (growerCol === -1 || hybridCol === -1 || bagsCol === -1) {
+                debugInfo += 'ERROR: Could not find required columns (grower, hybrid, bags)\n';
+                debugInfo += 'Expected columns like: Operation, Subproduct, Delivered\n';
+                debugInfo += 'Or: Grower, Hybrid, Bags\n';
+                return { records: [], debug: debugInfo };
             }
 
             // Parse data lines
             for (let i = 1; i < lines.length; i++) {
                 const values = lines[i].split(delimiter).map(v => v.trim().replace(/^["']|["']$/g, ''));
 
+                if (values.length <= Math.max(growerCol, hybridCol, bagsCol)) continue;
+
                 const grower = values[growerCol] || '';
                 let hybrid = values[hybridCol] || '';
-                const trait = values[traitCol] || 'NR58';
-                const bags = parseInt(values[bagsCol]) || 0;
+                const trait = traitCol >= 0 ? (values[traitCol] || 'NR58') : 'NR58';
 
-                // Clean up hybrid name (extract Pioneer product code)
-                const hybridMatch = hybrid.match(/P\d{4}[A-Z]*/i);
+                // Parse bags - handle comma-separated numbers
+                let bagsStr = values[bagsCol] || '0';
+                bagsStr = bagsStr.replace(/,/g, '').replace(/[^\d.-]/g, '');
+                const bags = parseInt(bagsStr) || 0;
+
+                // Clean up hybrid name (extract Pioneer product code like P0622AM)
+                const hybridMatch = hybrid.match(/P\d{3,4}[A-Z]*/i);
                 if (hybridMatch) {
                     hybrid = hybridMatch[0].toUpperCase();
+                } else if (hybrid && !hybrid.startsWith('P')) {
+                    // Keep original if it doesn't match Pioneer format
+                    hybrid = hybrid.toUpperCase();
                 }
 
                 if (grower && hybrid && bags > 0) {
@@ -1273,12 +1322,19 @@ The system will auto-detect the format and extract relevant columns."></textarea
                 }
             }
 
-            return records;
+            debugInfo += `Parsed ${records.length} valid records\n`;
+            if (records.length > 0) {
+                debugInfo += `Sample: ${records[0].grower} - ${records[0].hybrid} - ${records[0].bags} bags\n`;
+            }
+
+            return { records, debug: debugInfo };
         }
 
-        function importRecords(year, records, statusId) {
+        function importRecords(year, parseResult, statusId) {
+            const { records, debug } = parseResult;
+
             if (records.length === 0) {
-                showStatus(statusId, 'No valid records found. Please check the data format.', 'error');
+                showStatus(statusId, 'No valid records found.\n\n' + debug, 'error');
                 return;
             }
 
@@ -1397,6 +1453,58 @@ The system will auto-detect the format and extract relevant columns."></textarea
                 renderHybridAdjusters();
                 updateAllForecasts();
                 renderManualEntriesList();
+            }
+        }
+
+        // View Data Functions
+        function renderViewData() {
+            const container = document.getElementById('view-data-container');
+            const year = document.getElementById('view-year').value;
+            const entries = growerData[year]?.corn || [];
+
+            if (entries.length === 0) {
+                container.innerHTML = '<p style="padding: 1rem; color: #666;">No data loaded for ' + year + '. Use Upload, Paste, or Manual Entry to add data.</p>';
+                return;
+            }
+
+            let html = '<table><thead><tr><th>Grower</th><th>Hybrid</th><th>Trait</th><th>Bags</th></tr></thead><tbody>';
+            entries.forEach(entry => {
+                html += `<tr>
+                    <td>${entry.grower}</td>
+                    <td>${entry.hybrid}</td>
+                    <td>${entry.trait || 'NR58'}</td>
+                    <td>${entry.bags}</td>
+                </tr>`;
+            });
+            html += '</tbody></table>';
+            html += `<p style="padding: 0.5rem; background: #e8f5e9; margin-top: 0.5rem; border-radius: 4px;"><strong>${entries.length} records</strong> loaded for ${year}</p>`;
+            container.innerHTML = html;
+        }
+
+        function clearYearData() {
+            const year = document.getElementById('view-year').value;
+            if (confirm(`Clear all data for ${year}?`)) {
+                if (growerData[year]) {
+                    growerData[year].corn = [];
+                }
+                localStorage.setItem('pioneerGrowerData', JSON.stringify(growerData));
+                calculateBaseForecasts();
+                initializeAdjustments();
+                renderHybridAdjusters();
+                updateAllForecasts();
+                renderViewData();
+            }
+        }
+
+        function clearAllData() {
+            if (confirm('Clear ALL loaded data for all years?')) {
+                growerData = getEmbeddedData(); // Reset to sample data
+                localStorage.removeItem('pioneerGrowerData');
+                calculateBaseForecasts();
+                initializeAdjustments();
+                renderHybridAdjusters();
+                updateAllForecasts();
+                renderViewData();
             }
         }
 
