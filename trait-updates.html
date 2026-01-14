@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pioneer 2027 Corn Trait Updates</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f5f5; }
+        .header {
+            background: linear-gradient(135deg, #1a5f2a, #134620);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 { font-size: 1.4rem; }
+        .nav-links { display: flex; gap: 1rem; }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+        .nav-links a:hover { background: rgba(255,255,255,0.3); }
+        .nav-links a.active { background: rgba(255,255,255,0.4); font-weight: 600; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
+        .section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+        .section h2 {
+            font-size: 1.1rem;
+            color: #1a5f2a;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e8f5e9;
+        }
+        .update-card {
+            background: white;
+            border: 1px solid #eee;
+            border-left: 4px solid #007bff;
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+        .update-card h3 {
+            color: #333;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+        .crm-badge {
+            background: #1a5f2a;
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+        .trait-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            margin-left: 0.5rem;
+        }
+        .new-trait { background: #28a745; color: white; }
+        .update-details {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 0.75rem 0;
+        }
+        .update-notes { margin-top: 1rem; }
+        .update-notes label { font-size: 0.8rem; color: #666; display: block; margin-bottom: 0.25rem; }
+        .update-notes textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            min-height: 60px;
+            resize: vertical;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Pioneer 2027 Corn Trait Updates</h1>
+        <div class="nav-links">
+            <a href="index.html">Corn (New)</a>
+            <a href="trait-updates.html" class="active">Trait Updates</a>
+            <a href="sorghum.html">Sorghum</a>
+            <a href="soybeans.html">Soybeans</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="section">
+            <h2>2027 Trait Updates on Existing Products</h2>
+            <p style="color:#666; margin-bottom:1rem;"><strong style="color:#dc3545;">DEMAND PLAN: These products must be 13% of 2027 order!</strong></p>
+
+            <div class="update-card">
+                <h3>P02405V</h3>
+                <div class="update-details">
+                    <span style="color:#28a745;">UPGRADED:</span> Drought tolerance 7→8, Head smut 2→4<br>
+                    <span style="color:#dc3545;">DOWNGRADED:</span> Silage yield 8→7
+                </div>
+            </div>
+
+            <div class="update-card">
+                <h3>P03357PCUE</h3>
+                <div class="update-details">
+                    <span style="color:#dc3545;">DOWNGRADED:</span> Late roots 4→3, Overall root score 5→4, Ear flex 8→6<br>
+                    <span style="color:#28a745;">UPGRADED:</span> Ear height 5→6
+                </div>
+            </div>
+
+            <div class="update-card" style="border-left-color:#dc3545; background:#fff5f5;">
+                <h3>P10300PCE <span style="background:#dc3545;color:white;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.7rem;margin-left:0.5rem;">WATCH</span></h3>
+                <div class="update-details">
+                    <span style="color:#dc3545;">DOWNGRADED:</span> Mid-season brittle 6→5, Plant height 5→4<br>
+                    <strong>NOTE:</strong> Shorter plant stature observed THROUGH THE GROWING SEASON
+                </div>
+                <div class="update-notes">
+                    <label>My Notes:</label>
+                    <textarea id="notes-P10300PCE" onchange="saveNotes('P10300PCE', this.value)" placeholder="Your notes on P10300PCE..."></textarea>
+                </div>
+            </div>
+
+            <div class="update-card">
+                <h3>P11591Q <span style="background:#6c757d;color:white;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.7rem;margin-left:0.5rem;">BMR</span></h3>
+                <div class="update-details">
+                    <span style="color:#dc3545;">DOWNGRADED:</span> Silage yield 7→6
+                </div>
+            </div>
+
+            <div class="update-card" style="border-left-color:#28a745;">
+                <h3>P12517V/PCUE</h3>
+                <div class="update-details">
+                    <span style="color:#28a745;">UPGRADED:</span> Silage yield 8→9
+                </div>
+            </div>
+
+            <div class="update-card">
+                <h3>P14364PCUE</h3>
+                <div class="update-details">
+                    <span style="color:#dc3545;">DOWNGRADED:</span> Fusarium ear rot 5→4<br>
+                    <span style="color:#28a745;">UPGRADED:</span> Milk and beef per ton 7→8
+                </div>
+            </div>
+
+            <div class="update-card">
+                <h3>P18216PCUE</h3>
+                <div class="update-details">
+                    <span style="color:#dc3545;">DOWNGRADED:</span> Drought tolerance 8→7
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function saveNotes(hybrid, value) {
+            const notes = JSON.parse(localStorage.getItem('pioneerTraitNotes') || '{}');
+            notes[hybrid] = value;
+            localStorage.setItem('pioneerTraitNotes', JSON.stringify(notes));
+        }
+
+        function loadNotes() {
+            const notes = JSON.parse(localStorage.getItem('pioneerTraitNotes') || '{}');
+            Object.keys(notes).forEach(hybrid => {
+                const textarea = document.getElementById('notes-' + hybrid);
+                if (textarea) textarea.value = notes[hybrid];
+            });
+        }
+
+        loadNotes();
+    </script>
+</body>
+</html>
