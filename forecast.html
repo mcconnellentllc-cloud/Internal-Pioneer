@@ -198,6 +198,188 @@
                 position: relative;
             }
         }
+
+        /* Modal Styles */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #eee;
+            background: #f8f8f8;
+        }
+        .modal-header h2 { margin: 0; font-size: 1.25rem; color: #1a5f2a; }
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+        .close-btn:hover { color: #333; }
+        .modal-body { padding: 1.5rem; }
+
+        .import-instructions {
+            background: #e8f5e9;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+        .import-instructions h3 { margin-bottom: 0.5rem; color: #1a5f2a; font-size: 1rem; }
+        .import-instructions ol { padding-left: 1.25rem; margin: 0.5rem 0; }
+        .import-instructions li { margin-bottom: 0.5rem; font-size: 0.9rem; }
+        .import-instructions .note {
+            margin-top: 1rem;
+            padding: 0.5rem;
+            background: #fff3cd;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        .import-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .tab-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            background: #f8f8f8;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .tab-btn.active {
+            background: #1a5f2a;
+            color: white;
+            border-color: #1a5f2a;
+        }
+
+        .import-tab-content { display: block; }
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.25rem; font-weight: 600; font-size: 0.9rem; }
+        .form-group select,
+        .form-group input[type="text"],
+        .form-group input[type="number"] {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        .form-group textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .file-upload-area {
+            border: 2px dashed #1a5f2a;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            background: #f8fff8;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .file-upload-area:hover,
+        .file-upload-area.drag-over {
+            background: #e8f5e9;
+            border-color: #134620;
+        }
+        .file-upload-area .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+        .file-upload-area p { margin: 0.25rem 0; color: #666; }
+        .file-upload-area a { color: #1a5f2a; font-weight: 600; }
+        .file-upload-area .file-types { font-size: 0.8rem; color: #999; margin-top: 0.5rem; }
+
+        .upload-preview {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8f8f8;
+            border-radius: 8px;
+        }
+        .upload-preview h4 { margin: 0 0 0.5rem 0; }
+        #preview-content {
+            max-height: 200px;
+            overflow-y: auto;
+            background: white;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            white-space: pre-wrap;
+            margin-bottom: 1rem;
+        }
+
+        .import-status {
+            padding: 0.75rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+        .import-status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .import-status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .import-status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .entries-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+        .entries-list table { margin: 0; }
+        .entries-list .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>
@@ -207,8 +389,133 @@
             <span>Adjust hybrid mix to predict customer orders</span>
         </div>
         <div>
+            <button class="btn btn-secondary" onclick="showImportModal()">Import Data</button>
             <button class="btn btn-secondary" onclick="resetToDefaults()">Reset to Defaults</button>
             <button class="btn btn-primary" onclick="exportForecast()">Export Forecast</button>
+        </div>
+    </div>
+
+    <!-- Data Import Modal -->
+    <div id="import-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Import Grower Data</h2>
+                <button class="close-btn" onclick="hideImportModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="import-instructions">
+                    <h3>How to Export Data from Power BI:</h3>
+                    <ol>
+                        <li><strong>Option 1 - Export to CSV:</strong> In Power BI, click on the visual (table), then click the "..." menu → "Export data" → Choose CSV format</li>
+                        <li><strong>Option 2 - Copy from Table View:</strong> In Power BI Desktop, switch to "Data" view, find your table, select the rows, and copy (Ctrl+C)</li>
+                        <li><strong>Option 3 - Export from Excel:</strong> If your data is also in Excel, copy directly from there</li>
+                    </ol>
+                    <p class="note"><strong>Note:</strong> If you're copying from a Power BI visual and getting an image, try right-clicking the table and selecting "Show as a table" first, then copy from the table view.</p>
+                </div>
+
+                <div class="import-tabs">
+                    <button class="tab-btn active" onclick="switchImportTab('upload')">Upload File</button>
+                    <button class="tab-btn" onclick="switchImportTab('paste')">Paste Data</button>
+                    <button class="tab-btn" onclick="switchImportTab('manual')">Manual Entry</button>
+                </div>
+
+                <div id="upload-tab" class="import-tab-content">
+                    <div class="form-group">
+                        <label>Select Year for this data:</label>
+                        <select id="upload-year">
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                            <option value="2026" selected>2026</option>
+                        </select>
+                    </div>
+                    <div class="file-upload-area" id="drop-zone">
+                        <input type="file" id="file-input" accept=".csv,.txt,.tsv" onchange="handleFileUpload(event)" style="display: none;">
+                        <div class="upload-icon">📁</div>
+                        <p><strong>Drag & drop a file here</strong></p>
+                        <p>or <a href="#" onclick="document.getElementById('file-input').click(); return false;">click to browse</a></p>
+                        <p class="file-types">Accepts: CSV, TXT, TSV files</p>
+                    </div>
+                    <div id="upload-preview" class="upload-preview" style="display: none;">
+                        <h4>File Preview:</h4>
+                        <div id="preview-content"></div>
+                        <button class="btn btn-primary" onclick="confirmFileImport()">Confirm Import</button>
+                        <button class="btn btn-secondary" onclick="cancelFileUpload()">Cancel</button>
+                    </div>
+                    <div id="upload-status" class="import-status"></div>
+                </div>
+
+                <div id="paste-tab" class="import-tab-content" style="display: none;">
+                    <div class="form-group">
+                        <label>Select Year:</label>
+                        <select id="import-year">
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                            <option value="2026" selected>2026</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Paste your data below (tab or comma separated):</label>
+                        <textarea id="paste-data" rows="15" placeholder="Expected format (with headers):
+Sales Year	Operation	Account	Product line	Product	Subproduct	Trait segment	Total invoice	Regular in	Sample in	Replant in	Delivered	...
+
+OR simplified format:
+Grower	Hybrid	Trait	Bags
+McConnell Ent	P0622AM	NR58	65
+Half Pint	P0950AM	NR62	45
+
+The system will auto-detect the format and extract relevant columns."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary" onclick="parseAndImportData()">Import Data</button>
+                        <button class="btn btn-secondary" onclick="clearPasteArea()">Clear</button>
+                    </div>
+                    <div id="import-status" class="import-status"></div>
+                </div>
+
+                <div id="manual-tab" class="import-tab-content" style="display: none;">
+                    <div class="manual-entry-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Year:</label>
+                                <select id="manual-year">
+                                    <option value="2024">2024</option>
+                                    <option value="2025">2025</option>
+                                    <option value="2026" selected>2026</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Grower/Operation:</label>
+                                <input type="text" id="manual-grower" placeholder="e.g., McConnell Ent">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Hybrid:</label>
+                                <input type="text" id="manual-hybrid" placeholder="e.g., P0622AM">
+                            </div>
+                            <div class="form-group">
+                                <label>Trait:</label>
+                                <select id="manual-trait">
+                                    <option value="NR58">NR58</option>
+                                    <option value="NR62">NR62</option>
+                                    <option value="NR64">NR64</option>
+                                    <option value="STD">STD</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Quantity (bags):</label>
+                                <input type="number" id="manual-bags" placeholder="e.g., 65">
+                            </div>
+                            <div class="form-group" style="display: flex; align-items: flex-end;">
+                                <button class="btn btn-primary" onclick="addManualEntry()">Add Entry</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="manual-entries-list" class="entries-list"></div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -794,8 +1101,325 @@
             };
         }
 
+        // ============================================
+        // DATA IMPORT FUNCTIONS
+        // ============================================
+        let pendingFileData = null;
+        let manualEntries = [];
+
+        function showImportModal() {
+            document.getElementById('import-modal').style.display = 'flex';
+            setupDragAndDrop();
+        }
+
+        function hideImportModal() {
+            document.getElementById('import-modal').style.display = 'none';
+        }
+
+        function switchImportTab(tab) {
+            // Update tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Show/hide content
+            document.getElementById('upload-tab').style.display = tab === 'upload' ? 'block' : 'none';
+            document.getElementById('paste-tab').style.display = tab === 'paste' ? 'block' : 'none';
+            document.getElementById('manual-tab').style.display = tab === 'manual' ? 'block' : 'none';
+        }
+
+        function setupDragAndDrop() {
+            const dropZone = document.getElementById('drop-zone');
+            if (!dropZone) return;
+
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('drag-over');
+            });
+
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('drag-over');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('drag-over');
+                const file = e.dataTransfer.files[0];
+                if (file) processFile(file);
+            });
+
+            dropZone.addEventListener('click', () => {
+                document.getElementById('file-input').click();
+            });
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (file) processFile(file);
+        }
+
+        function processFile(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const content = e.target.result;
+                pendingFileData = content;
+
+                // Show preview
+                const preview = document.getElementById('upload-preview');
+                const previewContent = document.getElementById('preview-content');
+                const lines = content.split('\n').slice(0, 20);
+                previewContent.textContent = lines.join('\n') + (content.split('\n').length > 20 ? '\n...(more lines)' : '');
+                preview.style.display = 'block';
+
+                // Parse preview
+                const parsed = parseDataContent(content);
+                showStatus('upload-status', `Found ${parsed.length} records. Click "Confirm Import" to import.`, 'info');
+            };
+            reader.readAsText(file);
+        }
+
+        function confirmFileImport() {
+            if (!pendingFileData) return;
+            const year = document.getElementById('upload-year').value;
+            const records = parseDataContent(pendingFileData);
+            importRecords(year, records, 'upload-status');
+            pendingFileData = null;
+            document.getElementById('upload-preview').style.display = 'none';
+        }
+
+        function cancelFileUpload() {
+            pendingFileData = null;
+            document.getElementById('upload-preview').style.display = 'none';
+            document.getElementById('upload-status').innerHTML = '';
+        }
+
+        function clearPasteArea() {
+            document.getElementById('paste-data').value = '';
+            document.getElementById('import-status').innerHTML = '';
+        }
+
+        function parseAndImportData() {
+            const data = document.getElementById('paste-data').value.trim();
+            if (!data) {
+                showStatus('import-status', 'Please paste some data first.', 'error');
+                return;
+            }
+            const year = document.getElementById('import-year').value;
+            const records = parseDataContent(data);
+            importRecords(year, records, 'import-status');
+        }
+
+        function parseDataContent(content) {
+            const lines = content.split('\n').filter(l => l.trim());
+            if (lines.length === 0) return [];
+
+            const records = [];
+            let headers = [];
+
+            // Detect delimiter (tab or comma)
+            const firstLine = lines[0];
+            const delimiter = firstLine.includes('\t') ? '\t' : ',';
+
+            // Parse header line
+            headers = firstLine.split(delimiter).map(h => h.trim().toLowerCase());
+
+            // Detect format type
+            const isDemandPlanFormat = headers.some(h =>
+                h.includes('operation') || h.includes('account') || h.includes('subproduct') || h.includes('delivered')
+            );
+            const isSimpleFormat = headers.some(h =>
+                h.includes('grower') || h.includes('hybrid') || h.includes('bags')
+            );
+
+            // Map column indices based on format
+            let growerCol, hybridCol, traitCol, bagsCol;
+
+            if (isDemandPlanFormat) {
+                // Power BI Demand Plan format
+                growerCol = headers.findIndex(h => h.includes('operation') || h.includes('account'));
+                hybridCol = headers.findIndex(h => h.includes('subproduct') || h.includes('product'));
+                traitCol = headers.findIndex(h => h.includes('trait'));
+                bagsCol = headers.findIndex(h => h.includes('delivered') || h.includes('total'));
+            } else if (isSimpleFormat) {
+                // Simple format
+                growerCol = headers.findIndex(h => h.includes('grower') || h.includes('customer') || h.includes('name'));
+                hybridCol = headers.findIndex(h => h.includes('hybrid') || h.includes('variety') || h.includes('product'));
+                traitCol = headers.findIndex(h => h.includes('trait') || h.includes('treatment'));
+                bagsCol = headers.findIndex(h => h.includes('bags') || h.includes('quantity') || h.includes('qty'));
+            } else {
+                // Fallback - assume columns in order: grower, hybrid, trait, bags
+                growerCol = 0;
+                hybridCol = 1;
+                traitCol = 2;
+                bagsCol = 3;
+            }
+
+            // Parse data lines
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(delimiter).map(v => v.trim().replace(/^["']|["']$/g, ''));
+
+                const grower = values[growerCol] || '';
+                let hybrid = values[hybridCol] || '';
+                const trait = values[traitCol] || 'NR58';
+                const bags = parseInt(values[bagsCol]) || 0;
+
+                // Clean up hybrid name (extract Pioneer product code)
+                const hybridMatch = hybrid.match(/P\d{4}[A-Z]*/i);
+                if (hybridMatch) {
+                    hybrid = hybridMatch[0].toUpperCase();
+                }
+
+                if (grower && hybrid && bags > 0) {
+                    records.push({ grower, hybrid, trait, bags });
+                }
+            }
+
+            return records;
+        }
+
+        function importRecords(year, records, statusId) {
+            if (records.length === 0) {
+                showStatus(statusId, 'No valid records found. Please check the data format.', 'error');
+                return;
+            }
+
+            // Initialize year data if needed
+            if (!growerData[year]) {
+                growerData[year] = { corn: [] };
+            }
+            if (!growerData[year].corn) {
+                growerData[year].corn = [];
+            }
+
+            // Add or update records
+            records.forEach(record => {
+                const existing = growerData[year].corn.find(
+                    r => r.grower === record.grower && r.hybrid === record.hybrid
+                );
+                if (existing) {
+                    existing.bags = record.bags;
+                    existing.trait = record.trait;
+                } else {
+                    growerData[year].corn.push(record);
+                }
+            });
+
+            // Save to localStorage
+            localStorage.setItem('pioneerGrowerData', JSON.stringify(growerData));
+
+            // Recalculate everything
+            calculateBaseForecasts();
+            initializeAdjustments();
+            renderHybridAdjusters();
+            updateAllForecasts();
+
+            showStatus(statusId, `Successfully imported ${records.length} records for ${year}!`, 'success');
+        }
+
+        function showStatus(elementId, message, type) {
+            const el = document.getElementById(elementId);
+            el.className = 'import-status ' + type;
+            el.textContent = message;
+        }
+
+        // Manual Entry Functions
+        function addManualEntry() {
+            const year = document.getElementById('manual-year').value;
+            const grower = document.getElementById('manual-grower').value.trim();
+            const hybrid = document.getElementById('manual-hybrid').value.trim().toUpperCase();
+            const trait = document.getElementById('manual-trait').value;
+            const bags = parseInt(document.getElementById('manual-bags').value) || 0;
+
+            if (!grower || !hybrid || bags <= 0) {
+                alert('Please fill in all fields with valid values.');
+                return;
+            }
+
+            // Add to grower data
+            if (!growerData[year]) growerData[year] = { corn: [] };
+            if (!growerData[year].corn) growerData[year].corn = [];
+
+            const existing = growerData[year].corn.find(
+                r => r.grower === grower && r.hybrid === hybrid
+            );
+            if (existing) {
+                existing.bags = bags;
+                existing.trait = trait;
+            } else {
+                growerData[year].corn.push({ grower, hybrid, trait, bags });
+            }
+
+            // Save and refresh
+            localStorage.setItem('pioneerGrowerData', JSON.stringify(growerData));
+            calculateBaseForecasts();
+            initializeAdjustments();
+            renderHybridAdjusters();
+            updateAllForecasts();
+
+            // Clear form
+            document.getElementById('manual-grower').value = '';
+            document.getElementById('manual-hybrid').value = '';
+            document.getElementById('manual-bags').value = '';
+
+            // Show entries
+            renderManualEntriesList();
+        }
+
+        function renderManualEntriesList() {
+            const container = document.getElementById('manual-entries-list');
+            const year = document.getElementById('manual-year').value;
+            const entries = growerData[year]?.corn || [];
+
+            if (entries.length === 0) {
+                container.innerHTML = '<p style="padding: 1rem; color: #666;">No entries for this year.</p>';
+                return;
+            }
+
+            let html = '<table><thead><tr><th>Grower</th><th>Hybrid</th><th>Trait</th><th>Bags</th><th></th></tr></thead><tbody>';
+            entries.forEach((entry, idx) => {
+                html += `<tr>
+                    <td>${entry.grower}</td>
+                    <td>${entry.hybrid}</td>
+                    <td>${entry.trait}</td>
+                    <td>${entry.bags}</td>
+                    <td><button class="delete-btn" onclick="deleteEntry('${year}', ${idx})">Delete</button></td>
+                </tr>`;
+            });
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+
+        function deleteEntry(year, idx) {
+            if (growerData[year]?.corn) {
+                growerData[year].corn.splice(idx, 1);
+                localStorage.setItem('pioneerGrowerData', JSON.stringify(growerData));
+                calculateBaseForecasts();
+                initializeAdjustments();
+                renderHybridAdjusters();
+                updateAllForecasts();
+                renderManualEntriesList();
+            }
+        }
+
         // Initialize on load
         init();
+
+        // Try to load from localStorage
+        const savedData = localStorage.getItem('pioneerGrowerData');
+        if (savedData) {
+            try {
+                const parsed = JSON.parse(savedData);
+                // Merge with existing data
+                Object.keys(parsed).forEach(key => {
+                    growerData[key] = parsed[key];
+                });
+                calculateBaseForecasts();
+                initializeAdjustments();
+                renderHybridAdjusters();
+                updateAllForecasts();
+            } catch (e) {
+                console.error('Error loading saved data:', e);
+            }
+        }
     </script>
 </body>
 </html>
