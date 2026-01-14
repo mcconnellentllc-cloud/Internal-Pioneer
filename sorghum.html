@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pioneer 2027 Sorghum Hybrids</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f5f5; }
+        .header {
+            background: linear-gradient(135deg, #8b4513, #a0522d);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 { font-size: 1.4rem; }
+        .nav-links { display: flex; gap: 1rem; }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+        .nav-links a:hover { background: rgba(255,255,255,0.3); }
+        .nav-links a.active { background: rgba(255,255,255,0.4); font-weight: 600; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
+        .section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+        .section h2 {
+            font-size: 1.1rem;
+            color: #8b4513;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #f4a460;
+        }
+        .hybrid-card {
+            background: white;
+            border: 1px solid #eee;
+            border-left: 4px solid #8b4513;
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+        .hybrid-card h3 {
+            color: #333;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+        .crm-badge {
+            background: #8b4513;
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+        .hybrid-specs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+        .spec-item {
+            background: #fdf5e6;
+            padding: 0.6rem;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .spec-item .label { font-size: 0.7rem; color: #666; margin-bottom: 0.25rem; }
+        .spec-item .value { font-size: 0.95rem; font-weight: 600; color: #333; }
+        .replaces {
+            font-size: 0.85rem;
+            color: #666;
+            background: #fff8dc;
+            padding: 0.5rem;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+        }
+        .hybrid-notes { margin-top: 1rem; }
+        .hybrid-notes label { font-size: 0.8rem; color: #666; display: block; margin-bottom: 0.25rem; }
+        .hybrid-notes textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            min-height: 60px;
+            resize: vertical;
+        }
+        .trait-tag {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            margin-left: 0.5rem;
+        }
+        .inzen-tag { background: #6c757d; color: white; }
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .summary-card {
+            background: linear-gradient(135deg, #8b4513, #a0522d);
+            color: white;
+            padding: 1.25rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .summary-card .label { font-size: 0.8rem; opacity: 0.9; }
+        .summary-card .value { font-size: 2rem; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Pioneer 2027 Sorghum Hybrids</h1>
+        <div class="nav-links">
+            <a href="index.html">Corn</a>
+            <a href="sorghum.html" class="active">Sorghum</a>
+            <a href="soybeans.html">Soybeans</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="summary-cards">
+            <div class="summary-card">
+                <div class="label">New 2027 Sorghum</div>
+                <div class="value">1</div>
+            </div>
+            <div class="summary-card">
+                <div class="label">Inzen Hybrids</div>
+                <div class="value">1</div>
+            </div>
+            <div class="summary-card">
+                <div class="label">CRM Range</div>
+                <div class="value">101</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>2027 New Sorghum Hybrids</h2>
+
+            <div class="hybrid-card">
+                <h3>P88Z153 <span class="crm-badge">101 CRM</span> <span class="trait-tag inzen-tag">INZEN</span></h3>
+                <div class="replaces"><strong>TAKES OUT 86P20 ACRES</strong> | <strong>Companion to 89P52</strong>, P87R103, P86R138</div>
+                <div class="hybrid-specs">
+                    <div class="spec-item">
+                        <div class="label">Yield/Maturity</div>
+                        <div class="value" style="color:#28a745;">9</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Pre-Flower Drought</div>
+                        <div class="value" style="color:#28a745;">8</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Post-Flower Drought</div>
+                        <div class="value" style="color:#28a745;">8</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Stalk Strength</div>
+                        <div class="value" style="color:#28a745;">8</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Root Strength</div>
+                        <div class="value">7</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Test Weight</div>
+                        <div class="value" style="color:#28a745;">8</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Plant Height</div>
+                        <div class="value">7 (Moderate)</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Drydown</div>
+                        <div class="value">7</div>
+                    </div>
+                </div>
+                <p style="margin:1rem 0; color:#666; font-size:0.9rem;">
+                    <strong>Key Strengths:</strong> 101 CRM (61 RM) <strong style="color:#8b4513;">INZEN</strong> hybrid with ALS herbicide tolerance. <strong style="color:#dc3545;">USE WITH ZEST WDG HERBICIDE</strong> for proven post-emergence control of key grass weed species. Moderate stature plant with solid roots and late-season stalks. Excellent field appeal - very uniform head height, acceptable head exertion. Very good spring stand establishment.<br>
+                    <strong>Positioning:</strong> Good stability for dryland to irrigated environments where additional herbicide tools are needed to manage grass pressure<br>
+                    <strong>Considerations:</strong> Slightly below avg high pH tolerance. Iron Chlorosis 4**. Cold Emergence 4. Head Exertion 4<br>
+                    <strong>Grain Color:</strong> Red
+                </p>
+                <div class="hybrid-notes">
+                    <label>My Notes:</label>
+                    <textarea id="notes-P88Z153" onchange="saveNotes('P88Z153', this.value)" placeholder="Your notes: 101 day product with Inzen, chemical is Zest, moderate stature..."></textarea>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Load and save notes to localStorage
+        function saveNotes(hybrid, value) {
+            const notes = JSON.parse(localStorage.getItem('pioneerSorghumNotes') || '{}');
+            notes[hybrid] = value;
+            localStorage.setItem('pioneerSorghumNotes', JSON.stringify(notes));
+        }
+
+        function loadNotes() {
+            const notes = JSON.parse(localStorage.getItem('pioneerSorghumNotes') || '{}');
+            Object.keys(notes).forEach(hybrid => {
+                const textarea = document.getElementById('notes-' + hybrid);
+                if (textarea) textarea.value = notes[hybrid];
+            });
+        }
+
+        loadNotes();
+    </script>
+</body>
+</html>
