@@ -3,542 +3,1142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pioneer Analytics - Grower Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+    <title>Pioneer 2027 Hybrid Forecast</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f5f5; }
+
+        .header {
+            background: linear-gradient(135deg, #1a5f2a, #134620);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 { font-size: 1.4rem; }
+        .header-buttons { display: flex; gap: 0.5rem; }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+        .btn-primary { background: white; color: #1a5f2a; font-weight: 600; }
+        .btn-secondary { background: rgba(255,255,255,0.2); color: white; }
+        .btn:hover { opacity: 0.9; }
+
+        .container { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
+
+        .tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #1a5f2a;
+        }
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: #e8e8e8;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .tab.active {
+            background: #1a5f2a;
+            color: white;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+        .section h2 {
+            font-size: 1.1rem;
+            color: #1a5f2a;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e8f5e9;
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .summary-card {
+            background: linear-gradient(135deg, #1a5f2a, #2d8a42);
+            color: white;
+            padding: 1.25rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .summary-card .label { font-size: 0.8rem; opacity: 0.9; margin-bottom: 0.25rem; }
+        .summary-card .value { font-size: 2rem; font-weight: bold; }
+        .summary-card .sub { font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem; }
+
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        th, td { padding: 0.6rem 0.75rem; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #f8f8f8; font-weight: 600; color: #333; position: sticky; top: 0; }
+        tr:hover { background: #f9f9f9; }
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+
+        .grower-row { background: #f0f7f0; font-weight: 600; }
+        .grower-row td { border-top: 2px solid #1a5f2a; }
+
+        .prediction { color: #1a5f2a; font-weight: 600; }
+        .change-up { color: #28a745; }
+        .change-down { color: #dc3545; }
+
+        /* Import Modal */
+        .modal {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #eee;
+            background: #f8f8f8;
+        }
+        .modal-header h2 { font-size: 1.1rem; color: #1a5f2a; }
+        .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #666; }
+        .modal-body { padding: 1.5rem; }
+
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; margin-bottom: 0.25rem; font-weight: 600; font-size: 0.85rem; }
+        .form-group select, .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        .form-group textarea { font-family: monospace; font-size: 0.8rem; }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+        .file-drop {
+            border: 2px dashed #1a5f2a;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            background: #f8fff8;
+            cursor: pointer;
+        }
+        .file-drop:hover { background: #e8f5e9; }
+        .file-drop p { margin: 0.25rem 0; color: #666; font-size: 0.9rem; }
+
+        .status { padding: 0.75rem; border-radius: 4px; margin-top: 1rem; font-size: 0.85rem; white-space: pre-wrap; }
+        .status.success { background: #d4edda; color: #155724; }
+        .status.error { background: #f8d7da; color: #721c24; }
+        .status.info { background: #d1ecf1; color: #0c5460; }
+
+        .hybrid-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        .hybrid-tag {
+            background: #e8f5e9;
+            color: #1a5f2a;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .hybrid-tag .remove {
+            background: none;
+            border: none;
+            color: #dc3545;
+            cursor: pointer;
+            font-size: 1rem;
+            line-height: 1;
+        }
+        .hybrid-tag.discontinued { background: #f8d7da; color: #721c24; text-decoration: line-through; }
+        .hybrid-tag.new { background: #d4edda; color: #155724; border: 2px solid #28a745; }
+
+        .filter-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        .filter-row select, .filter-row input {
+            padding: 0.4rem 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        .data-table-container {
+            max-height: 500px;
+            overflow-y: auto;
+            border: 1px solid #eee;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body>
-    <!-- Login Screen -->
-    <div id="login-screen" class="login-container">
-        <div class="login-box">
-            <div class="login-logo">
-                <h1>Pioneer Analytics</h1>
-                <p>Grower Data Dashboard</p>
-            </div>
-            <form id="login-form">
-                <div class="form-group">
-                    <label for="access-code">Access Code</label>
-                    <input type="password" id="access-code" placeholder="Enter access code" required>
-                </div>
-                <button type="submit" class="btn btn-primary btn-full">Sign In</button>
-                <p id="login-error" class="error-message"></p>
-            </form>
+    <div class="header">
+        <div>
+            <h1>Pioneer 2027 Hybrid Quantity Forecast</h1>
+        </div>
+        <div class="header-buttons">
+            <button class="btn btn-secondary" onclick="showImportModal()">Import Data</button>
+            <button class="btn btn-secondary" onclick="showHybridModal()">Manage 2027 Hybrids</button>
+            <button class="btn btn-primary" onclick="exportData()">Export Forecast</button>
         </div>
     </div>
 
-    <!-- Main Dashboard -->
-    <div id="dashboard" class="dashboard-container hidden">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-left">
-                <h1>Pioneer Analytics</h1>
-                <span class="subtitle">Grower Data Dashboard</span>
+    <div class="container">
+        <!-- Summary Cards -->
+        <div class="summary-cards">
+            <div class="summary-card">
+                <div class="label">2024 Total</div>
+                <div class="value" id="total-2024">0</div>
+                <div class="sub">bags</div>
             </div>
-            <div class="header-right">
-                <span id="current-date"></span>
-                <button id="logout-btn" class="btn btn-secondary">Logout</button>
+            <div class="summary-card">
+                <div class="label">2025 Total</div>
+                <div class="value" id="total-2025">0</div>
+                <div class="sub">bags</div>
             </div>
-        </header>
+            <div class="summary-card">
+                <div class="label">2026 Total</div>
+                <div class="value" id="total-2026">0</div>
+                <div class="sub">bags</div>
+            </div>
+            <div class="summary-card" style="background: linear-gradient(135deg, #0056b3, #007bff);">
+                <div class="label">2027 Predicted</div>
+                <div class="value" id="total-2027">0</div>
+                <div class="sub">bags</div>
+            </div>
+        </div>
 
-        <!-- Navigation Tabs -->
-        <nav class="nav-tabs">
-            <button class="tab-btn active" data-tab="overview">Overview</button>
-            <button class="tab-btn" data-tab="historical">Historical Analysis</button>
-            <button class="tab-btn" data-tab="forecasting">2027 Forecasting</button>
-            <button class="tab-btn" data-tab="growers">Grower Analysis</button>
-            <button class="tab-btn" data-tab="products">Product Mix</button>
-            <button class="tab-btn" data-tab="data">Data Management</button>
-        </nav>
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('by-operation')">By Operation</button>
+            <button class="tab" onclick="switchTab('by-hybrid')">By Hybrid</button>
+            <button class="tab" onclick="switchTab('detail')">Detail View</button>
+        </div>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <!-- Overview Tab -->
-            <section id="overview-tab" class="tab-content active">
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <h3>Total Revenue</h3>
-                        <p class="stat-value" id="total-revenue">$0</p>
-                        <span class="stat-change positive" id="revenue-change">+0%</span>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Active Growers</h3>
-                        <p class="stat-value" id="total-growers">0</p>
-                        <span class="stat-change" id="growers-change">+0</span>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Total Orders</h3>
-                        <p class="stat-value" id="total-orders">0</p>
-                        <span class="stat-change" id="orders-change">+0%</span>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Retention Rate</h3>
-                        <p class="stat-value" id="retention-rate">0%</p>
-                        <span class="stat-change" id="retention-change">+0%</span>
-                    </div>
+        <!-- By Operation Tab -->
+        <div id="by-operation" class="tab-content active">
+            <div class="section">
+                <h2>Quantity by Operation (Grower)</h2>
+                <div class="filter-row">
+                    <input type="text" id="filter-operation" placeholder="Filter operations..." oninput="renderByOperation()">
                 </div>
-
-                <div class="charts-row">
-                    <div class="chart-container half">
-                        <h3>Revenue Trend (2022-2026)</h3>
-                        <canvas id="overview-revenue-chart"></canvas>
-                    </div>
-                    <div class="chart-container half">
-                        <h3>Product Distribution</h3>
-                        <canvas id="overview-product-chart"></canvas>
-                    </div>
-                </div>
-
-                <div class="chart-container full">
-                    <h3>Monthly Performance</h3>
-                    <canvas id="overview-monthly-chart"></canvas>
-                </div>
-            </section>
-
-            <!-- Historical Analysis Tab -->
-            <section id="historical-tab" class="tab-content">
-                <div class="filter-bar">
-                    <div class="filter-group">
-                        <label>Year Range</label>
-                        <select id="hist-year-start">
-                            <option value="2022">2022</option>
-                            <option value="2023">2023</option>
-                            <option value="2024">2024</option>
-                            <option value="2025">2025</option>
-                            <option value="2026" selected>2026</option>
-                        </select>
-                        <span>to</span>
-                        <select id="hist-year-end">
-                            <option value="2022">2022</option>
-                            <option value="2023">2023</option>
-                            <option value="2024">2024</option>
-                            <option value="2025">2025</option>
-                            <option value="2026" selected>2026</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label>Product</label>
-                        <select id="hist-product">
-                            <option value="all">All Products</option>
-                            <option value="Corn Seed">Corn Seed</option>
-                            <option value="Soybean Seed">Soybean Seed</option>
-                            <option value="Sorghum">Sorghum</option>
-                            <option value="Alfalfa">Alfalfa</option>
-                            <option value="Herbicide">Herbicide</option>
-                            <option value="Fungicide">Fungicide</option>
-                            <option value="Insecticide">Insecticide</option>
-                            <option value="Fertilizer">Fertilizer</option>
-                            <option value="Equipment">Equipment</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                    <button id="apply-hist-filter" class="btn btn-primary">Apply Filter</button>
-                </div>
-
-                <div class="chart-container full">
-                    <h3>5-Year Revenue Analysis</h3>
-                    <canvas id="historical-revenue-chart"></canvas>
-                </div>
-
-                <div class="charts-row">
-                    <div class="chart-container half">
-                        <h3>Year-over-Year Comparison</h3>
-                        <canvas id="yoy-comparison-chart"></canvas>
-                    </div>
-                    <div class="chart-container half">
-                        <h3>Growth Rate by Year</h3>
-                        <canvas id="growth-rate-chart"></canvas>
-                    </div>
-                </div>
-
                 <div class="data-table-container">
-                    <h3>Historical Summary</h3>
-                    <table id="historical-summary-table" class="data-table">
+                    <table>
                         <thead>
                             <tr>
-                                <th>Year</th>
-                                <th>Total Revenue</th>
-                                <th>Orders</th>
-                                <th>Growers</th>
-                                <th>Avg Order Value</th>
-                                <th>Growth</th>
+                                <th>Operation</th>
+                                <th class="text-right">2024</th>
+                                <th class="text-right">2025</th>
+                                <th class="text-right">2026</th>
+                                <th class="text-right prediction">2027 Predicted</th>
+                                <th class="text-right">Change</th>
                             </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody id="operation-table"></tbody>
                     </table>
                 </div>
-            </section>
+            </div>
+        </div>
 
-            <!-- Forecasting Tab -->
-            <section id="forecasting-tab" class="tab-content">
-                <div class="forecast-header">
-                    <h2>2027 Revenue Forecasting</h2>
-                    <div class="forecast-controls">
-                        <div class="filter-group">
-                            <label>Forecast Method</label>
-                            <select id="forecast-method">
-                                <option value="linear">Linear Trend</option>
-                                <option value="growth">Growth Rate</option>
-                                <option value="weighted">Weighted Average</option>
-                            </select>
-                        </div>
-                        <div class="filter-group">
-                            <label>Confidence Level</label>
-                            <select id="confidence-level">
-                                <option value="0.80">80%</option>
-                                <option value="0.90" selected>90%</option>
-                                <option value="0.95">95%</option>
-                            </select>
-                        </div>
-                        <button id="run-forecast" class="btn btn-primary">Run Forecast</button>
-                    </div>
+        <!-- By Hybrid Tab -->
+        <div id="by-hybrid" class="tab-content">
+            <div class="section">
+                <h2>Quantity by Hybrid (Subproduct)</h2>
+                <div class="filter-row">
+                    <input type="text" id="filter-hybrid" placeholder="Filter hybrids..." oninput="renderByHybrid()">
+                    <select id="filter-hybrid-status" onchange="renderByHybrid()">
+                        <option value="all">All Hybrids</option>
+                        <option value="active">Active Only</option>
+                        <option value="discontinued">Discontinued</option>
+                        <option value="new">New for 2027</option>
+                    </select>
                 </div>
-
-                <div class="forecast-summary">
-                    <div class="forecast-card">
-                        <h4>Projected Revenue</h4>
-                        <p class="forecast-value" id="forecast-revenue">$0</p>
-                        <span class="forecast-range" id="forecast-range">Range: $0 - $0</span>
-                    </div>
-                    <div class="forecast-card">
-                        <h4>Expected Growers</h4>
-                        <p class="forecast-value" id="forecast-growers">0</p>
-                        <span class="forecast-range" id="forecast-growers-range">Range: 0 - 0</span>
-                    </div>
-                    <div class="forecast-card">
-                        <h4>Projected Growth</h4>
-                        <p class="forecast-value" id="forecast-growth">0%</p>
-                        <span class="forecast-range" id="forecast-growth-range">vs 2026</span>
-                    </div>
-                </div>
-
-                <div class="chart-container full">
-                    <h3>Revenue Forecast with Confidence Intervals</h3>
-                    <canvas id="forecast-chart"></canvas>
-                </div>
-
-                <div class="charts-row">
-                    <div class="chart-container half">
-                        <h3>Product Category Forecast</h3>
-                        <canvas id="product-forecast-chart"></canvas>
-                    </div>
-                    <div class="chart-container half">
-                        <h3>Monthly Forecast Distribution</h3>
-                        <canvas id="monthly-forecast-chart"></canvas>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Grower Analysis Tab -->
-            <section id="growers-tab" class="tab-content">
-                <div class="filter-bar">
-                    <div class="filter-group">
-                        <label>Year</label>
-                        <select id="grower-year">
-                            <option value="2022">2022</option>
-                            <option value="2023">2023</option>
-                            <option value="2024">2024</option>
-                            <option value="2025">2025</option>
-                            <option value="2026" selected>2026</option>
-                        </select>
-                    </div>
-                    <div class="filter-group">
-                        <label>Sort By</label>
-                        <select id="grower-sort">
-                            <option value="revenue">Revenue</option>
-                            <option value="orders">Orders</option>
-                            <option value="name">Name</option>
-                        </select>
-                    </div>
-                    <input type="text" id="grower-search" placeholder="Search growers..." class="search-input">
-                    <button id="apply-grower-filter" class="btn btn-primary">Apply</button>
-                </div>
-
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <h3>New Growers</h3>
-                        <p class="stat-value" id="new-growers">0</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Returning Growers</h3>
-                        <p class="stat-value" id="returning-growers">0</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Lost Growers</h3>
-                        <p class="stat-value" id="lost-growers">0</p>
-                    </div>
-                    <div class="stat-card">
-                        <h3>Retention Rate</h3>
-                        <p class="stat-value" id="grower-retention">0%</p>
-                    </div>
-                </div>
-
-                <div class="charts-row">
-                    <div class="chart-container half">
-                        <h3>Grower Retention Trend</h3>
-                        <canvas id="retention-trend-chart"></canvas>
-                    </div>
-                    <div class="chart-container half">
-                        <h3>Top 10 Growers by Revenue</h3>
-                        <canvas id="top-growers-chart"></canvas>
-                    </div>
-                </div>
-
                 <div class="data-table-container">
-                    <h3>Grower Details</h3>
-                    <table id="grower-table" class="data-table">
+                    <table>
                         <thead>
                             <tr>
-                                <th>Grower Name</th>
-                                <th>Total Revenue</th>
-                                <th>Orders</th>
-                                <th>Products</th>
-                                <th>First Purchase</th>
-                                <th>Last Purchase</th>
-                                <th>Status</th>
+                                <th>Hybrid</th>
+                                <th class="text-right">2024</th>
+                                <th class="text-right">2025</th>
+                                <th class="text-right">2026</th>
+                                <th class="text-right prediction">2027 Predicted</th>
+                                <th class="text-right">% of Total</th>
+                                <th class="text-center">Status</th>
                             </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody id="hybrid-table"></tbody>
                     </table>
                 </div>
-            </section>
+            </div>
+        </div>
 
-            <!-- Product Mix Tab -->
-            <section id="products-tab" class="tab-content">
-                <div class="filter-bar">
-                    <div class="filter-group">
-                        <label>Year</label>
-                        <select id="product-year">
-                            <option value="all">All Years</option>
-                            <option value="2022">2022</option>
-                            <option value="2023">2023</option>
-                            <option value="2024">2024</option>
-                            <option value="2025">2025</option>
-                            <option value="2026" selected>2026</option>
-                        </select>
-                    </div>
-                    <button id="apply-product-filter" class="btn btn-primary">Apply</button>
+        <!-- Detail View Tab -->
+        <div id="detail" class="tab-content">
+            <div class="section">
+                <h2>Detail: Quantity by Operation + Hybrid</h2>
+                <div class="filter-row">
+                    <input type="text" id="filter-detail" placeholder="Filter..." oninput="renderDetail()">
+                    <select id="filter-detail-year" onchange="renderDetail()">
+                        <option value="all">All Years</option>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                        <option value="2026">2026</option>
+                    </select>
                 </div>
-
-                <div class="charts-row">
-                    <div class="chart-container half">
-                        <h3>Revenue by Product Category</h3>
-                        <canvas id="product-revenue-chart"></canvas>
-                    </div>
-                    <div class="chart-container half">
-                        <h3>Units Sold by Product</h3>
-                        <canvas id="product-units-chart"></canvas>
-                    </div>
-                </div>
-
-                <div class="chart-container full">
-                    <h3>Product Performance Over Time</h3>
-                    <canvas id="product-trend-chart"></canvas>
-                </div>
-
                 <div class="data-table-container">
-                    <h3>Product Summary</h3>
-                    <table id="product-table" class="data-table">
+                    <table>
                         <thead>
                             <tr>
-                                <th>Product</th>
-                                <th>Revenue</th>
-                                <th>Units Sold</th>
-                                <th>Avg Price</th>
-                                <th>% of Total</th>
-                                <th>YoY Change</th>
+                                <th>Operation</th>
+                                <th>Hybrid</th>
+                                <th class="text-right">2024</th>
+                                <th class="text-right">2025</th>
+                                <th class="text-right">2026</th>
+                                <th class="text-right prediction">2027 Predicted</th>
                             </tr>
                         </thead>
-                        <tbody></tbody>
+                        <tbody id="detail-table"></tbody>
                     </table>
                 </div>
-            </section>
-
-            <!-- Data Management Tab -->
-            <section id="data-tab" class="tab-content">
-                <div class="data-management">
-                    <!-- Pioneer Format Import -->
-                    <div class="data-section pioneer-import">
-                        <h3>Pioneer Sales Data Import</h3>
-                        <p class="section-desc">Paste your Pioneer sales report data directly. Supports formats with columns: Year, Grower, Product, Hybrid, Quantity fields</p>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Data Year</label>
-                                <select id="pioneer-year">
-                                    <option value="auto">Auto-detect from data</option>
-                                    <option value="2024">2024</option>
-                                    <option value="2025">2025</option>
-                                    <option value="2026">2026</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Product Type</label>
-                                <select id="pioneer-product-type">
-                                    <option value="auto">Auto-detect</option>
-                                    <option value="Corn Seed">Corn Seed</option>
-                                    <option value="Soybean Seed">Soybean Seed</option>
-                                    <option value="Sorghum">Sorghum</option>
-                                    <option value="Alfalfa">Alfalfa</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Price per Unit ($)</label>
-                                <input type="number" id="pioneer-price" placeholder="280" value="280">
-                            </div>
-                        </div>
-                        <textarea id="pioneer-paste" class="bulk-textarea" rows="10" placeholder="Paste your Pioneer sales data here...
-
-Example format:
-2024	Anderson	Corn	P0157AM	NR58	3	3	0	3
-2024	Arrow Acres	Corn	P0339AM	NR62	5	5	0	5
-
-The importer will automatically detect columns and extract grower names, products, and quantities."></textarea>
-                        <div class="paste-actions">
-                            <button id="parse-pioneer" class="btn btn-secondary">Preview Import</button>
-                            <button id="import-pioneer" class="btn btn-primary" disabled>Import Data</button>
-                            <span id="pioneer-status" class="import-status"></span>
-                        </div>
-                        <div id="pioneer-preview" class="preview-container hidden">
-                            <h4>Import Preview</h4>
-                            <div class="preview-stats">
-                                <span><strong>Records:</strong> <span id="pioneer-record-count">0</span></span>
-                                <span><strong>Growers:</strong> <span id="pioneer-grower-count">0</span></span>
-                                <span><strong>Total Units:</strong> <span id="pioneer-unit-count">0</span></span>
-                                <span><strong>Est. Value:</strong> <span id="pioneer-value-count">$0</span></span>
-                            </div>
-                            <table id="pioneer-preview-table" class="data-table"></table>
-                        </div>
-                    </div>
-
-                    <!-- CSV Upload -->
-                    <div class="data-section">
-                        <h3>CSV Import</h3>
-                        <p class="section-desc">Upload a CSV file with columns: date, invoice_number, grower_name, product, quantity, amount</p>
-                        <div class="upload-area" id="csv-upload-area">
-                            <input type="file" id="csv-file" accept=".csv" hidden>
-                            <div class="upload-content">
-                                <span class="upload-icon">📁</span>
-                                <p>Drag & drop CSV file here or <button class="btn-link" id="browse-csv">browse</button></p>
-                            </div>
-                        </div>
-                        <div id="csv-preview" class="preview-container hidden">
-                            <h4>Preview (first 5 rows)</h4>
-                            <table id="csv-preview-table" class="data-table"></table>
-                            <div class="preview-actions">
-                                <button id="import-csv" class="btn btn-primary">Import Data</button>
-                                <button id="cancel-csv" class="btn btn-secondary">Cancel</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Manual Entry -->
-                    <div class="data-section">
-                        <h3>Manual Entry</h3>
-                        <form id="manual-entry-form" class="entry-form">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label>Date</label>
-                                    <input type="date" id="entry-date" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Invoice Number</label>
-                                    <input type="text" id="entry-invoice" placeholder="INV-001" required>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label>Grower Name</label>
-                                    <input type="text" id="entry-grower" placeholder="John Smith" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Product</label>
-                                    <select id="entry-product" required>
-                                        <option value="">Select Product</option>
-                                        <option value="Corn Seed">Corn Seed</option>
-                                        <option value="Soybean Seed">Soybean Seed</option>
-                                        <option value="Sorghum">Sorghum</option>
-                                        <option value="Alfalfa">Alfalfa</option>
-                                        <option value="Herbicide">Herbicide</option>
-                                        <option value="Fungicide">Fungicide</option>
-                                        <option value="Insecticide">Insecticide</option>
-                                        <option value="Fertilizer">Fertilizer</option>
-                                        <option value="Equipment">Equipment</option>
-                                        <option value="Other">Other</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label>Quantity</label>
-                                    <input type="number" id="entry-quantity" placeholder="0" min="0" step="0.01" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Amount ($)</label>
-                                    <input type="number" id="entry-amount" placeholder="0.00" min="0" step="0.01" required>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Add Entry</button>
-                        </form>
-                    </div>
-
-                    <!-- Bulk Paste -->
-                    <div class="data-section">
-                        <h3>Bulk Paste</h3>
-                        <p class="section-desc">Paste tab-separated or comma-separated data (date, invoice_number, grower_name, product, quantity, amount)</p>
-                        <textarea id="bulk-paste" class="bulk-textarea" placeholder="2024-01-15,INV-001,John Smith,Corn Seed,100,15000&#10;2024-01-16,INV-002,Jane Doe,Soybean Seed,50,7500"></textarea>
-                        <div class="paste-actions">
-                            <button id="parse-bulk" class="btn btn-secondary">Parse Data</button>
-                            <button id="import-bulk" class="btn btn-primary" disabled>Import Data</button>
-                        </div>
-                        <div id="bulk-preview" class="preview-container hidden">
-                            <h4>Parsed Data Preview</h4>
-                            <table id="bulk-preview-table" class="data-table"></table>
-                        </div>
-                    </div>
-
-                    <!-- Export Data -->
-                    <div class="data-section">
-                        <h3>Export Data</h3>
-                        <div class="export-options">
-                            <div class="filter-group">
-                                <label>Year</label>
-                                <select id="export-year">
-                                    <option value="all">All Years</option>
-                                    <option value="2022">2022</option>
-                                    <option value="2023">2023</option>
-                                    <option value="2024">2024</option>
-                                    <option value="2025">2025</option>
-                                    <option value="2026">2026</option>
-                                </select>
-                            </div>
-                            <button id="export-csv" class="btn btn-primary">Export to CSV</button>
-                            <button id="clear-data" class="btn btn-danger">Clear All Data</button>
-                        </div>
-                    </div>
-
-                    <!-- Data Summary -->
-                    <div class="data-section">
-                        <h3>Current Data Summary</h3>
-                        <div class="data-summary">
-                            <p><strong>Total Records:</strong> <span id="total-records">0</span></p>
-                            <p><strong>Date Range:</strong> <span id="data-date-range">No data</span></p>
-                            <p><strong>Unique Growers:</strong> <span id="unique-growers">0</span></p>
-                            <p><strong>Last Updated:</strong> <span id="last-updated">Never</span></p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
-
-        <!-- Footer -->
-        <footer class="footer">
-            <p>&copy; 2024-2027 Pioneer Analytics. All rights reserved.</p>
-        </footer>
+            </div>
+        </div>
     </div>
 
-    <!-- Toast Notifications -->
-    <div id="toast-container"></div>
+    <!-- Import Modal -->
+    <div id="import-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Import Data</h2>
+                <button class="close-btn" onclick="hideImportModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Year:</label>
+                        <select id="import-year">
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                            <option value="2026" selected>2026</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Data Format:</label>
+                        <select id="import-format">
+                            <option value="auto">Auto-detect</option>
+                            <option value="powerbi">Power BI Export</option>
+                            <option value="simple">Simple (Grower, Hybrid, Bags)</option>
+                        </select>
+                    </div>
+                </div>
 
-    <script src="app.js"></script>
+                <div class="form-group">
+                    <label>Upload File or Paste Data:</label>
+                    <div class="file-drop" id="drop-zone" onclick="document.getElementById('file-input').click()">
+                        <input type="file" id="file-input" accept=".csv,.txt,.tsv" onchange="handleFile(event)" style="display:none;">
+                        <p><strong>Click to upload or drag file here</strong></p>
+                        <p>CSV, TXT, TSV accepted</p>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Or paste data directly:</label>
+                    <textarea id="paste-data" rows="8" placeholder="Paste your data here..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <button class="btn btn-primary" onclick="importData()">Import Data</button>
+                    <button class="btn btn-secondary" onclick="viewCurrentData()">View Current Data</button>
+                    <button class="btn btn-secondary" onclick="clearData()">Clear All Data</button>
+                </div>
+
+                <div id="import-status" class="status" style="display:none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hybrid Management Modal -->
+    <div id="hybrid-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Manage 2027 Available Hybrids</h2>
+                <button class="close-btn" onclick="hideHybridModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="section" style="box-shadow: none; padding: 1rem; background: #f8f8f8;">
+                    <h2 style="font-size: 1rem;">Discontinued for 2027</h2>
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">These hybrids will NOT be available in 2027. Predicted quantity = 0.</p>
+                    <div class="hybrid-list" id="discontinued-list"></div>
+                    <div class="form-row" style="margin-top: 1rem;">
+                        <input type="text" id="add-discontinued" placeholder="Add discontinued hybrid (e.g., P0622AM)">
+                        <button class="btn btn-secondary" onclick="addDiscontinued()">Add Discontinued</button>
+                    </div>
+                </div>
+
+                <div class="section" style="box-shadow: none; padding: 1rem; background: #f8f8f8; margin-top: 1rem;">
+                    <h2 style="font-size: 1rem;">New for 2027</h2>
+                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">New hybrids available for purchase in 2027.</p>
+                    <div class="hybrid-list" id="new-list"></div>
+                    <div class="form-row" style="margin-top: 1rem;">
+                        <input type="text" id="add-new" placeholder="Add new hybrid (e.g., P0890AM)">
+                        <button class="btn btn-secondary" onclick="addNewHybrid()">Add New Hybrid</button>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label>Or paste a list of 2027 available hybrids (one per line):</label>
+                    <textarea id="paste-hybrids" rows="5" placeholder="P0622AM&#10;P0950AM&#10;P1093AM&#10;..."></textarea>
+                    <button class="btn btn-primary" onclick="importHybridList()" style="margin-top: 0.5rem;">Set as 2027 Available Hybrids</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // DATA STORAGE
+        // ============================================
+        let data = {
+            records: [], // {operation, hybrid, year, bags}
+            discontinued2027: [],
+            new2027: []
+        };
+
+        // Default sample data - will be used if no localStorage data exists
+        const defaultData = {
+            records: [
+                // 2024 Data
+                {operation: "Anderson", hybrid: "P0157AM", year: 2024, bags: 3},
+                {operation: "Anderson", hybrid: "P0339AM", year: 2024, bags: 5},
+                {operation: "Anderson", hybrid: "P0574AM", year: 2024, bags: 8},
+                {operation: "Arrow Acres", hybrid: "P0339AM", year: 2024, bags: 12},
+                {operation: "Arrow Acres", hybrid: "P0574AM", year: 2024, bags: 6},
+                {operation: "Barnhart Farms", hybrid: "P0622AM", year: 2024, bags: 17},
+                {operation: "Barnhart Farms", hybrid: "P0720Q", year: 2024, bags: 10},
+                {operation: "Barnhart Farms", hybrid: "P0825Q", year: 2024, bags: 15},
+                {operation: "Chapman", hybrid: "P0950AM", year: 2024, bags: 25},
+                {operation: "Chapman", hybrid: "P1093AM", year: 2024, bags: 18},
+                {operation: "Crosswhite", hybrid: "P0622AM", year: 2024, bags: 20},
+                {operation: "Crosswhite", hybrid: "P0825Q", year: 2024, bags: 12},
+                {operation: "Douglas A Rhem", hybrid: "P0950AM", year: 2024, bags: 8},
+                {operation: "Douglas A Rhem", hybrid: "P1093AM", year: 2024, bags: 14},
+                {operation: "Garms Inc", hybrid: "P0339AM", year: 2024, bags: 22},
+                {operation: "Garms Inc", hybrid: "P0574AM", year: 2024, bags: 30},
+                {operation: "Half Pint", hybrid: "P0720Q", year: 2024, bags: 45},
+                {operation: "Half Pint", hybrid: "P0825Q", year: 2024, bags: 38},
+                {operation: "Hirschman Farms", hybrid: "P0622AM", year: 2024, bags: 16},
+                {operation: "Hirschman Farms", hybrid: "P0950AM", year: 2024, bags: 24},
+                {operation: "Knouse", hybrid: "P1093AM", year: 2024, bags: 35},
+                {operation: "Knouse", hybrid: "P0157AM", year: 2024, bags: 28},
+                {operation: "Latvala", hybrid: "P0339AM", year: 2024, bags: 19},
+                {operation: "Latvala", hybrid: "P0574AM", year: 2024, bags: 11},
+                {operation: "MB Farms", hybrid: "P0720Q", year: 2024, bags: 42},
+                {operation: "MB Farms", hybrid: "P0825Q", year: 2024, bags: 33},
+                {operation: "McConnell Ent", hybrid: "P0622AM", year: 2024, bags: 55},
+                {operation: "McConnell Ent", hybrid: "P0950AM", year: 2024, bags: 48},
+                {operation: "Mednansky", hybrid: "P1093AM", year: 2024, bags: 12},
+                {operation: "Mednansky", hybrid: "P0157AM", year: 2024, bags: 9},
+                {operation: "Moore", hybrid: "P0339AM", year: 2024, bags: 27},
+                {operation: "Moore", hybrid: "P0574AM", year: 2024, bags: 21},
+                {operation: "Moser", hybrid: "P0720Q", year: 2024, bags: 15},
+                {operation: "Moser", hybrid: "P0825Q", year: 2024, bags: 18},
+                {operation: "Ramer", hybrid: "P0950AM", year: 2024, bags: 32},
+                {operation: "Ramer", hybrid: "P1093AM", year: 2024, bags: 26},
+                {operation: "Reinke", hybrid: "P0157AM", year: 2024, bags: 14},
+                {operation: "Reinke", hybrid: "P0339AM", year: 2024, bags: 19},
+                {operation: "Ryan Ohlde", hybrid: "P0574AM", year: 2024, bags: 23},
+                {operation: "Ryan Ohlde", hybrid: "P0720Q", year: 2024, bags: 17},
+                {operation: "Strobel/Econ", hybrid: "P0825Q", year: 2024, bags: 29},
+                {operation: "Strobel/Econ", hybrid: "P0622AM", year: 2024, bags: 34},
+                {operation: "Tayer", hybrid: "P0950AM", year: 2024, bags: 11},
+                {operation: "Tayer", hybrid: "P1093AM", year: 2024, bags: 16},
+                {operation: "Vanderweide", hybrid: "P0157AM", year: 2024, bags: 7},
+                {operation: "Vanderweide", hybrid: "P0339AM", year: 2024, bags: 13},
+                {operation: "Voelker Implement", hybrid: "P0574AM", year: 2024, bags: 9},
+                {operation: "Zimmerman", hybrid: "P0720Q", year: 2024, bags: 21},
+                {operation: "Zimmerman", hybrid: "P0825Q", year: 2024, bags: 18},
+                // 2025 Data
+                {operation: "Anderson", hybrid: "P0157AM", year: 2025, bags: 4},
+                {operation: "Anderson", hybrid: "P0339AM", year: 2025, bags: 6},
+                {operation: "Anderson", hybrid: "P0622AM", year: 2025, bags: 5},
+                {operation: "Arrow Acres", hybrid: "P0339AM", year: 2025, bags: 14},
+                {operation: "Arrow Acres", hybrid: "P0622AM", year: 2025, bags: 8},
+                {operation: "Barnhart Farms", hybrid: "P0622AM", year: 2025, bags: 19},
+                {operation: "Barnhart Farms", hybrid: "P0720Q", year: 2025, bags: 12},
+                {operation: "Barnhart Farms", hybrid: "P0950AM", year: 2025, bags: 14},
+                {operation: "Chapman", hybrid: "P0950AM", year: 2025, bags: 28},
+                {operation: "Chapman", hybrid: "P1093AM", year: 2025, bags: 20},
+                {operation: "Chapman", hybrid: "P1197AM", year: 2025, bags: 15},
+                {operation: "Crosswhite", hybrid: "P0622AM", year: 2025, bags: 22},
+                {operation: "Crosswhite", hybrid: "P0950AM", year: 2025, bags: 16},
+                {operation: "Douglas A Rhem", hybrid: "P0950AM", year: 2025, bags: 10},
+                {operation: "Douglas A Rhem", hybrid: "P1197AM", year: 2025, bags: 12},
+                {operation: "Garms Inc", hybrid: "P0339AM", year: 2025, bags: 25},
+                {operation: "Garms Inc", hybrid: "P0622AM", year: 2025, bags: 35},
+                {operation: "Half Pint", hybrid: "P0720Q", year: 2025, bags: 48},
+                {operation: "Half Pint", hybrid: "P0950AM", year: 2025, bags: 42},
+                {operation: "Hirschman Farms", hybrid: "P0622AM", year: 2025, bags: 18},
+                {operation: "Hirschman Farms", hybrid: "P1093AM", year: 2025, bags: 22},
+                {operation: "Knouse", hybrid: "P1093AM", year: 2025, bags: 38},
+                {operation: "Knouse", hybrid: "P0622AM", year: 2025, bags: 30},
+                {operation: "Latvala", hybrid: "P0339AM", year: 2025, bags: 21},
+                {operation: "Latvala", hybrid: "P0720Q", year: 2025, bags: 14},
+                {operation: "MB Farms", hybrid: "P0720Q", year: 2025, bags: 45},
+                {operation: "MB Farms", hybrid: "P0950AM", year: 2025, bags: 38},
+                {operation: "McConnell Ent", hybrid: "P0622AM", year: 2025, bags: 60},
+                {operation: "McConnell Ent", hybrid: "P0950AM", year: 2025, bags: 52},
+                {operation: "McConnell Ent", hybrid: "P1197AM", year: 2025, bags: 25},
+                {operation: "Mednansky", hybrid: "P1093AM", year: 2025, bags: 14},
+                {operation: "Mednansky", hybrid: "P0622AM", year: 2025, bags: 11},
+                {operation: "Moore", hybrid: "P0339AM", year: 2025, bags: 30},
+                {operation: "Moore", hybrid: "P0720Q", year: 2025, bags: 24},
+                {operation: "Moser", hybrid: "P0720Q", year: 2025, bags: 17},
+                {operation: "Moser", hybrid: "P0950AM", year: 2025, bags: 20},
+                {operation: "Ramer", hybrid: "P0950AM", year: 2025, bags: 35},
+                {operation: "Ramer", hybrid: "P1197AM", year: 2025, bags: 28},
+                {operation: "Reinke", hybrid: "P0622AM", year: 2025, bags: 16},
+                {operation: "Reinke", hybrid: "P0339AM", year: 2025, bags: 22},
+                {operation: "Ryan Ohlde", hybrid: "P0720Q", year: 2025, bags: 25},
+                {operation: "Ryan Ohlde", hybrid: "P0950AM", year: 2025, bags: 19},
+                {operation: "Strobel/Econ", hybrid: "P0950AM", year: 2025, bags: 32},
+                {operation: "Strobel/Econ", hybrid: "P0622AM", year: 2025, bags: 38},
+                {operation: "Tayer", hybrid: "P1093AM", year: 2025, bags: 13},
+                {operation: "Tayer", hybrid: "P1197AM", year: 2025, bags: 18},
+                {operation: "Vanderweide", hybrid: "P0622AM", year: 2025, bags: 9},
+                {operation: "Vanderweide", hybrid: "P0339AM", year: 2025, bags: 15},
+                {operation: "Voelker Implement", hybrid: "P0720Q", year: 2025, bags: 11},
+                {operation: "Zimmerman", hybrid: "P0720Q", year: 2025, bags: 24},
+                {operation: "Zimmerman", hybrid: "P0950AM", year: 2025, bags: 20},
+                // 2026 Data
+                {operation: "Anderson", hybrid: "P0157AM", year: 2026, bags: 3},
+                {operation: "Anderson", hybrid: "P0339AM", year: 2026, bags: 5},
+                {operation: "Anderson", hybrid: "P0622AM", year: 2026, bags: 7},
+                {operation: "Arrow Acres", hybrid: "P0339AM", year: 2026, bags: 15},
+                {operation: "Arrow Acres", hybrid: "P0622AM", year: 2026, bags: 10},
+                {operation: "Barnhart Farms", hybrid: "P0622AM", year: 2026, bags: 20},
+                {operation: "Barnhart Farms", hybrid: "P0825Q", year: 2026, bags: 14},
+                {operation: "Barnhart Farms", hybrid: "P0950AM", year: 2026, bags: 16},
+                {operation: "Chapman", hybrid: "P0950AM", year: 2026, bags: 30},
+                {operation: "Chapman", hybrid: "P1093AM", year: 2026, bags: 22},
+                {operation: "Chapman", hybrid: "P1197AM", year: 2026, bags: 18},
+                {operation: "Crosswhite", hybrid: "P0622AM", year: 2026, bags: 24},
+                {operation: "Crosswhite", hybrid: "P0950AM", year: 2026, bags: 18},
+                {operation: "Douglas A Rhem", hybrid: "P0950AM", year: 2026, bags: 12},
+                {operation: "Douglas A Rhem", hybrid: "P1197AM", year: 2026, bags: 14},
+                {operation: "Garms Inc", hybrid: "P0339AM", year: 2026, bags: 28},
+                {operation: "Garms Inc", hybrid: "P0622AM", year: 2026, bags: 38},
+                {operation: "Half Pint", hybrid: "P0825Q", year: 2026, bags: 50},
+                {operation: "Half Pint", hybrid: "P0950AM", year: 2026, bags: 45},
+                {operation: "Hirschman Farms", hybrid: "P0622AM", year: 2026, bags: 20},
+                {operation: "Hirschman Farms", hybrid: "P1093AM", year: 2026, bags: 25},
+                {operation: "Knouse", hybrid: "P1093AM", year: 2026, bags: 40},
+                {operation: "Knouse", hybrid: "P0622AM", year: 2026, bags: 32},
+                {operation: "Latvala", hybrid: "P0339AM", year: 2026, bags: 23},
+                {operation: "Latvala", hybrid: "P0825Q", year: 2026, bags: 16},
+                {operation: "MB Farms", hybrid: "P0825Q", year: 2026, bags: 48},
+                {operation: "MB Farms", hybrid: "P0950AM", year: 2026, bags: 40},
+                {operation: "McConnell Ent", hybrid: "P0622AM", year: 2026, bags: 65},
+                {operation: "McConnell Ent", hybrid: "P0950AM", year: 2026, bags: 55},
+                {operation: "McConnell Ent", hybrid: "P1197AM", year: 2026, bags: 30},
+                {operation: "Mednansky", hybrid: "P1093AM", year: 2026, bags: 15},
+                {operation: "Mednansky", hybrid: "P0622AM", year: 2026, bags: 12},
+                {operation: "Moore", hybrid: "P0339AM", year: 2026, bags: 32},
+                {operation: "Moore", hybrid: "P0825Q", year: 2026, bags: 26},
+                {operation: "Moser", hybrid: "P0825Q", year: 2026, bags: 19},
+                {operation: "Moser", hybrid: "P0950AM", year: 2026, bags: 22},
+                {operation: "Ramer", hybrid: "P0950AM", year: 2026, bags: 38},
+                {operation: "Ramer", hybrid: "P1197AM", year: 2026, bags: 30},
+                {operation: "Reinke", hybrid: "P0622AM", year: 2026, bags: 18},
+                {operation: "Reinke", hybrid: "P0339AM", year: 2026, bags: 24},
+                {operation: "Ryan Ohlde", hybrid: "P0825Q", year: 2026, bags: 27},
+                {operation: "Ryan Ohlde", hybrid: "P0950AM", year: 2026, bags: 21},
+                {operation: "Strobel/Econ", hybrid: "P0950AM", year: 2026, bags: 35},
+                {operation: "Strobel/Econ", hybrid: "P0622AM", year: 2026, bags: 40},
+                {operation: "Tayer", hybrid: "P1093AM", year: 2026, bags: 15},
+                {operation: "Tayer", hybrid: "P1197AM", year: 2026, bags: 20},
+                {operation: "Vanderweide", hybrid: "P0622AM", year: 2026, bags: 10},
+                {operation: "Vanderweide", hybrid: "P0339AM", year: 2026, bags: 17},
+                {operation: "Voelker Implement", hybrid: "P0825Q", year: 2026, bags: 13},
+                {operation: "Zimmerman", hybrid: "P0825Q", year: 2026, bags: 26},
+                {operation: "Zimmerman", hybrid: "P0950AM", year: 2026, bags: 22}
+            ],
+            discontinued2027: ["P0157AM", "P0574AM", "P0720Q"],
+            new2027: ["P0185AM", "P0650Q", "P0890AM", "P1250AM"]
+        };
+
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        function init() {
+            loadFromStorage();
+            renderAll();
+        }
+
+        function loadFromStorage() {
+            const saved = localStorage.getItem('pioneerForecastData');
+            if (saved) {
+                try {
+                    data = JSON.parse(saved);
+                    if (!data.records) data.records = [];
+                    if (!data.discontinued2027) data.discontinued2027 = [];
+                    if (!data.new2027) data.new2027 = [];
+                } catch (e) {
+                    console.error('Error loading data:', e);
+                    data = JSON.parse(JSON.stringify(defaultData));
+                }
+            } else {
+                // No saved data - use default sample data
+                data = JSON.parse(JSON.stringify(defaultData));
+            }
+        }
+
+        function saveToStorage() {
+            localStorage.setItem('pioneerForecastData', JSON.stringify(data));
+        }
+
+        // ============================================
+        // TAB SWITCHING
+        // ============================================
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // ============================================
+        // RENDERING
+        // ============================================
+        function renderAll() {
+            renderSummary();
+            renderByOperation();
+            renderByHybrid();
+            renderDetail();
+        }
+
+        function renderSummary() {
+            const totals = {2024: 0, 2025: 0, 2026: 0};
+            data.records.forEach(r => {
+                if (totals[r.year] !== undefined) {
+                    totals[r.year] += r.bags;
+                }
+            });
+
+            // Calculate 2027 prediction
+            let total2027 = 0;
+            const hybridTotals = getHybridTotals();
+            Object.keys(hybridTotals).forEach(hybrid => {
+                if (!data.discontinued2027.includes(hybrid)) {
+                    total2027 += hybridTotals[hybrid].predicted;
+                }
+            });
+            // Add new hybrids (estimate based on average)
+            const avgPerHybrid = total2027 / Math.max(Object.keys(hybridTotals).length, 1);
+            data.new2027.forEach(h => {
+                if (!hybridTotals[h]) {
+                    total2027 += Math.round(avgPerHybrid * 0.5); // New hybrids start at 50% of average
+                }
+            });
+
+            document.getElementById('total-2024').textContent = totals[2024].toLocaleString();
+            document.getElementById('total-2025').textContent = totals[2025].toLocaleString();
+            document.getElementById('total-2026').textContent = totals[2026].toLocaleString();
+            document.getElementById('total-2027').textContent = total2027.toLocaleString();
+        }
+
+        function renderByOperation() {
+            const filter = document.getElementById('filter-operation').value.toLowerCase();
+            const operations = getOperationTotals();
+            const tbody = document.getElementById('operation-table');
+
+            let html = '';
+            Object.keys(operations).sort().forEach(op => {
+                if (filter && !op.toLowerCase().includes(filter)) return;
+
+                const d = operations[op];
+                const change = d.y2026 > 0 ? ((d.predicted - d.y2026) / d.y2026 * 100).toFixed(1) : 0;
+                const changeClass = change >= 0 ? 'change-up' : 'change-down';
+
+                html += `<tr>
+                    <td><strong>${op}</strong></td>
+                    <td class="text-right">${d.y2024 || '-'}</td>
+                    <td class="text-right">${d.y2025 || '-'}</td>
+                    <td class="text-right">${d.y2026 || '-'}</td>
+                    <td class="text-right prediction">${d.predicted}</td>
+                    <td class="text-right ${changeClass}">${change >= 0 ? '+' : ''}${change}%</td>
+                </tr>`;
+            });
+
+            tbody.innerHTML = html || '<tr><td colspan="6" style="text-align:center; color:#666;">No data. Click "Import Data" to add records.</td></tr>';
+        }
+
+        function renderByHybrid() {
+            const filter = document.getElementById('filter-hybrid').value.toLowerCase();
+            const statusFilter = document.getElementById('filter-hybrid-status').value;
+            const hybrids = getHybridTotals();
+            const tbody = document.getElementById('hybrid-table');
+
+            // Calculate total for percentage
+            let grandTotal = 0;
+            Object.values(hybrids).forEach(h => {
+                if (!data.discontinued2027.includes(h.hybrid)) {
+                    grandTotal += h.predicted;
+                }
+            });
+
+            let html = '';
+            Object.keys(hybrids).sort().forEach(hybrid => {
+                if (filter && !hybrid.toLowerCase().includes(filter)) return;
+
+                const isDiscontinued = data.discontinued2027.includes(hybrid);
+                const isNew = data.new2027.includes(hybrid);
+
+                if (statusFilter === 'active' && (isDiscontinued || isNew)) return;
+                if (statusFilter === 'discontinued' && !isDiscontinued) return;
+                if (statusFilter === 'new' && !isNew) return;
+
+                const d = hybrids[hybrid];
+                const predicted = isDiscontinued ? 0 : d.predicted;
+                const pct = grandTotal > 0 ? (predicted / grandTotal * 100).toFixed(1) : 0;
+
+                let status = '<span style="color:#28a745;">Active</span>';
+                if (isDiscontinued) status = '<span style="color:#dc3545;">Discontinued</span>';
+                if (isNew) status = '<span style="color:#007bff;">New 2027</span>';
+
+                html += `<tr ${isDiscontinued ? 'style="opacity:0.5;"' : ''}>
+                    <td><strong>${hybrid}</strong></td>
+                    <td class="text-right">${d.y2024 || '-'}</td>
+                    <td class="text-right">${d.y2025 || '-'}</td>
+                    <td class="text-right">${d.y2026 || '-'}</td>
+                    <td class="text-right prediction">${predicted}</td>
+                    <td class="text-right">${pct}%</td>
+                    <td class="text-center">${status}</td>
+                </tr>`;
+            });
+
+            // Add new hybrids with no history
+            data.new2027.forEach(hybrid => {
+                if (hybrids[hybrid]) return; // Already shown
+                if (filter && !hybrid.toLowerCase().includes(filter)) return;
+                if (statusFilter === 'active' || statusFilter === 'discontinued') return;
+
+                const avgPredicted = Math.round(grandTotal / Math.max(Object.keys(hybrids).length, 1) * 0.5);
+                html += `<tr>
+                    <td><strong>${hybrid}</strong></td>
+                    <td class="text-right">-</td>
+                    <td class="text-right">-</td>
+                    <td class="text-right">-</td>
+                    <td class="text-right prediction">${avgPredicted}</td>
+                    <td class="text-right">-</td>
+                    <td class="text-center"><span style="color:#007bff;">New 2027</span></td>
+                </tr>`;
+            });
+
+            tbody.innerHTML = html || '<tr><td colspan="7" style="text-align:center; color:#666;">No data.</td></tr>';
+        }
+
+        function renderDetail() {
+            const filter = document.getElementById('filter-detail').value.toLowerCase();
+            const yearFilter = document.getElementById('filter-detail-year').value;
+            const details = getDetailData();
+            const tbody = document.getElementById('detail-table');
+
+            let html = '';
+            details.forEach(d => {
+                if (filter && !d.operation.toLowerCase().includes(filter) && !d.hybrid.toLowerCase().includes(filter)) return;
+
+                const showRow = yearFilter === 'all' ||
+                    (yearFilter === '2024' && d.y2024 > 0) ||
+                    (yearFilter === '2025' && d.y2025 > 0) ||
+                    (yearFilter === '2026' && d.y2026 > 0);
+
+                if (!showRow) return;
+
+                const isDiscontinued = data.discontinued2027.includes(d.hybrid);
+                const predicted = isDiscontinued ? 0 : d.predicted;
+
+                html += `<tr ${isDiscontinued ? 'style="opacity:0.5;"' : ''}>
+                    <td>${d.operation}</td>
+                    <td>${d.hybrid}</td>
+                    <td class="text-right">${d.y2024 || '-'}</td>
+                    <td class="text-right">${d.y2025 || '-'}</td>
+                    <td class="text-right">${d.y2026 || '-'}</td>
+                    <td class="text-right prediction">${predicted}</td>
+                </tr>`;
+            });
+
+            tbody.innerHTML = html || '<tr><td colspan="6" style="text-align:center; color:#666;">No data.</td></tr>';
+        }
+
+        // ============================================
+        // DATA AGGREGATION
+        // ============================================
+        function getOperationTotals() {
+            const ops = {};
+            data.records.forEach(r => {
+                if (!ops[r.operation]) {
+                    ops[r.operation] = {y2024: 0, y2025: 0, y2026: 0, predicted: 0};
+                }
+                if (r.year === 2024 || r.year === '2024') ops[r.operation].y2024 += r.bags;
+                if (r.year === 2025 || r.year === '2025') ops[r.operation].y2025 += r.bags;
+                if (r.year === 2026 || r.year === '2026') ops[r.operation].y2026 += r.bags;
+            });
+
+            // Calculate predictions per operation
+            Object.keys(ops).forEach(op => {
+                ops[op].predicted = predictValue(ops[op].y2024, ops[op].y2025, ops[op].y2026);
+            });
+
+            return ops;
+        }
+
+        function getHybridTotals() {
+            const hybrids = {};
+            data.records.forEach(r => {
+                if (!hybrids[r.hybrid]) {
+                    hybrids[r.hybrid] = {hybrid: r.hybrid, y2024: 0, y2025: 0, y2026: 0, predicted: 0};
+                }
+                if (r.year === 2024 || r.year === '2024') hybrids[r.hybrid].y2024 += r.bags;
+                if (r.year === 2025 || r.year === '2025') hybrids[r.hybrid].y2025 += r.bags;
+                if (r.year === 2026 || r.year === '2026') hybrids[r.hybrid].y2026 += r.bags;
+            });
+
+            Object.keys(hybrids).forEach(h => {
+                hybrids[h].predicted = predictValue(hybrids[h].y2024, hybrids[h].y2025, hybrids[h].y2026);
+            });
+
+            return hybrids;
+        }
+
+        function getDetailData() {
+            const detail = {};
+            data.records.forEach(r => {
+                const key = `${r.operation}|${r.hybrid}`;
+                if (!detail[key]) {
+                    detail[key] = {operation: r.operation, hybrid: r.hybrid, y2024: 0, y2025: 0, y2026: 0};
+                }
+                if (r.year === 2024 || r.year === '2024') detail[key].y2024 += r.bags;
+                if (r.year === 2025 || r.year === '2025') detail[key].y2025 += r.bags;
+                if (r.year === 2026 || r.year === '2026') detail[key].y2026 += r.bags;
+            });
+
+            return Object.values(detail).map(d => {
+                d.predicted = predictValue(d.y2024, d.y2025, d.y2026);
+                return d;
+            }).sort((a, b) => a.operation.localeCompare(b.operation) || a.hybrid.localeCompare(b.hybrid));
+        }
+
+        function predictValue(y2024, y2025, y2026) {
+            // Simple trend-based prediction
+            if (y2024 && y2025 && y2026) {
+                const growth1 = y2024 > 0 ? (y2025 - y2024) / y2024 : 0;
+                const growth2 = y2025 > 0 ? (y2026 - y2025) / y2025 : 0;
+                const avgGrowth = (growth1 + growth2) / 2;
+                return Math.max(0, Math.round(y2026 * (1 + avgGrowth)));
+            } else if (y2026) {
+                return Math.round(y2026 * 1.02); // 2% default growth
+            } else if (y2025) {
+                return Math.round(y2025);
+            } else if (y2024) {
+                return Math.round(y2024);
+            }
+            return 0;
+        }
+
+        // ============================================
+        // IMPORT FUNCTIONS
+        // ============================================
+        function showImportModal() {
+            document.getElementById('import-modal').style.display = 'flex';
+        }
+
+        function hideImportModal() {
+            document.getElementById('import-modal').style.display = 'none';
+        }
+
+        function handleFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('paste-data').value = e.target.result;
+                showStatus('import-status', 'File loaded. Click "Import Data" to process.', 'info');
+            };
+            reader.readAsText(file);
+        }
+
+        function importData() {
+            const content = document.getElementById('paste-data').value.trim();
+            if (!content) {
+                showStatus('import-status', 'Please paste data or upload a file first.', 'error');
+                return;
+            }
+
+            const year = document.getElementById('import-year').value;
+            const result = parseData(content, year);
+
+            if (result.records.length > 0) {
+                // Add to existing data
+                result.records.forEach(r => {
+                    // Check if exists, update if so
+                    const existing = data.records.find(
+                        e => e.operation === r.operation && e.hybrid === r.hybrid && e.year == r.year
+                    );
+                    if (existing) {
+                        existing.bags = r.bags;
+                    } else {
+                        data.records.push(r);
+                    }
+                });
+
+                saveToStorage();
+                renderAll();
+                showStatus('import-status', `Successfully imported ${result.records.length} records for ${year}!\n\n${result.debug}`, 'success');
+            } else {
+                showStatus('import-status', `No valid records found.\n\n${result.debug}`, 'error');
+            }
+        }
+
+        function parseData(content, year) {
+            const lines = content.split('\n').filter(l => l.trim());
+            if (lines.length === 0) return {records: [], debug: 'No data lines found'};
+
+            let debug = '';
+            const records = [];
+
+            // Detect delimiter
+            const firstLine = lines[0];
+            const tabs = (firstLine.match(/\t/g) || []).length;
+            const commas = (firstLine.match(/,/g) || []).length;
+            const delimiter = tabs > commas ? '\t' : ',';
+            debug += `Delimiter: ${delimiter === '\t' ? 'TAB' : 'COMMA'}\n`;
+
+            // Parse headers
+            const headers = firstLine.split(delimiter).map(h => h.trim().toLowerCase().replace(/['"]/g, ''));
+            debug += `Columns: ${headers.length}\n`;
+            debug += `Headers: ${headers.slice(0, 5).join(', ')}${headers.length > 5 ? '...' : ''}\n`;
+
+            // Find columns
+            let opCol = headers.findIndex(h => h.includes('operation') || h.includes('account') || h.includes('grower') || h.includes('customer') || h.includes('farm'));
+            let hybridCol = headers.findIndex(h => h.includes('subproduct') || h.includes('hybrid') || h.includes('variety'));
+            if (hybridCol === -1) hybridCol = headers.findIndex(h => h.includes('product') && !h.includes('line'));
+            let bagsCol = headers.findIndex(h => h.includes('delivered') || h.includes('bags') || h.includes('quantity') || h.includes('qty') || h.includes('total physical') || h.includes('regular'));
+
+            debug += `Mapped: Operation=${opCol}, Hybrid=${hybridCol}, Bags=${bagsCol}\n`;
+
+            if (opCol === -1 || hybridCol === -1 || bagsCol === -1) {
+                debug += '\nERROR: Could not find required columns.\n';
+                debug += 'Need: Operation (or Account/Grower), Subproduct (or Hybrid), Delivered (or Bags/Quantity)\n';
+                return {records: [], debug};
+            }
+
+            // Parse data rows
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(delimiter).map(v => v.trim().replace(/^["']|["']$/g, ''));
+                if (values.length <= Math.max(opCol, hybridCol, bagsCol)) continue;
+
+                const operation = values[opCol] || '';
+                let hybrid = values[hybridCol] || '';
+                let bags = values[bagsCol] || '0';
+
+                // Clean hybrid - extract P#### pattern
+                const match = hybrid.match(/P\d{3,4}[A-Z]*/i);
+                if (match) hybrid = match[0].toUpperCase();
+                else hybrid = hybrid.toUpperCase();
+
+                // Clean bags
+                bags = parseInt(bags.replace(/,/g, '').replace(/[^\d.-]/g, '')) || 0;
+
+                if (operation && hybrid && bags > 0) {
+                    records.push({operation, hybrid, year: parseInt(year), bags});
+                }
+            }
+
+            debug += `\nParsed ${records.length} valid records\n`;
+            if (records.length > 0) {
+                debug += `Sample: ${records[0].operation} | ${records[0].hybrid} | ${records[0].bags} bags`;
+            }
+
+            return {records, debug};
+        }
+
+        function showStatus(id, message, type) {
+            const el = document.getElementById(id);
+            el.style.display = 'block';
+            el.className = 'status ' + type;
+            el.textContent = message;
+        }
+
+        function viewCurrentData() {
+            const counts = {2024: 0, 2025: 0, 2026: 0};
+            data.records.forEach(r => {
+                if (counts[r.year] !== undefined) counts[r.year]++;
+            });
+            const msg = `Current data:\n2024: ${counts[2024]} records\n2025: ${counts[2025]} records\n2026: ${counts[2026]} records\n\nTotal: ${data.records.length} records`;
+            showStatus('import-status', msg, 'info');
+        }
+
+        function clearData() {
+            if (confirm('Clear ALL data? This cannot be undone.')) {
+                data.records = [];
+                saveToStorage();
+                renderAll();
+                showStatus('import-status', 'All data cleared.', 'info');
+            }
+        }
+
+        // ============================================
+        // HYBRID MANAGEMENT
+        // ============================================
+        function showHybridModal() {
+            document.getElementById('hybrid-modal').style.display = 'flex';
+            renderHybridLists();
+        }
+
+        function hideHybridModal() {
+            document.getElementById('hybrid-modal').style.display = 'none';
+        }
+
+        function renderHybridLists() {
+            // Discontinued
+            const discList = document.getElementById('discontinued-list');
+            discList.innerHTML = data.discontinued2027.map(h =>
+                `<span class="hybrid-tag discontinued">${h} <button class="remove" onclick="removeDiscontinued('${h}')">&times;</button></span>`
+            ).join('') || '<span style="color:#666;">None</span>';
+
+            // New
+            const newList = document.getElementById('new-list');
+            newList.innerHTML = data.new2027.map(h =>
+                `<span class="hybrid-tag new">${h} <button class="remove" onclick="removeNew('${h}')">&times;</button></span>`
+            ).join('') || '<span style="color:#666;">None</span>';
+        }
+
+        function addDiscontinued() {
+            const input = document.getElementById('add-discontinued');
+            const hybrid = input.value.trim().toUpperCase();
+            if (hybrid && !data.discontinued2027.includes(hybrid)) {
+                data.discontinued2027.push(hybrid);
+                saveToStorage();
+                renderHybridLists();
+                renderAll();
+            }
+            input.value = '';
+        }
+
+        function removeDiscontinued(hybrid) {
+            data.discontinued2027 = data.discontinued2027.filter(h => h !== hybrid);
+            saveToStorage();
+            renderHybridLists();
+            renderAll();
+        }
+
+        function addNewHybrid() {
+            const input = document.getElementById('add-new');
+            const hybrid = input.value.trim().toUpperCase();
+            if (hybrid && !data.new2027.includes(hybrid)) {
+                data.new2027.push(hybrid);
+                saveToStorage();
+                renderHybridLists();
+                renderAll();
+            }
+            input.value = '';
+        }
+
+        function removeNew(hybrid) {
+            data.new2027 = data.new2027.filter(h => h !== hybrid);
+            saveToStorage();
+            renderHybridLists();
+            renderAll();
+        }
+
+        function importHybridList() {
+            const content = document.getElementById('paste-hybrids').value.trim();
+            if (!content) return;
+
+            const hybrids = content.split('\n')
+                .map(h => h.trim().toUpperCase())
+                .filter(h => h.match(/P\d{3,4}/));
+
+            // Get all current hybrids from data
+            const currentHybrids = [...new Set(data.records.map(r => r.hybrid))];
+
+            // Hybrids in current data but NOT in 2027 list = discontinued
+            const discontinued = currentHybrids.filter(h => !hybrids.includes(h));
+            // Hybrids in 2027 list but NOT in current data = new
+            const newOnes = hybrids.filter(h => !currentHybrids.includes(h));
+
+            data.discontinued2027 = discontinued;
+            data.new2027 = newOnes;
+            saveToStorage();
+            renderHybridLists();
+            renderAll();
+
+            alert(`Updated!\nDiscontinued: ${discontinued.length}\nNew for 2027: ${newOnes.length}`);
+        }
+
+        // ============================================
+        // EXPORT
+        // ============================================
+        function exportData() {
+            let csv = 'Operation,Hybrid,2024,2025,2026,2027 Predicted,Status\n';
+
+            const details = getDetailData();
+            details.forEach(d => {
+                const isDisc = data.discontinued2027.includes(d.hybrid);
+                const isNew = data.new2027.includes(d.hybrid);
+                const predicted = isDisc ? 0 : d.predicted;
+                const status = isDisc ? 'Discontinued' : (isNew ? 'New' : 'Active');
+
+                csv += `"${d.operation}","${d.hybrid}",${d.y2024 || 0},${d.y2025 || 0},${d.y2026 || 0},${predicted},${status}\n`;
+            });
+
+            const blob = new Blob([csv], {type: 'text/csv'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'pioneer_2027_forecast.csv';
+            a.click();
+        }
+
+        // Initialize
+        init();
+    </script>
 </body>
 </html>
