@@ -10,6 +10,8 @@ const CONFIG = {
     ACCESS_CODE: 'pioneer2024',
     STORAGE_KEY: 'pioneer_grower_data',
     SESSION_KEY: 'pioneer_session',
+    SYNC_KEY: 'pioneer_last_sync',
+    USE_API: true,  // Enable API integration
     PRODUCTS: [
         'Corn Seed', 'Soybean Seed', 'Sorghum', 'Alfalfa',
         'Herbicide', 'Fungicide', 'Insecticide', 'Fertilizer',
@@ -28,7 +30,10 @@ const CONFIG = {
 let state = {
     data: [],
     charts: {},
-    isAuthenticated: false
+    isAuthenticated: false,
+    apiOnline: false,
+    isLoading: false,
+    lastSync: null
 };
 
 // ============================================
@@ -114,10 +119,21 @@ function handleLogout() {
     destroyAllCharts();
 }
 
-function showDashboard() {
+async function showDashboard() {
     document.getElementById('login-screen').classList.add('hidden');
     document.getElementById('dashboard').classList.remove('hidden');
-    loadData();
+
+    // Check API status and update indicator
+    await checkApiStatus();
+
+    // Load data (from API or localStorage)
+    await loadData();
+
+    // If no data, try to load from grower_data.json
+    if (state.data.length === 0) {
+        await loadInitialGrowerData();
+    }
+
     initializeAllCharts();
     updateDataSummary();
 }
@@ -147,27 +163,182 @@ function switchTab(tabId) {
 // ============================================
 // DATA MANAGEMENT
 // ============================================
-function loadData() {
+
+/**
+ * Load data from API first, fallback to localStorage
+ */
+async function loadData() {
+    state.isLoading = true;
+
+    // Try API first if enabled
+    if (CONFIG.USE_API && typeof API !== 'undefined') {
+        try {
+            const apiData = await API.getData();
+            if (apiData && apiData.length > 0) {
+                state.data = apiData;
+                state.apiOnline = true;
+                // Update localStorage as backup
+                localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(state.data));
+                state.lastSync = new Date();
+                localStorage.setItem(CONFIG.SYNC_KEY, state.lastSync.toISOString());
+                updateApiStatusIndicator(true);
+                state.isLoading = false;
+                return;
+            }
+        } catch (error) {
+            console.warn('API load failed, falling back to localStorage:', error.message);
+            state.apiOnline = false;
+            updateApiStatusIndicator(false);
+        }
+    }
+
+    // Fallback to localStorage
     const stored = localStorage.getItem(CONFIG.STORAGE_KEY);
     state.data = stored ? JSON.parse(stored) : [];
+    state.isLoading = false;
 }
 
-function saveData() {
+/**
+ * Save data to localStorage and optionally sync to API
+ */
+async function saveData() {
+    // Always save to localStorage first
     localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(state.data));
     updateDataSummary();
+
+    // Try to sync to API in background (don't await)
+    if (CONFIG.USE_API && state.apiOnline && typeof API !== 'undefined') {
+        syncToApi().catch(err => console.warn('Background sync failed:', err.message));
+    }
 }
 
-function addDataEntry(entry) {
-    state.data.push({
+/**
+ * Add a new data entry
+ */
+async function addDataEntry(entry) {
+    const newEntry = {
         ...entry,
         id: generateId(),
         created_at: new Date().toISOString()
-    });
-    saveData();
+    };
+
+    // Add to local state
+    state.data.push(newEntry);
+
+    // Try to add via API
+    if (CONFIG.USE_API && state.apiOnline && typeof API !== 'undefined') {
+        try {
+            await API.addRecord(newEntry);
+        } catch (error) {
+            console.warn('API add failed, saved locally:', error.message);
+        }
+    }
+
+    // Save to localStorage
+    await saveData();
 }
 
 function generateId() {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
+}
+
+/**
+ * Check API status and update UI indicator
+ */
+async function checkApiStatus() {
+    if (!CONFIG.USE_API || typeof API === 'undefined') {
+        state.apiOnline = false;
+        updateApiStatusIndicator(false, 'API Disabled');
+        return;
+    }
+
+    try {
+        const health = await API.checkHealth();
+        state.apiOnline = health.status === 'healthy';
+        updateApiStatusIndicator(state.apiOnline);
+    } catch (error) {
+        state.apiOnline = false;
+        updateApiStatusIndicator(false);
+    }
+}
+
+/**
+ * Update the API status indicator in the UI
+ */
+function updateApiStatusIndicator(isOnline, message = null) {
+    const indicator = document.getElementById('api-indicator');
+    const statusText = document.getElementById('api-status-text');
+
+    if (indicator) {
+        indicator.classList.toggle('online', isOnline);
+        indicator.classList.toggle('offline', !isOnline);
+    }
+
+    if (statusText) {
+        statusText.textContent = message || (isOnline ? 'Connected' : 'Offline (Local Mode)');
+    }
+}
+
+/**
+ * Sync local data to API server
+ */
+async function syncToApi() {
+    if (!CONFIG.USE_API || !state.apiOnline || typeof API === 'undefined') {
+        showToast('API not available', 'warning');
+        return;
+    }
+
+    try {
+        const result = await API.syncToServer(state.data);
+        state.lastSync = new Date();
+        localStorage.setItem(CONFIG.SYNC_KEY, state.lastSync.toISOString());
+        showToast(`Synced ${result.synced} new records to server`, 'success');
+    } catch (error) {
+        showToast('Sync failed: ' + error.message, 'error');
+        throw error;
+    }
+}
+
+/**
+ * Load initial grower data from grower_data.json
+ */
+async function loadInitialGrowerData() {
+    if (typeof API === 'undefined') return;
+
+    try {
+        showToast('Loading initial grower data...', 'info');
+        const records = await API.loadGrowerDataJSON();
+
+        if (records && records.length > 0) {
+            // Add all records
+            for (const record of records) {
+                state.data.push({
+                    ...record,
+                    id: generateId(),
+                    created_at: new Date().toISOString()
+                });
+            }
+
+            // Save to localStorage
+            localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(state.data));
+
+            // Try to sync to API
+            if (state.apiOnline) {
+                try {
+                    await API.addRecords(state.data);
+                    showToast(`Loaded ${records.length} records from grower data`, 'success');
+                } catch (error) {
+                    showToast(`Loaded ${records.length} records locally`, 'success');
+                }
+            } else {
+                showToast(`Loaded ${records.length} records locally`, 'success');
+            }
+
+            refreshAllCharts();
+        }
+    } catch (error) {
+        console.error('Failed to load initial grower data:', error);
+    }
 }
 
 function initializeDataManagement() {
@@ -211,9 +382,26 @@ function initializeDataManagement() {
     document.getElementById('parse-bulk')?.addEventListener('click', parseBulkData);
     document.getElementById('import-bulk')?.addEventListener('click', importBulkData);
 
-    // Export/Clear
+    // Export/Clear/Sync
     document.getElementById('export-csv')?.addEventListener('click', exportToCSV);
+    document.getElementById('sync-data')?.addEventListener('click', handleSyncData);
     document.getElementById('clear-data')?.addEventListener('click', clearAllData);
+}
+
+/**
+ * Handle sync data button click
+ */
+async function handleSyncData() {
+    try {
+        await checkApiStatus();
+        if (!state.apiOnline) {
+            showToast('Server is offline. Start the server and try again.', 'warning');
+            return;
+        }
+        await syncToApi();
+    } catch (error) {
+        showToast('Sync failed: ' + error.message, 'error');
+    }
 }
 
 // CSV Handling
@@ -331,10 +519,14 @@ function showCSVPreview(data) {
     previewContainer.classList.remove('hidden');
 }
 
-function importCSVData() {
+async function importCSVData() {
     if (pendingCSVData.length === 0) return;
 
-    pendingCSVData.forEach(entry => addDataEntry(entry));
+    showToast('Importing data...', 'info');
+
+    for (const entry of pendingCSVData) {
+        await addDataEntry(entry);
+    }
 
     showToast(`Successfully imported ${pendingCSVData.length} records`, 'success');
     pendingCSVData = [];
@@ -351,7 +543,7 @@ function cancelCSVImport() {
 }
 
 // Manual Entry
-function handleManualEntry(e) {
+async function handleManualEntry(e) {
     e.preventDefault();
 
     const entry = {
@@ -363,7 +555,7 @@ function handleManualEntry(e) {
         amount: parseFloat(document.getElementById('entry-amount').value) || 0
     };
 
-    addDataEntry(entry);
+    await addDataEntry(entry);
     showToast('Entry added successfully', 'success');
     e.target.reset();
     refreshAllCharts();
@@ -425,10 +617,14 @@ function showBulkPreview(data) {
     previewContainer.classList.remove('hidden');
 }
 
-function importBulkData() {
+async function importBulkData() {
     if (pendingBulkData.length === 0) return;
 
-    pendingBulkData.forEach(entry => addDataEntry(entry));
+    showToast('Importing data...', 'info');
+
+    for (const entry of pendingBulkData) {
+        await addDataEntry(entry);
+    }
 
     showToast(`Successfully imported ${pendingBulkData.length} records`, 'success');
     pendingBulkData = [];
@@ -469,10 +665,20 @@ function exportToCSV() {
     showToast(`Exported ${dataToExport.length} records`, 'success');
 }
 
-function clearAllData() {
+async function clearAllData() {
     if (confirm('Are you sure you want to delete all data? This cannot be undone.')) {
         state.data = [];
-        saveData();
+
+        // Clear from API if available
+        if (CONFIG.USE_API && state.apiOnline && typeof API !== 'undefined') {
+            try {
+                await API.clearData();
+            } catch (error) {
+                console.warn('API clear failed:', error.message);
+            }
+        }
+
+        await saveData();
         showToast('All data cleared', 'info');
         refreshAllCharts();
     }
@@ -2022,14 +2228,18 @@ function showPioneerPreview(data, pricePerUnit) {
     previewContainer.classList.remove('hidden');
 }
 
-function importPioneerData() {
+async function importPioneerData() {
     if (pendingPioneerData.length === 0) {
         showToast('No data to import', 'warning');
         return;
     }
 
+    showToast('Importing Pioneer data...', 'info');
+
     // Add all records
-    pendingPioneerData.forEach(entry => addDataEntry(entry));
+    for (const entry of pendingPioneerData) {
+        await addDataEntry(entry);
+    }
 
     const count = pendingPioneerData.length;
     const totalUnits = pendingPioneerData.reduce((sum, d) => sum + d.quantity, 0);
