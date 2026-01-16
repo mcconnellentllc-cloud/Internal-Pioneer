@@ -2024,14 +2024,40 @@
         }
 
         function predictValue(y2024, y2025, y2026) {
-            if (y2024 && y2025 && y2026) {
-                const growth1 = y2024 > 0 ? (y2025 - y2024) / y2024 : 0;
-                const growth2 = y2025 > 0 ? (y2026 - y2025) / y2025 : 0;
-                const avgGrowth = (growth1 + growth2) / 2;
-                return Math.max(0, Math.round(y2026 * (1 + avgGrowth)));
-            } else if (y2026) return Math.round(y2026 * 1.02);
-            else if (y2025) return Math.round(y2025);
-            else if (y2024) return Math.round(y2024);
+            // Conservative prediction logic - trends should be reasonable, not crazy
+            // Big changes only happen when moving away from hybrids or introducing new ones
+
+            const MAX_GROWTH = 0.25;  // Max 25% increase
+            const MAX_DECLINE = -0.30; // Max 30% decline (for exiting products)
+
+            if (y2026) {
+                // If we have 2026 data, use it as primary basis
+                if (y2025 && y2026) {
+                    // Calculate recent trend from 2025 to 2026
+                    const recentChange = y2025 > 0 ? (y2026 - y2025) / y2025 : 0;
+                    // Clamp the change to reasonable bounds
+                    const clampedChange = Math.max(MAX_DECLINE, Math.min(MAX_GROWTH, recentChange));
+                    // Apply a dampened version of the trend (don't extrapolate aggressively)
+                    const dampedChange = clampedChange * 0.5;
+                    return Math.max(0, Math.round(y2026 * (1 + dampedChange)));
+                }
+                // Only have 2026, assume stable with small increase
+                return Math.round(y2026 * 1.02);
+            } else if (y2025) {
+                // No 2026 data - product may be declining/exiting
+                if (y2024) {
+                    const change = y2024 > 0 ? (y2025 - y2024) / y2024 : 0;
+                    if (change < -0.3) {
+                        // Declining rapidly - likely exiting, project continued decline
+                        return Math.round(y2025 * 0.5);
+                    }
+                }
+                // Assume slight decline if no recent orders
+                return Math.round(y2025 * 0.8);
+            } else if (y2024) {
+                // Only 2024 data - likely exiting hybrid
+                return Math.round(y2024 * 0.3);
+            }
             return 0;
         }
 
