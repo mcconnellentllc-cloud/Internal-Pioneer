@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pioneer 2027 Soybean Varieties</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f5f5; }
+        .header {
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 { font-size: 1.4rem; }
+        .nav-links { display: flex; gap: 1rem; }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+        .nav-links a:hover { background: rgba(255,255,255,0.3); }
+        .nav-links a.active { background: rgba(255,255,255,0.4); font-weight: 600; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
+        .section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+        .section h2 {
+            font-size: 1.1rem;
+            color: #2e7d32;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #c8e6c9;
+        }
+        .variety-card {
+            background: white;
+            border: 1px solid #eee;
+            border-left: 4px solid #2e7d32;
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+        }
+        .variety-card h3 {
+            color: #333;
+            margin-bottom: 0.75rem;
+            font-size: 1.1rem;
+        }
+        .rm-badge {
+            background: #2e7d32;
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+        }
+        .variety-specs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+        .spec-item {
+            background: #e8f5e9;
+            padding: 0.6rem;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .spec-item .label { font-size: 0.7rem; color: #666; margin-bottom: 0.25rem; }
+        .spec-item .value { font-size: 0.95rem; font-weight: 600; color: #333; }
+        .trait-tag {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            margin-left: 0.5rem;
+        }
+        .e3-tag { background: #1565c0; color: white; }
+        .xtend-tag { background: #7b1fa2; color: white; }
+        .xtendflex-tag { background: #c62828; color: white; }
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .summary-card {
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+            color: white;
+            padding: 1.25rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .summary-card .label { font-size: 0.8rem; opacity: 0.9; }
+        .summary-card .value { font-size: 2rem; font-weight: bold; }
+        .coming-soon {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 2px dashed #dee2e6;
+        }
+        .coming-soon h3 {
+            color: #495057;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .coming-soon p {
+            color: #6c757d;
+            font-size: 1rem;
+        }
+        .variety-notes { margin-top: 1rem; }
+        .variety-notes label { font-size: 0.8rem; color: #666; display: block; margin-bottom: 0.25rem; }
+        .variety-notes textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            min-height: 60px;
+            resize: vertical;
+        }
+    </style>
+</head>
+<body>
+    <!-- Auth check -->
+    <script>
+        if (!sessionStorage.getItem('pioneer_auth')) {
+            window.location.href = 'login.html';
+        }
+    </script>
+
+    <div class="header">
+        <h1>Pioneer 2027 Soybean Varieties</h1>
+        <div class="nav-links">
+            <a href="index.html">Corn</a>
+            <a href="yield-zone.html">Yield Zones</a>
+            <a href="sorghum.html">Sorghum</a>
+            <a href="soybeans.html" class="active">Soybeans</a>
+            <a href="#" onclick="sessionStorage.clear(); window.location.href='login.html'; return false;">Logout</a>
+        </div>
+    </div>
+    <div class="container">
+        <div class="summary-cards">
+            <div class="summary-card">
+                <div class="label">New 2027 Varieties</div>
+                <div class="value">--</div>
+            </div>
+            <div class="summary-card">
+                <div class="label">E3 Varieties</div>
+                <div class="value">--</div>
+            </div>
+            <div class="summary-card">
+                <div class="label">RM Range</div>
+                <div class="value">--</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>2027 Soybean Varieties</h2>
+            <div class="coming-soon">
+                <h3>Soybean Data Coming Soon</h3>
+                <p>2027 soybean variety information will be added when available.</p>
+                <p style="margin-top:1rem; color:#2e7d32;">Check back for updates on new varieties, trait packages, and positioning guides.</p>
+            </div>
+        </div>
+
+        <!-- Template for future soybean entries -->
+        <!--
+        <div class="section">
+            <h2>2027 New Soybean Varieties</h2>
+
+            <div class="variety-card">
+                <h3>P##A##X <span class="rm-badge">X.X RM</span> <span class="trait-tag e3-tag">E3</span></h3>
+                <div class="variety-specs">
+                    <div class="spec-item">
+                        <div class="label">Yield</div>
+                        <div class="value">-</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Emergence</div>
+                        <div class="value">-</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">SDS</div>
+                        <div class="value">-</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">SCN</div>
+                        <div class="value">-</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Phytophthora</div>
+                        <div class="value">-</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Iron Chlorosis</div>
+                        <div class="value">-</div>
+                    </div>
+                </div>
+                <div class="variety-notes">
+                    <label>My Notes:</label>
+                    <textarea id="notes-VARIETY" onchange="saveNotes('VARIETY', this.value)" placeholder="Your notes..."></textarea>
+                </div>
+            </div>
+
+        </div>
+        -->
+
+    </div>
+
+    <script>
+        // Load and save notes to localStorage
+        function saveNotes(variety, value) {
+            const notes = JSON.parse(localStorage.getItem('pioneerSoybeanNotes') || '{}');
+            notes[variety] = value;
+            localStorage.setItem('pioneerSoybeanNotes', JSON.stringify(notes));
+        }
+
+        function loadNotes() {
+            const notes = JSON.parse(localStorage.getItem('pioneerSoybeanNotes') || '{}');
+            Object.keys(notes).forEach(variety => {
+                const textarea = document.getElementById('notes-' + variety);
+                if (textarea) textarea.value = notes[variety];
+            });
+        }
+
+        loadNotes();
+    </script>
+</body>
+</html>
