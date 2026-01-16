@@ -132,12 +132,21 @@
     </style>
 </head>
 <body>
+    <!-- Auth check -->
+    <script>
+        if (!sessionStorage.getItem('pioneer_auth')) {
+            window.location.href = 'login.html';
+        }
+    </script>
+
     <div class="header">
         <h1>Pioneer 2027 Soybean Varieties</h1>
         <div class="nav-links">
             <a href="index.html">Corn</a>
+            <a href="yield-zone.html">Yield Zones</a>
             <a href="sorghum.html">Sorghum</a>
             <a href="soybeans.html" class="active">Soybeans</a>
+            <a href="#" onclick="sessionStorage.clear(); window.location.href='login.html'; return false;">Logout</a>
         </div>
     </div>
     <div class="container">
