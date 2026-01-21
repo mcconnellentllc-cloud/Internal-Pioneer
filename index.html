@@ -169,6 +169,28 @@
         }
         .key-notes h4 { color: #856404; margin-bottom: 0.5rem; }
         .key-notes ul { margin-left: 1.5rem; color: #856404; }
+
+        /* Print styles */
+        @media print {
+            body { background: white; }
+            .header, .tabs, .filter-row, .summary-cards, .btn { display: none !important; }
+            .container { max-width: 100%; padding: 0; margin: 0; }
+            .tab-content { display: none !important; }
+            .tab-content.print-active { display: block !important; }
+            .section { box-shadow: none; padding: 0; margin: 0; }
+            .data-table-container { max-height: none; overflow: visible; border: none; }
+            table { font-size: 10pt; }
+            th, td { padding: 4px 8px; border: 1px solid #333; }
+            th { background: #e8e8e8 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .prediction { color: #1a5f2a !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .print-header { display: block !important; text-align: center; margin-bottom: 1rem; }
+            .print-header h1 { font-size: 16pt; color: #1a5f2a; margin-bottom: 0.25rem; }
+            .print-header p { font-size: 10pt; color: #666; }
+            .print-summary { display: flex !important; justify-content: space-around; margin-bottom: 1rem; padding: 0.5rem; border: 1px solid #ddd; }
+            .print-summary span { font-size: 10pt; }
+            .print-summary strong { color: #1a5f2a; }
+        }
+        .print-header, .print-summary { display: none; }
     </style>
 </head>
 <body>
@@ -266,8 +288,21 @@
             </div>
         </div>
         <div id="detail" class="tab-content">
+            <div class="print-header">
+                <h1>Pioneer 2027 Hybrid Quantity Forecast</h1>
+                <p>Detail View: Quantity by Operation + Hybrid</p>
+            </div>
+            <div class="print-summary">
+                <span>2024 Total: <strong id="print-2024">0</strong> bags</span>
+                <span>2025 Total: <strong id="print-2025">0</strong> bags</span>
+                <span>2026 Total: <strong id="print-2026">0</strong> bags</span>
+                <span>2027 Predicted: <strong id="print-2027">0</strong> bags</span>
+            </div>
             <div class="section">
-                <h2>Detail: Quantity by Operation + Hybrid</h2>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h2 style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">Detail: Quantity by Operation + Hybrid</h2>
+                    <button class="btn btn-primary" onclick="printDetailView()">Print Detail View</button>
+                </div>
                 <div class="filter-row">
                     <input type="text" id="filter-detail" placeholder="Filter..." oninput="renderDetail()">
                 </div>
@@ -2059,6 +2094,25 @@
                 return Math.round(y2024 * 0.3);
             }
             return 0;
+        }
+
+        function printDetailView() {
+            // Update print summary with current totals
+            document.getElementById('print-2024').textContent = document.getElementById('total-2024').textContent;
+            document.getElementById('print-2025').textContent = document.getElementById('total-2025').textContent;
+            document.getElementById('print-2026').textContent = document.getElementById('total-2026').textContent;
+            document.getElementById('print-2027').textContent = document.getElementById('total-2027').textContent;
+
+            // Add print-active class to detail tab
+            document.getElementById('detail').classList.add('print-active');
+
+            // Print
+            window.print();
+
+            // Remove print-active class after printing
+            setTimeout(() => {
+                document.getElementById('detail').classList.remove('print-active');
+            }, 100);
         }
 
         function exportData() {
