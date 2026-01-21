@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pioneer - Customer Data Portal</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f5f5; }
+        .hidden { display: none !important; }
+
+        /* Login Screen */
+        .login-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a5f2a, #134620);
+        }
+
+        .login-container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-container h1 {
+            color: #1a5f2a;
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        .login-container .subtitle {
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+
+        .login-container .lock-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .login-container input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .login-container input:focus {
+            border-color: #1a5f2a;
+            outline: none;
+        }
+
+        .login-container button {
+            width: 100%;
+            padding: 0.85rem;
+            background: #1a5f2a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .login-container button:hover {
+            background: #134620;
+        }
+
+        .login-error {
+            color: #dc3545;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Dashboard Header */
+        .header {
+            background: linear-gradient(135deg, #1a5f2a, #2d8a42);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 { font-size: 1.4rem; }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .btn-primary { background: white; color: #1a5f2a; font-weight: 600; }
+        .btn-secondary { background: rgba(255,255,255,0.2); color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn:hover { opacity: 0.9; }
+
+        .container { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #1a5f2a;
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: #e8e8e8;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .tab.active { background: #1a5f2a; color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #1a5f2a, #2d8a42);
+            color: white;
+            padding: 1.25rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-card .label { font-size: 0.8rem; opacity: 0.9; margin-bottom: 0.25rem; }
+        .stat-card .value { font-size: 1.75rem; font-weight: bold; }
+
+        /* Section */
+        .section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .section h2 {
+            font-size: 1.1rem;
+            color: #1a5f2a;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e8f5e9;
+        }
+
+        /* Table */
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        th, td { padding: 0.6rem 0.75rem; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #f8f8f8; font-weight: 600; color: #333; position: sticky; top: 0; }
+        tr:hover { background: #f9f9f9; }
+        .text-right { text-align: right; }
+
+        .data-table-container {
+            max-height: 500px;
+            overflow-y: auto;
+            border: 1px solid #eee;
+            border-radius: 4px;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-row select, .filter-row input {
+            padding: 0.4rem 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        .charts-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Grower card */
+        .grower-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .grower-card h3 {
+            color: #1a5f2a;
+            margin-bottom: 0.5rem;
+        }
+
+        .grower-meta {
+            display: flex;
+            gap: 2rem;
+            color: #666;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .grower-hybrids {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .hybrid-tag {
+            background: #e8f5e9;
+            color: #1a5f2a;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .hybrid-tag.discontinued {
+            background: #f8d7da;
+            color: #721c24;
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-screen">
+        <div class="login-container">
+            <div class="lock-icon">&#128274;</div>
+            <h1>Customer Data Portal</h1>
+            <p class="subtitle">Protected Area - Authorized Access Only</p>
+            <form id="login-form">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="username" placeholder="Enter username" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" placeholder="Enter password" required>
+                </div>
+                <button type="submit">Sign In</button>
+                <p id="login-error" class="login-error"></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="hidden">
+        <div class="header">
+            <h1>Pioneer Customer Data Portal</h1>
+            <div style="display:flex; gap:0.5rem; align-items:center;">
+                <span id="user-display" style="opacity:0.8;"></span>
+                <a href="index.html" class="btn btn-secondary" style="text-decoration:none;">Forecast</a>
+                <a href="hybrid-portfolio.html" class="btn btn-secondary" style="text-decoration:none;">Portfolio</a>
+                <button class="btn btn-secondary" onclick="exportAllData()">Export All Data</button>
+                <button class="btn btn-secondary" onclick="logout()">Logout</button>
+            </div>
+        </div>
+
+        <div class="container">
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="label">Total Growers</div>
+                    <div class="value" id="total-growers">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">2024 Bags</div>
+                    <div class="value" id="bags-2024">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">2025 Bags</div>
+                    <div class="value" id="bags-2025">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">2026 Bags</div>
+                    <div class="value" id="bags-2026">0</div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('growers')">Grower Details</button>
+                <button class="tab" onclick="switchTab('transactions')">All Transactions</button>
+                <button class="tab" onclick="switchTab('analysis')">Analysis</button>
+            </div>
+
+            <!-- Grower Details Tab -->
+            <div id="growers" class="tab-content active">
+                <div class="section">
+                    <h2>Grower Details by Year</h2>
+                    <div class="filter-row">
+                        <select id="grower-year-filter" onchange="renderGrowerDetails()">
+                            <option value="all">All Years</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                            <option value="2026">2026</option>
+                        </select>
+                        <input type="text" id="grower-search" placeholder="Search grower..." oninput="renderGrowerDetails()">
+                    </div>
+                    <div id="grower-cards"></div>
+                </div>
+            </div>
+
+            <!-- Transactions Tab -->
+            <div id="transactions" class="tab-content">
+                <div class="section">
+                    <h2>All Transactions</h2>
+                    <div class="filter-row">
+                        <select id="trans-year-filter" onchange="renderTransactions()">
+                            <option value="all">All Years</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                            <option value="2026">2026</option>
+                        </select>
+                        <select id="trans-grower-filter" onchange="renderTransactions()">
+                            <option value="all">All Growers</option>
+                        </select>
+                        <select id="trans-hybrid-filter" onchange="renderTransactions()">
+                            <option value="all">All Hybrids</option>
+                        </select>
+                    </div>
+                    <div class="data-table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Year</th>
+                                    <th>Grower</th>
+                                    <th>Hybrid</th>
+                                    <th>Trait</th>
+                                    <th class="text-right">Bags</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactions-table"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analysis Tab -->
+            <div id="analysis" class="tab-content">
+                <div class="charts-row">
+                    <div class="section">
+                        <h2>Grower Purchase Trends</h2>
+                        <div class="chart-container">
+                            <canvas id="grower-trend-chart"></canvas>
+                        </div>
+                    </div>
+                    <div class="section">
+                        <h2>Hybrid Distribution</h2>
+                        <div class="chart-container">
+                            <canvas id="hybrid-dist-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="section">
+                    <h2>Grower Purchasing History</h2>
+                    <div class="data-table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Grower</th>
+                                    <th class="text-right">2024 Bags</th>
+                                    <th class="text-right">2025 Bags</th>
+                                    <th class="text-right">2026 Bags</th>
+                                    <th class="text-right">Total</th>
+                                    <th class="text-right">Trend</th>
+                                </tr>
+                            </thead>
+                            <tbody id="grower-analysis-table"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // AUTHENTICATION
+        // ============================================
+        const VALID_CREDENTIALS = {
+            username: 'kyle',
+            password: 'customerdata'
+        };
+
+        let isAuthenticated = false;
+        let growerData = null;
+        let charts = {};
+
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value.toLowerCase();
+            const password = document.getElementById('password').value;
+
+            if (username === VALID_CREDENTIALS.username && password === VALID_CREDENTIALS.password) {
+                isAuthenticated = true;
+                sessionStorage.setItem('customerDataAuth', 'true');
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('dashboard').classList.remove('hidden');
+                document.getElementById('user-display').textContent = 'Welcome, Kyle';
+                loadData();
+            } else {
+                document.getElementById('login-error').textContent = 'Invalid username or password';
+            }
+        });
+
+        function logout() {
+            isAuthenticated = false;
+            sessionStorage.removeItem('customerDataAuth');
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('login-error').textContent = '';
+        }
+
+        // Check for existing session
+        if (sessionStorage.getItem('customerDataAuth') === 'true') {
+            isAuthenticated = true;
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+            document.getElementById('user-display').textContent = 'Welcome, Kyle';
+            loadData();
+        }
+
+        // ============================================
+        // DATA LOADING
+        // ============================================
+        async function loadData() {
+            try {
+                const response = await fetch('data/grower_data.json');
+                growerData = await response.json();
+                populateFilters();
+                renderAll();
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        }
+
+        function populateFilters() {
+            if (!growerData) return;
+
+            const growers = new Set();
+            const hybrids = new Set();
+
+            ['2024', '2025', '2026'].forEach(year => {
+                if (growerData[year] && growerData[year].corn) {
+                    growerData[year].corn.forEach(r => {
+                        growers.add(r.grower);
+                        hybrids.add(r.hybrid);
+                    });
+                }
+            });
+
+            const growerFilter = document.getElementById('trans-grower-filter');
+            growerFilter.innerHTML = '<option value="all">All Growers</option>';
+            [...growers].sort().forEach(g => {
+                growerFilter.innerHTML += `<option value="${g}">${g}</option>`;
+            });
+
+            const hybridFilter = document.getElementById('trans-hybrid-filter');
+            hybridFilter.innerHTML = '<option value="all">All Hybrids</option>';
+            [...hybrids].sort().forEach(h => {
+                hybridFilter.innerHTML += `<option value="${h}">${h}</option>`;
+            });
+        }
+
+        // ============================================
+        // RENDERING
+        // ============================================
+        function renderAll() {
+            renderStats();
+            renderGrowerDetails();
+            renderTransactions();
+            renderAnalysis();
+        }
+
+        function renderStats() {
+            if (!growerData) return;
+
+            const growers = new Set();
+            let bags2024 = 0, bags2025 = 0, bags2026 = 0;
+
+            ['2024', '2025', '2026'].forEach(year => {
+                if (growerData[year] && growerData[year].corn) {
+                    growerData[year].corn.forEach(r => {
+                        growers.add(r.grower);
+                        if (year === '2024') bags2024 += r.bags;
+                        if (year === '2025') bags2025 += r.bags;
+                        if (year === '2026') bags2026 += r.bags;
+                    });
+                }
+            });
+
+            document.getElementById('total-growers').textContent = growers.size;
+            document.getElementById('bags-2024').textContent = bags2024.toLocaleString();
+            document.getElementById('bags-2025').textContent = bags2025.toLocaleString();
+            document.getElementById('bags-2026').textContent = bags2026.toLocaleString();
+        }
+
+        function renderGrowerDetails() {
+            if (!growerData) return;
+
+            const yearFilter = document.getElementById('grower-year-filter').value;
+            const searchFilter = document.getElementById('grower-search').value.toLowerCase();
+            const discontinued = growerData.hybrids?.discontinued_2027 || [];
+
+            // Group by grower
+            const growerMap = {};
+            const years = yearFilter === 'all' ? ['2024', '2025', '2026'] : [yearFilter];
+
+            years.forEach(year => {
+                if (growerData[year] && growerData[year].corn) {
+                    growerData[year].corn.forEach(r => {
+                        if (!growerMap[r.grower]) {
+                            growerMap[r.grower] = { purchases: [], totalBags: 0 };
+                        }
+                        growerMap[r.grower].purchases.push({ ...r, year });
+                        growerMap[r.grower].totalBags += r.bags;
+                    });
+                }
+            });
+
+            let html = '';
+            Object.keys(growerMap).sort().forEach(grower => {
+                if (searchFilter && !grower.toLowerCase().includes(searchFilter)) return;
+
+                const data = growerMap[grower];
+                const hybridMap = {};
+                data.purchases.forEach(p => {
+                    const key = `${p.hybrid}-${p.year}`;
+                    if (!hybridMap[key]) {
+                        hybridMap[key] = { hybrid: p.hybrid, year: p.year, bags: 0, trait: p.trait };
+                    }
+                    hybridMap[key].bags += p.bags;
+                });
+
+                html += `
+                    <div class="grower-card">
+                        <h3>${grower}</h3>
+                        <div class="grower-meta">
+                            <span>Total Bags: ${data.totalBags}</span>
+                            <span>Purchases: ${data.purchases.length}</span>
+                        </div>
+                        <div class="grower-hybrids">
+                            ${Object.values(hybridMap).map(p => `
+                                <span class="hybrid-tag ${discontinued.includes(p.hybrid) ? 'discontinued' : ''}">
+                                    ${p.hybrid} (${p.year}): ${p.bags} bags
+                                </span>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+
+            document.getElementById('grower-cards').innerHTML = html || '<p style="color:#666;">No growers found.</p>';
+        }
+
+        function renderTransactions() {
+            if (!growerData) return;
+
+            const yearFilter = document.getElementById('trans-year-filter').value;
+            const growerFilter = document.getElementById('trans-grower-filter').value;
+            const hybridFilter = document.getElementById('trans-hybrid-filter').value;
+
+            let rows = [];
+            const years = yearFilter === 'all' ? ['2024', '2025', '2026'] : [yearFilter];
+
+            years.forEach(year => {
+                if (growerData[year] && growerData[year].corn) {
+                    growerData[year].corn.forEach(r => {
+                        if (growerFilter !== 'all' && r.grower !== growerFilter) return;
+                        if (hybridFilter !== 'all' && r.hybrid !== hybridFilter) return;
+                        rows.push({ ...r, year });
+                    });
+                }
+            });
+
+            let html = '';
+            rows.sort((a, b) => b.year - a.year || a.grower.localeCompare(b.grower)).forEach(r => {
+                html += `
+                    <tr>
+                        <td>${r.year}</td>
+                        <td>${r.grower}</td>
+                        <td>${r.hybrid}</td>
+                        <td>${r.trait}</td>
+                        <td class="text-right">${r.bags}</td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('transactions-table').innerHTML = html || '<tr><td colspan="5" style="text-align:center; color:#666;">No transactions found.</td></tr>';
+        }
+
+        function renderAnalysis() {
+            if (!growerData) return;
+
+            // Grower analysis table
+            const growerTotals = {};
+            ['2024', '2025', '2026'].forEach(year => {
+                if (growerData[year] && growerData[year].corn) {
+                    growerData[year].corn.forEach(r => {
+                        if (!growerTotals[r.grower]) {
+                            growerTotals[r.grower] = { y2024: 0, y2025: 0, y2026: 0 };
+                        }
+                        growerTotals[r.grower][`y${year}`] += r.bags;
+                    });
+                }
+            });
+
+            let html = '';
+            Object.keys(growerTotals).sort((a, b) => {
+                const totalA = growerTotals[a].y2024 + growerTotals[a].y2025 + growerTotals[a].y2026;
+                const totalB = growerTotals[b].y2024 + growerTotals[b].y2025 + growerTotals[b].y2026;
+                return totalB - totalA;
+            }).forEach(grower => {
+                const d = growerTotals[grower];
+                const total = d.y2024 + d.y2025 + d.y2026;
+                let trend = '-';
+                if (d.y2025 > 0 && d.y2026 > 0) {
+                    const change = ((d.y2026 - d.y2025) / d.y2025 * 100).toFixed(1);
+                    trend = `<span style="color:${change >= 0 ? '#28a745' : '#dc3545'}">${change >= 0 ? '+' : ''}${change}%</span>`;
+                }
+                html += `
+                    <tr>
+                        <td><strong>${grower}</strong></td>
+                        <td class="text-right">${d.y2024 || '-'}</td>
+                        <td class="text-right">${d.y2025 || '-'}</td>
+                        <td class="text-right">${d.y2026 || '-'}</td>
+                        <td class="text-right"><strong>${total}</strong></td>
+                        <td class="text-right">${trend}</td>
+                    </tr>
+                `;
+            });
+
+            document.getElementById('grower-analysis-table').innerHTML = html;
+
+            // Charts
+            renderCharts(growerTotals);
+        }
+
+        function renderCharts(growerTotals) {
+            // Destroy existing charts
+            Object.values(charts).forEach(c => c.destroy());
+            charts = {};
+
+            // Top growers trend chart
+            const topGrowers = Object.keys(growerTotals).sort((a, b) => {
+                const totalA = growerTotals[a].y2024 + growerTotals[a].y2025 + growerTotals[a].y2026;
+                const totalB = growerTotals[b].y2024 + growerTotals[b].y2025 + growerTotals[b].y2026;
+                return totalB - totalA;
+            }).slice(0, 8);
+
+            charts.growerTrend = new Chart(document.getElementById('grower-trend-chart'), {
+                type: 'bar',
+                data: {
+                    labels: topGrowers,
+                    datasets: [
+                        { label: '2024', data: topGrowers.map(g => growerTotals[g].y2024), backgroundColor: '#6c757d' },
+                        { label: '2025', data: topGrowers.map(g => growerTotals[g].y2025), backgroundColor: '#28a745' },
+                        { label: '2026', data: topGrowers.map(g => growerTotals[g].y2026), backgroundColor: '#1a5f2a' }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'top' } }
+                }
+            });
+
+            // Hybrid distribution
+            const hybridTotals = {};
+            ['2024', '2025', '2026'].forEach(year => {
+                if (growerData[year] && growerData[year].corn) {
+                    growerData[year].corn.forEach(r => {
+                        if (!hybridTotals[r.hybrid]) hybridTotals[r.hybrid] = 0;
+                        hybridTotals[r.hybrid] += r.bags;
+                    });
+                }
+            });
+
+            const hybridLabels = Object.keys(hybridTotals).sort((a, b) => hybridTotals[b] - hybridTotals[a]);
+            const hybridValues = hybridLabels.map(h => hybridTotals[h]);
+            const colors = ['#1a5f2a', '#28a745', '#6c757d', '#17a2b8', '#ffc107', '#dc3545', '#007bff', '#343a40', '#20c997'];
+
+            charts.hybridDist = new Chart(document.getElementById('hybrid-dist-chart'), {
+                type: 'doughnut',
+                data: {
+                    labels: hybridLabels,
+                    datasets: [{
+                        data: hybridValues,
+                        backgroundColor: colors.slice(0, hybridLabels.length)
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'right' } }
+                }
+            });
+        }
+
+        // ============================================
+        // TAB SWITCHING
+        // ============================================
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // ============================================
+        // EXPORT
+        // ============================================
+        function exportAllData() {
+            if (!growerData) return;
+
+            let csv = 'Year,Grower,Hybrid,Trait,Bags\n';
+            ['2024', '2025', '2026'].forEach(year => {
+                if (growerData[year] && growerData[year].corn) {
+                    growerData[year].corn.forEach(r => {
+                        csv += `${year},"${r.grower}","${r.hybrid}","${r.trait}",${r.bags}\n`;
+                    });
+                }
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'customer_data_export.csv';
+            a.click();
+        }
+    </script>
+</body>
+</html>
