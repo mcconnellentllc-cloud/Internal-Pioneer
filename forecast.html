@@ -209,14 +209,23 @@
     </style>
 </head>
 <body>
+    <!-- Auth check -->
+    <script>
+        if (!sessionStorage.getItem('pioneer_auth')) {
+            window.location.href = 'login.html';
+        }
+    </script>
+
     <div class="header">
         <div>
             <h1>Pioneer 2027 Hybrid Quantity Forecast</h1>
         </div>
         <div class="header-buttons">
+            <a href="index.html" style="color:white; text-decoration:none; padding:0.5rem 1rem; background:rgba(255,255,255,0.2); border-radius:4px; font-size:0.85rem; margin-right:0.5rem;">Dashboard</a>
             <button class="btn btn-secondary" onclick="showImportModal()">Import Data</button>
             <button class="btn btn-secondary" onclick="showHybridModal()">Manage 2027 Hybrids</button>
             <button class="btn btn-primary" onclick="exportData()">Export Forecast</button>
+            <button class="btn btn-secondary" onclick="sessionStorage.clear(); window.location.href='login.html';">Logout</button>
         </div>
     </div>
 

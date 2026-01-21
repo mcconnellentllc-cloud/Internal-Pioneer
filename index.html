@@ -194,12 +194,23 @@
     </style>
 </head>
 <body>
+    <!-- Auth check -->
+    <script>
+        if (!sessionStorage.getItem('pioneer_auth')) {
+            window.location.href = 'login.html';
+        }
+    </script>
+
     <div class="header">
         <h1>Pioneer 2027 Hybrid Quantity Forecast</h1>
-        <div style="display:flex; gap:0.5rem;">
-            <a href="hybrid-portfolio.html" class="btn btn-secondary" style="text-decoration:none;">2027 Portfolio</a>
-            <a href="customer-data.html" class="btn btn-secondary" style="text-decoration:none;">Customer Data</a>
+        <div style="display:flex; gap:0.5rem; align-items:center;">
+            <a href="yield-zone.html" style="color:white; text-decoration:none; padding:0.5rem 1rem; background:rgba(255,255,255,0.2); border-radius:4px; font-size:0.85rem; margin-right:0.5rem;">Yield Zones</a>
+            <a href="hybrid-portfolio.html" style="color:white; text-decoration:none; padding:0.5rem 1rem; background:rgba(255,255,255,0.2); border-radius:4px; font-size:0.85rem; margin-right:0.5rem;">2027 Portfolio</a>
+            <a href="customer-data.html" style="color:white; text-decoration:none; padding:0.5rem 1rem; background:rgba(255,255,255,0.2); border-radius:4px; font-size:0.85rem; margin-right:0.5rem;">Customer Data</a>
+            <a href="sorghum.html" style="color:white; text-decoration:none; padding:0.5rem 1rem; background:rgba(255,255,255,0.2); border-radius:4px; font-size:0.85rem; margin-right:0.5rem;">Sorghum</a>
+            <a href="soybeans.html" style="color:white; text-decoration:none; padding:0.5rem 1rem; background:rgba(255,255,255,0.2); border-radius:4px; font-size:0.85rem; margin-right:0.5rem;">Soybeans</a>
             <button class="btn btn-primary" onclick="exportData()">Export Forecast</button>
+            <button class="btn" onclick="sessionStorage.clear(); window.location.href='login.html';" style="background:rgba(255,255,255,0.2); color:white; border:none; padding:0.5rem 1rem; border-radius:4px; cursor:pointer; font-size:0.85rem;">Logout</button>
         </div>
     </div>
     <div class="container">
@@ -230,6 +241,7 @@
             <button class="tab" onclick="switchTab('by-hybrid')">By Hybrid</button>
             <button class="tab" onclick="switchTab('detail')">Detail View</button>
             <button class="tab" onclick="switchTab('new-hybrids')">2027 New Hybrids</button>
+            <button class="tab" onclick="switchTab('competitive')">Competitive</button>
         </div>
         <div id="by-operation" class="tab-content active">
             <div class="section">
@@ -319,6 +331,24 @@
                 <ul>
                     <li><strong>RC Invoicing:</strong> 2027 invoicing 13% into RC invoicing</li>
                     <li><strong>P05081:</strong> Will be 90% in PCUE and 10% of volume in AML</li>
+                </ul>
+            </div>
+            <div class="key-notes" style="background:#e3f2fd; border-color:#2196f3; margin-bottom:1.5rem;">
+                <h4 style="color:#1565c0;">Demand Plan Reminders</h4>
+                <ul style="color:#1565c0;">
+                    <li><strong>Sales Reps plan:</strong> Corn, Soybeans, and Grain Sorghum to agency target
+                        <ul style="margin-top:0.25rem; color:#1976d2;">
+                            <li>RC02 soybeans and grain sorghum are <strong>OPEN DEMAND</strong> for 2027 (not capped like corn RC02's)</li>
+                        </ul>
+                    </li>
+                    <li><strong>DO NOT plan:</strong> Forage sorghum, sorghum-sudangrass, or sunflowers – TMs & FAs will plan at territory level</li>
+                    <li><strong>District corn target:</strong> Bumped up <strong>13k (+3.7%) units</strong>
+                        <ul style="margin-top:0.25rem; color:#1976d2;">
+                            <li>Corn targets in DP tool reflect previous target</li>
+                            <li>TMs will work with reps to adjust plans product-by-product</li>
+                        </ul>
+                    </li>
+                    <li><strong>Job aids:</strong> DP tool job aids sent to Rep team by Sales Support</li>
                 </ul>
             </div>
             <div class="hybrid-card">
@@ -641,6 +671,684 @@
                 <h3 style="margin-bottom:1rem; color:#666;">Other Crops</h3>
                 <a href="sorghum.html" style="display:inline-block; padding:0.75rem 1.5rem; background:#8b4513; color:white; text-decoration:none; border-radius:4px; margin:0.5rem; font-weight:600;">Sorghum Hybrids</a>
                 <a href="soybeans.html" style="display:inline-block; padding:0.75rem 1.5rem; background:#228b22; color:white; text-decoration:none; border-radius:4px; margin:0.5rem; font-weight:600;">Soybean Varieties</a>
+            </div>
+        </div>
+        <div id="competitive" class="tab-content">
+            <div class="section">
+                <h2>Product Performance by Yield Zone</h2>
+                <p style="color:#666; margin-bottom:1rem;">2025-2023, District CD, Pioneer vs Competition, +/- 3 CRM, <strong style="color:#1a5f2a;">>10 Comparisons per cell</strong></p>
+                <div class="key-notes" style="background:#ffe6e6; border-color:#dc3545; margin-bottom:1rem;">
+                    <h4 style="color:#dc3545;">2027 DEMAND PLAN: 13% REQUIREMENT</h4>
+                    <p style="color:#333; margin:0;">These products must represent <strong>13% of your 2027 orders</strong>. Use this data to match the right hybrid to each grower's yield environment.</p>
+                </div>
+                <div class="key-notes" style="background:#e8f5e9; border-color:#1a5f2a;">
+                    <h4 style="color:#1a5f2a;">How to Read This Table</h4>
+                    <ul style="color:#333;">
+                        <li><strong style="color:#28a745;">Green (75%+):</strong> Strong performer - leads in this yield environment</li>
+                        <li><strong style="color:#ffc107;">Yellow (50-74%):</strong> Competitive - holds its own vs competition</li>
+                        <li><strong style="color:#dc3545;">Red (<50%):</strong> Weak spot - consider alternatives for this environment</li>
+                    </ul>
+                </div>
+                <div class="data-table-container" style="max-height:none;">
+                    <table id="yield-zone-table">
+                        <thead>
+                            <tr>
+                                <th>Hybrid</th>
+                                <th class="text-center">&lt;150 bu/a<br><span style="font-weight:normal;font-size:0.75rem;">%Wins</span></th>
+                                <th class="text-center">150-200 bu/a<br><span style="font-weight:normal;font-size:0.75rem;">%Wins</span></th>
+                                <th class="text-center">200-250 bu/a<br><span style="font-weight:normal;font-size:0.75rem;">%Wins</span></th>
+                                <th class="text-center">&gt;250 bu/a<br><span style="font-weight:normal;font-size:0.75rem;">%Wins</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>P00549</strong></td>
+                                <td class="text-center" style="background:#fff3cd;">63%</td>
+                                <td class="text-center" style="background:#f8f9fa;">N/A</td>
+                                <td class="text-center" style="background:#d4edda;">82%</td>
+                                <td class="text-center" style="background:#fff3cd;">73%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P02405</strong></td>
+                                <td class="text-center" style="background:#f8d7da;">48%</td>
+                                <td class="text-center" style="background:#fff3cd;">73%</td>
+                                <td class="text-center" style="background:#fff3cd;">61%</td>
+                                <td class="text-center" style="background:#d4edda;">80%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P03115</strong></td>
+                                <td class="text-center" style="background:#fff3cd;">65%</td>
+                                <td class="text-center" style="background:#f8d7da;">38%</td>
+                                <td class="text-center" style="background:#f8d7da;">41%</td>
+                                <td class="text-center" style="background:#f8d7da;">41%</td>
+                            </tr>
+                            <tr style="background:#f0fff0;">
+                                <td><strong>P03357</strong> ⭐</td>
+                                <td class="text-center" style="background:#f8d7da;">47%</td>
+                                <td class="text-center" style="background:#fff3cd;">63%</td>
+                                <td class="text-center" style="background:#d4edda;">79%</td>
+                                <td class="text-center" style="background:#28a745;color:white;font-weight:bold;">100%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P03951</strong></td>
+                                <td class="text-center" style="background:#f8d7da;">43%</td>
+                                <td class="text-center" style="background:#fff3cd;">63%</td>
+                                <td class="text-center" style="background:#fff3cd;">61%</td>
+                                <td class="text-center" style="background:#d4edda;">89%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P05081</strong></td>
+                                <td class="text-center" style="background:#fff3cd;">51%</td>
+                                <td class="text-center" style="background:#fff3cd;">66%</td>
+                                <td class="text-center" style="background:#fff3cd;">74%</td>
+                                <td class="text-center" style="background:#fff3cd;">70%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P05466</strong></td>
+                                <td class="text-center" style="background:#dc3545;color:white;">18%</td>
+                                <td class="text-center" style="background:#d4edda;">88%</td>
+                                <td class="text-center" style="background:#fff3cd;">70%</td>
+                                <td class="text-center" style="background:#d4edda;">80%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P08527</strong></td>
+                                <td class="text-center" style="background:#fff3cd;">60%</td>
+                                <td class="text-center" style="background:#d4edda;">78%</td>
+                                <td class="text-center" style="background:#fff3cd;">72%</td>
+                                <td class="text-center" style="background:#d4edda;">75%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P0859</strong></td>
+                                <td class="text-center" style="background:#fff3cd;">60%</td>
+                                <td class="text-center" style="background:#d4edda;">83%</td>
+                                <td class="text-center" style="background:#fff3cd;">74%</td>
+                                <td class="text-center" style="background:#d4edda;">79%</td>
+                            </tr>
+                            <tr style="background:#f0fff0;">
+                                <td><strong>P09076</strong> ⭐</td>
+                                <td class="text-center" style="background:#d4edda;">82%</td>
+                                <td class="text-center" style="background:#d4edda;">77%</td>
+                                <td class="text-center" style="background:#d4edda;">90%</td>
+                                <td class="text-center" style="background:#fff3cd;">64%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P0995</strong></td>
+                                <td class="text-center" style="background:#fff3cd;">56%</td>
+                                <td class="text-center" style="background:#fff3cd;">71%</td>
+                                <td class="text-center" style="background:#fff3cd;">61%</td>
+                                <td class="text-center" style="background:#fff3cd;">69%</td>
+                            </tr>
+                            <tr style="background:#f0fff0;">
+                                <td><strong>P10300</strong> ⭐</td>
+                                <td class="text-center" style="background:#fff3cd;">63%</td>
+                                <td class="text-center" style="background:#d4edda;">80%</td>
+                                <td class="text-center" style="background:#d4edda;">89%</td>
+                                <td class="text-center" style="background:#d4edda;">82%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P10625</strong></td>
+                                <td class="text-center" style="background:#fff3cd;">60%</td>
+                                <td class="text-center" style="background:#fff3cd;">72%</td>
+                                <td class="text-center" style="background:#d4edda;">75%</td>
+                                <td class="text-center" style="background:#fff3cd;">74%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P1122</strong></td>
+                                <td class="text-center" style="background:#fff3cd;">63%</td>
+                                <td class="text-center" style="background:#fff3cd;">58%</td>
+                                <td class="text-center" style="background:#fff3cd;">57%</td>
+                                <td class="text-center" style="background:#fff3cd;">68%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P12393</strong></td>
+                                <td class="text-center" style="background:#dc3545;color:white;">33%</td>
+                                <td class="text-center" style="background:#d4edda;">90%</td>
+                                <td class="text-center" style="background:#fff3cd;">68%</td>
+                                <td class="text-center" style="background:#d4edda;">83%</td>
+                            </tr>
+                            <tr style="background:#f0fff0;">
+                                <td><strong>P12517</strong> ⭐</td>
+                                <td class="text-center" style="background:#f8d7da;">46%</td>
+                                <td class="text-center" style="background:#d4edda;">75%</td>
+                                <td class="text-center" style="background:#d4edda;">85%</td>
+                                <td class="text-center" style="background:#d4edda;">91%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P12904</strong></td>
+                                <td class="text-center" style="background:#dc3545;color:white;">17%</td>
+                                <td class="text-center" style="background:#fff3cd;">67%</td>
+                                <td class="text-center" style="background:#fff3cd;">56%</td>
+                                <td class="text-center" style="background:#fff3cd;">69%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P13777</strong></td>
+                                <td class="text-center" style="background:#f8d7da;">45%</td>
+                                <td class="text-center" style="background:#f8d7da;">46%</td>
+                                <td class="text-center" style="background:#d4edda;">79%</td>
+                                <td class="text-center" style="background:#d4edda;">78%</td>
+                            </tr>
+                            <tr style="background:#f0fff0;">
+                                <td><strong>P14364</strong> ⭐</td>
+                                <td class="text-center" style="background:#d4edda;">80%</td>
+                                <td class="text-center" style="background:#28a745;color:white;font-weight:bold;">100%</td>
+                                <td class="text-center" style="background:#d4edda;">85%</td>
+                                <td class="text-center" style="background:#d4edda;">89%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P14830</strong></td>
+                                <td class="text-center" style="background:#dc3545;color:white;">20%</td>
+                                <td class="text-center" style="background:#fff3cd;">72%</td>
+                                <td class="text-center" style="background:#d4edda;">88%</td>
+                                <td class="text-center" style="background:#fff3cd;">74%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P1548</strong></td>
+                                <td class="text-center" style="background:#f8f9fa;">N/A</td>
+                                <td class="text-center" style="background:#f8d7da;">47%</td>
+                                <td class="text-center" style="background:#fff3cd;">54%</td>
+                                <td class="text-center" style="background:#dc3545;color:white;">27%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P1742</strong></td>
+                                <td class="text-center" style="background:#f8f9fa;">N/A</td>
+                                <td class="text-center" style="background:#d4edda;">86%</td>
+                                <td class="text-center" style="background:#fff3cd;">71%</td>
+                                <td class="text-center" style="background:#d4edda;">82%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="margin-top:1.5rem; padding:1rem; background:#fff3cd; border:1px solid #ffc107; border-radius:8px;">
+                    <h4 style="color:#856404; margin-bottom:0.5rem;">Key Takeaways</h4>
+                    <ul style="color:#856404; margin-left:1.5rem;">
+                        <li><strong>P03357:</strong> 100% wins at >250 bu/a - DOMINANT in high-yield environments</li>
+                        <li><strong>P14364:</strong> 100% wins at 150-200 bu/a, strong across ALL zones (80%+ everywhere)</li>
+                        <li><strong>P09076:</strong> Best dryland performer (82% at <150), excellent mid-range (90% at 200-250)</li>
+                        <li><strong>P12517:</strong> Strong high-yield (91% at >250, 85% at 200-250)</li>
+                        <li><strong>P10300:</strong> Consistent performer - 80%+ in top 3 yield zones</li>
+                        <li><strong style="color:#dc3545;">Avoid P03115, P1548 in high-yield environments</strong></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- NCGA Population Data Section -->
+            <div class="section" style="margin-top:1.5rem;">
+                <h2>PKP x Population: Pioneer vs Dekalb (NCGA Yield Contest)</h2>
+                <div class="key-notes" style="background:#d4edda; border-color:#28a745; margin-bottom:1rem;">
+                    <h4 style="color:#155724; font-size:1.1rem;">Pioneer entries have 1,800 LESS plants/acre than competitors - SAME OR BETTER YIELDS!</h4>
+                    <p style="color:#155724; margin:0.5rem 0 0 0;">Lower seeding rates = Lower seed cost for growers. This is your efficiency story.</p>
+                </div>
+                <p style="color:#666; margin-bottom:1rem;">12-year NCGA data (2013-2024) from IA, IL, IN, MN, MI, NE, MO, KS, OH, WI, ND, SD</p>
+
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:1.5rem;">
+                    <!-- All Field Entries Table -->
+                    <div>
+                        <h4 style="color:#1a5f2a; margin-bottom:0.5rem;">All Field Entries - Grain Yield (bu/a)</h4>
+                        <table style="font-size:0.8rem;">
+                            <thead>
+                                <tr>
+                                    <th>Year</th>
+                                    <th class="text-center">Dekalb</th>
+                                    <th class="text-center">Other</th>
+                                    <th class="text-center" style="background:#e8f5e9;">Pioneer</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>2013</td><td class="text-center">230</td><td class="text-center">241</td><td class="text-center" style="background:#f0fff0;">233</td></tr>
+                                <tr><td>2014</td><td class="text-center">231</td><td class="text-center">243</td><td class="text-center" style="background:#f0fff0;">240</td></tr>
+                                <tr><td>2015</td><td class="text-center">239</td><td class="text-center">236</td><td class="text-center" style="background:#f0fff0;font-weight:600;">241</td></tr>
+                                <tr><td>2016</td><td class="text-center">240</td><td class="text-center">237</td><td class="text-center" style="background:#f0fff0;">236</td></tr>
+                                <tr><td>2017</td><td class="text-center">248</td><td class="text-center">264</td><td class="text-center" style="background:#f0fff0;">259</td></tr>
+                                <tr><td>2018</td><td class="text-center">246</td><td class="text-center">262</td><td class="text-center" style="background:#f0fff0;">254</td></tr>
+                                <tr><td>2019</td><td class="text-center">239</td><td class="text-center">251</td><td class="text-center" style="background:#f0fff0;">248</td></tr>
+                                <tr><td>2020</td><td class="text-center">250</td><td class="text-center">255</td><td class="text-center" style="background:#f0fff0;font-weight:600;">259</td></tr>
+                                <tr><td>2021</td><td class="text-center">265</td><td class="text-center">266</td><td class="text-center" style="background:#d4edda;font-weight:600;">277</td></tr>
+                                <tr><td>2022</td><td class="text-center">263</td><td class="text-center">255</td><td class="text-center" style="background:#d4edda;font-weight:600;">275</td></tr>
+                                <tr><td>2023</td><td class="text-center">266</td><td class="text-center">257</td><td class="text-center" style="background:#d4edda;font-weight:600;">280</td></tr>
+                                <tr><td>2024</td><td class="text-center">276</td><td class="text-center">267</td><td class="text-center" style="background:#d4edda;font-weight:600;">281</td></tr>
+                                <tr style="font-weight:bold; background:#f8f8f8;">
+                                    <td>Mean</td>
+                                    <td class="text-center">249</td>
+                                    <td class="text-center">253</td>
+                                    <td class="text-center" style="background:#28a745;color:white;">257</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Harvest Population Table -->
+                    <div>
+                        <h4 style="color:#1a5f2a; margin-bottom:0.5rem;">Harvest Population (plants/acre) - THE KEY!</h4>
+                        <table style="font-size:0.8rem;">
+                            <thead>
+                                <tr>
+                                    <th>Year</th>
+                                    <th class="text-center">Dekalb</th>
+                                    <th class="text-center">Other</th>
+                                    <th class="text-center" style="background:#e8f5e9;">Pioneer</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>2013</td><td class="text-center">37,053</td><td class="text-center">35,625</td><td class="text-center" style="background:#f0fff0;">37,033</td></tr>
+                                <tr><td>2014</td><td class="text-center">36,686</td><td class="text-center">38,438</td><td class="text-center" style="background:#d4edda;font-weight:600;">35,148</td></tr>
+                                <tr><td>2015</td><td class="text-center">37,571</td><td class="text-center">36,033</td><td class="text-center" style="background:#d4edda;font-weight:600;">35,537</td></tr>
+                                <tr><td>2016</td><td class="text-center">39,167</td><td class="text-center">41,750</td><td class="text-center" style="background:#d4edda;font-weight:600;">37,389</td></tr>
+                                <tr><td>2017</td><td class="text-center">38,887</td><td class="text-center">37,527</td><td class="text-center" style="background:#d4edda;font-weight:600;">35,035</td></tr>
+                                <tr><td>2018</td><td class="text-center">36,414</td><td class="text-center">36,874</td><td class="text-center" style="background:#d4edda;font-weight:600;">34,210</td></tr>
+                                <tr><td>2019</td><td class="text-center">35,530</td><td class="text-center">35,428</td><td class="text-center" style="background:#d4edda;font-weight:600;">34,935</td></tr>
+                                <tr><td>2020</td><td class="text-center">37,204</td><td class="text-center">35,076</td><td class="text-center" style="background:#d4edda;font-weight:600;">34,357</td></tr>
+                                <tr><td>2021</td><td class="text-center">36,169</td><td class="text-center">35,902</td><td class="text-center" style="background:#d4edda;font-weight:600;">34,060</td></tr>
+                                <tr><td>2022</td><td class="text-center">36,436</td><td class="text-center">34,667</td><td class="text-center" style="background:#d4edda;font-weight:600;">33,781</td></tr>
+                                <tr><td>2023</td><td class="text-center">35,823</td><td class="text-center">36,083</td><td class="text-center" style="background:#d4edda;font-weight:600;">34,623</td></tr>
+                                <tr><td>2024</td><td class="text-center">35,664</td><td class="text-center">35,616</td><td class="text-center" style="background:#d4edda;font-weight:600;">34,389</td></tr>
+                                <tr style="font-weight:bold; background:#f8f8f8;">
+                                    <td>Mean</td>
+                                    <td class="text-center">36,884</td>
+                                    <td class="text-center">36,585</td>
+                                    <td class="text-center" style="background:#28a745;color:white;">35,041</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div style="margin-top:1.5rem; padding:1rem; background:#e8f5e9; border:2px solid #28a745; border-radius:8px;">
+                    <h4 style="color:#155724; margin-bottom:0.5rem;">The Bottom Line</h4>
+                    <ul style="color:#155724; margin-left:1.5rem;">
+                        <li><strong>Pioneer Mean Yield: 257 bu/a</strong> vs Dekalb 249 bu/a (+8 bu/a advantage)</li>
+                        <li><strong>Pioneer Population: 35,041 pl/a</strong> vs Dekalb 36,884 pl/a (1,843 FEWER plants)</li>
+                        <li><strong>2021-2024 Trend:</strong> Pioneer winning by 11-14 bu/a in recent years</li>
+                        <li><strong>Selling Point:</strong> "You can plant 1,800 fewer seeds per acre and STILL beat the competition"</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- CD 2027 Tough Dryland Options -->
+            <div class="section" style="margin-top:1.5rem;">
+                <h2>CD 2027 Tough Dryland Options</h2>
+                <p style="color:#666; margin-bottom:1rem;">All products for tough/dryland acres in District CD - <strong style="color:#dc3545;">Red = Being Discontinued</strong></p>
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:1.5rem;">
+                    <!-- Available Products -->
+                    <div>
+                        <h4 style="color:#28a745; margin-bottom:0.75rem; padding:0.5rem; background:#d4edda; border-radius:4px;">✓ AVAILABLE 2027</h4>
+                        <table style="font-size:0.9rem;">
+                            <tbody>
+                                <tr style="background:#d4edda;"><td style="padding:0.5rem;font-weight:600;">P9845PCE</td><td style="padding:0.5rem;color:#155724;">Top pick</td></tr>
+                                <tr><td style="padding:0.5rem;font-weight:600;">P9845V</td><td style="padding:0.5rem;color:#666;">V option</td></tr>
+                                <tr><td style="padding:0.5rem;font-weight:600;">P00549PCE</td><td style="padding:0.5rem;color:#666;">PCE option</td></tr>
+                                <tr><td style="padding:0.5rem;font-weight:600;">P00549V</td><td style="padding:0.5rem;color:#666;">V option</td></tr>
+                                <tr><td style="padding:0.5rem;font-weight:600;">P03115V</td><td style="padding:0.5rem;color:#666;">Mid-season</td></tr>
+                                <tr><td style="padding:0.5rem;font-weight:600;">P0487PCE</td><td style="padding:0.5rem;color:#666;">PCE option</td></tr>
+                                <tr><td style="padding:0.5rem;font-weight:600;">P10625V</td><td style="padding:0.5rem;color:#666;">Later maturity</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Discontinued Products -->
+                    <div>
+                        <h4 style="color:#dc3545; margin-bottom:0.75rem; padding:0.5rem; background:#f8d7da; border-radius:4px;">✗ BEING DISCONTINUED</h4>
+                        <table style="font-size:0.9rem;">
+                            <tbody>
+                                <tr style="background:#f8d7da;"><td style="padding:0.5rem;font-weight:600;">P0075AM</td><td style="padding:0.5rem;color:#721c24;">Discontinued</td></tr>
+                                <tr style="background:#f8d7da;"><td style="padding:0.5rem;font-weight:600;">P0075Q</td><td style="padding:0.5rem;color:#721c24;">Discontinued</td></tr>
+                                <tr style="background:#f8d7da;"><td style="padding:0.5rem;font-weight:600;">P0487Q</td><td style="padding:0.5rem;color:#721c24;">Discontinued</td></tr>
+                                <tr style="background:#f8d7da;"><td style="padding:0.5rem;font-weight:600;">P0622Q</td><td style="padding:0.5rem;color:#721c24;">Discontinued</td></tr>
+                                <tr style="background:#f8d7da;"><td style="padding:0.5rem;font-weight:600;">P1244AM</td><td style="padding:0.5rem;color:#721c24;">Discontinued</td></tr>
+                                <tr style="background:#f8d7da;"><td style="padding:0.5rem;font-weight:600;">P13476Q</td><td style="padding:0.5rem;color:#721c24;">Discontinued</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div style="margin-top:1rem; padding:0.75rem; background:#fff3cd; border:1px solid #ffc107; border-radius:4px;">
+                    <strong style="color:#856404;">Transition Plan:</strong> <span style="color:#856404;">Move growers from discontinued Q-series and AM products to <strong>P9845PCE</strong>, <strong>P00549 series</strong>, or <strong>P0487PCE</strong>.</span>
+                </div>
+            </div>
+
+            <!-- Lifecycle Planning Section -->
+            <div class="section" style="margin-top:1.5rem;">
+                <h2>Lifecycle Planning - XD Codes</h2>
+                <p style="color:#666; margin-bottom:1rem;">Product exit date codes - plan your transitions accordingly</p>
+
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1rem; margin-bottom:1.5rem;">
+                    <div style="background:#f8d7da; border:2px solid #dc3545; border-radius:8px; padding:1rem;">
+                        <h4 style="color:#721c24; margin-bottom:0.5rem;">XD27 - GONE</h4>
+                        <p style="color:#721c24; margin:0; font-size:0.9rem;"><strong>No volume in 2027 or 2028 DP</strong></p>
+                        <p style="color:#721c24; margin:0.5rem 0 0 0; font-size:0.85rem;">These products are done - transition growers NOW</p>
+                    </div>
+                    <div style="background:#fff3cd; border:2px solid #ffc107; border-radius:8px; padding:1rem;">
+                        <h4 style="color:#856404; margin-bottom:0.5rem;">XD28 - LAST CALL</h4>
+                        <p style="color:#856404; margin:0; font-size:0.9rem;"><strong>No produce - carry-in volume in 2027</strong></p>
+                        <p style="color:#856404; margin:0.5rem 0 0 0; font-size:0.85rem;">No volume in 2028 - use remaining inventory only</p>
+                    </div>
+                    <div style="background:#e8f5e9; border:2px solid #28a745; border-radius:8px; padding:1rem;">
+                        <h4 style="color:#155724; margin-bottom:0.5rem;">XD29 - WINDING DOWN</h4>
+                        <p style="color:#155724; margin:0; font-size:0.9rem;"><strong>Last year of production: 2026</strong></p>
+                        <ul style="color:#155724; margin:0.5rem 0 0 0; font-size:0.85rem; padding-left:1.25rem;">
+                            <li>Volume plan for 2027, 0% DRF</li>
+                            <li>Carry-in for 2028, 0% DRF</li>
+                            <li>No volume in 2029</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div style="padding:1rem; background:#ffe6e6; border:2px solid #dc3545; border-radius:8px;">
+                    <h4 style="color:#dc3545; margin-bottom:0.5rem;">⚠️ IMPORTANT: All AM, AML, and Q Products</h4>
+                    <p style="color:#721c24; margin:0; font-size:0.95rem;"><strong>All AM, AML and Q products should have an XD assigned for 2026.</strong></p>
+                    <p style="color:#721c24; margin:0.5rem 0 0 0; font-size:0.9rem;">Start transitioning these growers to V, PCE, and PCUE trait packages now.</p>
+                </div>
+
+                <!-- NAS YOY Progress - Trait Adoption -->
+                <div style="margin-top:1.5rem; padding:1rem; background:#f8f9fa; border:1px solid #ddd; border-radius:8px;">
+                    <h4 style="color:#1a5f2a; margin-bottom:1rem;">NAS YOY Progress vs DP27 - Trait Transition</h4>
+                    <p style="color:#666; font-size:0.85rem; margin-bottom:1rem;">
+                        <span style="display:inline-block; width:12px; height:12px; background:repeating-linear-gradient(45deg, #ccc, #ccc 2px, #fff 2px, #fff 4px); margin-right:4px; vertical-align:middle;"></span> Hatched = Older traits (Q, AM, AMX) &nbsp;|&nbsp;
+                        <span style="display:inline-block; width:12px; height:12px; background:#1a5f2a; margin-right:4px; vertical-align:middle;"></span> Solid = Newer traits (V, PCE, PCUE)
+                    </p>
+
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:1.5rem;">
+                        <!-- Trait Mix -->
+                        <div>
+                            <h5 style="color:#666; margin-bottom:0.75rem; font-size:0.85rem;">Lifecycle Trait Mix</h5>
+                            <div style="margin-bottom:0.5rem;">
+                                <span style="font-weight:600;">Above/Below (V):</span> <span style="color:#28a745; font-weight:bold;">53%</span> new products
+                            </div>
+                            <div style="margin-bottom:0.5rem;">
+                                <span style="font-weight:600;">Above (PCE):</span> <span style="color:#28a745; font-weight:bold;">53%</span> new products
+                            </div>
+                            <div>
+                                <span style="font-weight:600;">Above-Lep (PCUE):</span> <span style="color:#28a745; font-weight:bold;">53%</span> new products
+                            </div>
+                        </div>
+
+                        <!-- YOY Adoption Rates -->
+                        <div>
+                            <h5 style="color:#666; margin-bottom:0.75rem; font-size:0.85rem;">YOY Adoption Rates</h5>
+                            <div style="background:#d4edda; padding:0.75rem; border-radius:4px; margin-bottom:0.5rem;">
+                                <strong style="color:#155724;">V Adoption:</strong><br>
+                                <span style="font-size:1.25rem; font-weight:bold; color:#155724;">75% DP27</span>
+                                <span style="color:#28a745; font-size:0.9rem;"> (+23% vs DP26)</span>
+                            </div>
+                            <div style="background:#d4edda; padding:0.75rem; border-radius:4px;">
+                                <strong style="color:#155724;">PCE/PCUE Adoption:</strong><br>
+                                <span style="font-size:1.25rem; font-weight:bold; color:#155724;">74% DP27</span>
+                                <span style="color:#28a745; font-size:0.9rem;"> (+24% vs DP26)</span>
+                            </div>
+                        </div>
+
+                        <!-- Demand Split -->
+                        <div>
+                            <h5 style="color:#666; margin-bottom:0.75rem; font-size:0.85rem;">Macro Segment Demand (units)</h5>
+                            <table style="font-size:0.8rem; width:100%;">
+                                <tr><td>Above/Below</td><td class="text-right"><strong>3,436,393</strong></td></tr>
+                                <tr><td>Above w/ Lep</td><td class="text-right"><strong>3,091,028</strong></td></tr>
+                                <tr><td>Above</td><td class="text-right">1,459,293</td></tr>
+                                <tr><td>Herb Resistant</td><td class="text-right">848,200</td></tr>
+                                <tr><td>Conv</td><td class="text-right">492,613</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advancement Overview and Product Retirements -->
+            <div class="section" style="margin-top:1.5rem;">
+                <h2>Advancement Overview & Product Retirements</h2>
+                <p style="color:#666; margin-bottom:1rem;">Strategic direction for 2027 product positioning</p>
+
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:1.5rem;">
+                    <!-- Advancement Strategy -->
+                    <div style="background:#e8f5e9; border-left:4px solid #28a745; padding:1rem; border-radius:0 8px 8px 0;">
+                        <h4 style="color:#155724; margin-bottom:0.75rem;">Advancement Strategy</h4>
+                        <p style="color:#333; font-size:0.9rem; margin-bottom:0.75rem;">Highest impact new tech to replace branded products <em>locally</em></p>
+                        <ul style="color:#333; font-size:0.85rem; margin-left:1.25rem;">
+                            <li><strong>Address true gaps</strong> – MS Drivers</li>
+                            <li><strong>Dominate stress acres</strong> – AQ and '8' DT types:<br>
+                                <span style="color:#1a5f2a; font-weight:600;">P14364 / P11259 / P08215 / P04651 / P03357</span></li>
+                            <li><strong>Silage focus:</strong><br>
+                                <span style="color:#1a5f2a; font-weight:600;">P18216 / P18512 / P14270 / P14744</span></li>
+                        </ul>
+                    </div>
+
+                    <!-- Competitive Targets -->
+                    <div style="background:#fff3cd; border-left:4px solid #ffc107; padding:1rem; border-radius:0 8px 8px 0;">
+                        <h4 style="color:#856404; margin-bottom:0.75rem;">Target Competitors</h4>
+                        <p style="color:#333; font-size:0.9rem; margin-bottom:0.75rem;">Rapidly seek performance solutions to most difficult competitors:</p>
+                        <div style="background:white; padding:0.75rem; border-radius:4px;">
+                            <strong style="color:#dc3545;">DKC Targets:</strong>
+                            <ul style="color:#333; font-size:0.9rem; margin:0.5rem 0 0 1.25rem;">
+                                <li>DKC 101-33</li>
+                                <li>DKC 68-35</li>
+                                <li>DKC 117-78</li>
+                                <li>DKC 114-99</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:1.5rem; margin-top:1.5rem;">
+                    <!-- Balance of Performance -->
+                    <div style="background:#f8f9fa; border-left:4px solid #6c757d; padding:1rem; border-radius:0 8px 8px 0;">
+                        <h4 style="color:#333; margin-bottom:0.75rem;">Balance Performance & Agronomics</h4>
+                        <ul style="color:#333; font-size:0.9rem; margin-left:1.25rem;">
+                            <li><strong>Eliminate high risk agronomics</strong> into large volume districts</li>
+                            <li>Performance curve <strong>outpacing prior advancement classes</strong></li>
+                        </ul>
+                    </div>
+
+                    <!-- Smooth Transition -->
+                    <div style="background:#d4edda; border-left:4px solid #28a745; padding:1rem; border-radius:0 8px 8px 0;">
+                        <h4 style="color:#155724; margin-bottom:0.75rem;">Smooth Transition to Modern Traits</h4>
+                        <ul style="color:#333; font-size:0.9rem; margin-left:1.25rem;">
+                            <li>Bring <strong>elite genetics at elevated pace</strong></li>
+                            <li>Fully supports <strong>trait exit strategy</strong> and meeting timelines</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2027 XD Products Transition Guide -->
+            <div class="section" style="margin-top:1.5rem;">
+                <h2>2027 XD Products - Corn Transition Guide</h2>
+                <p style="color:#666; margin-bottom:0.5rem;"><strong style="color:#dc3545;">Final year of sales: 2026 growing season</strong> - Will NOT be in DP for 2027</p>
+                <p style="color:#666; margin-bottom:1rem; font-size:0.9rem;">Use this table to transition growers from exiting products to go-to replacements</p>
+
+                <div class="data-table-container" style="max-height:none;">
+                    <table style="font-size:0.9rem;">
+                        <thead>
+                            <tr style="background:#f8d7da;">
+                                <th style="color:#721c24;">2027 XD (Exiting)</th>
+                                <th style="color:#155724; background:#d4edda;">Go-to Products (Replacements)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="background:#f8d7da;"><strong>P95819V</strong></td>
+                                <td style="background:#d4edda;">P92399V, P96567V, P9845V</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#f8d7da;"><strong>P0157AMXT</strong></td>
+                                <td style="background:#d4edda;">P99491V, P00549V</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#f8d7da;"><strong>P03951PCE</strong></td>
+                                <td style="background:#d4edda;">P03357PCUE, P03802PCE</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#f8d7da;"><strong>P0622AML</strong></td>
+                                <td style="background:#d4edda;">P05081PCUE, P08215PCUE</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#f8d7da;"><strong>P07340Q</strong></td>
+                                <td style="background:#d4edda;">P05466V, P08527V, P10625V</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#f8d7da;"><strong>P0817Q</strong></td>
+                                <td style="background:#d4edda;">P08527V, P12517V, P12904V</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#f8d7da;"><strong>P0924Q</strong></td>
+                                <td style="background:#d4edda;">P08527V, P10625V</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#f8d7da;"><strong>P1278Q</strong></td>
+                                <td style="background:#d4edda;">P12517V, P12904V, P13777V, P14270V</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#f8d7da;"><strong>P1359 conv</strong></td>
+                                <td style="background:#d4edda;">P13777 conv</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#f8d7da;"><strong>P1366Q</strong></td>
+                                <td style="background:#d4edda;">P12517V, P13777V, P14270V</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#f8d7da;"><strong>P1449AMX</strong></td>
+                                <td style="background:#fff3cd; color:#856404;"><em>Product line exit - no replacement</em></td>
+                            </tr>
+                            <tr>
+                                <td style="background:#f8d7da;"><strong>P2042AML</strong></td>
+                                <td style="background:#d4edda;">P18216PCUE, P18512PCE</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="margin-top:1rem; padding:0.75rem; background:#e8f5e9; border:1px solid #28a745; border-radius:4px;">
+                    <strong style="color:#155724;">Pro Tip:</strong> <span style="color:#155724;">Start transition conversations NOW. Run comparison plots in 2026 to build grower confidence in replacement products.</span>
+                </div>
+            </div>
+
+            <!-- 2028 XD Products Transition Guide -->
+            <div class="section" style="margin-top:1.5rem;">
+                <h2>2028 XD Products - Corn Transition Guide</h2>
+                <p style="color:#666; margin-bottom:0.5rem;"><strong style="color:#ffc107;">Final year of sales: 2027 growing season</strong> - One more DP cycle, no DP for 2028</p>
+                <p style="color:#856404; margin-bottom:1rem; font-size:0.9rem; font-weight:600;">⚠️ DECREASE VOLUME in these products - start transitioning growers now</p>
+
+                <div class="data-table-container" style="max-height:none;">
+                    <table style="font-size:0.9rem;">
+                        <thead>
+                            <tr style="background:#fff3cd;">
+                                <th style="color:#856404;">2028 XD (Winding Down)</th>
+                                <th style="color:#155724; background:#d4edda;">Go-to Products (Replacements)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="background:#fff3cd;"><strong>P9955V</strong></td>
+                                <td style="background:#d4edda;">P9845V, P99491V, P00549V</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#fff3cd;"><strong>P00549PCE</strong></td>
+                                <td style="background:#d4edda;">P9845PCE, P99491PCE, P03802PCE, P03357PCUE</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#fff3cd;"><strong>P0075 conv</strong></td>
+                                <td style="background:#d4edda;">P02405 conv</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#fff3cd;"><strong>P0487Q</strong></td>
+                                <td style="background:#d4edda;">P03115V, P04651V, P05466V</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#fff3cd;"><strong>P05081AML</strong></td>
+                                <td style="background:#d4edda;">P05081PCUE retro</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#fff3cd;"><strong>P0622Q</strong></td>
+                                <td style="background:#d4edda;">P04651V, P05466V, P08527V</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#fff3cd;"><strong>P0859AM</strong></td>
+                                <td style="background:#d4edda;">P08215PCUE, P09076PCE, P10300PCE</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#fff3cd;"><strong>P1244AM</strong></td>
+                                <td style="background:#d4edda;">P08215PCUE, P11259PCE, P12517PCUE</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#fff3cd;"><strong>P12393V</strong></td>
+                                <td style="background:#d4edda;">P12517V, P13777V, P14270V</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#fff3cd;"><strong>P12904AML</strong></td>
+                                <td style="background:#d4edda;">P11259PCE, P12517PCUE, P13777PCUE</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#fff3cd;"><strong>P14830AML</strong></td>
+                                <td style="background:#d4edda;">P13777PCUE, P14270PCE, P14364PCUE</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#fff3cd;"><strong>P1742Q</strong></td>
+                                <td style="background:#d4edda;">P14270V, P15517V, P17677V, P18512V</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#fff3cd;"><strong>P1847AML</strong></td>
+                                <td style="background:#d4edda;">P14364PCUE, P18216PCUE</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="margin-top:1rem; padding:0.75rem; background:#fff3cd; border:1px solid #ffc107; border-radius:4px;">
+                    <strong style="color:#856404;">Action Required:</strong> <span style="color:#856404;">These products have ONE more season. Reduce volume in 2027 orders and actively transition growers to replacements.</span>
+                </div>
+            </div>
+
+            <!-- 2029 XD Products Transition Guide -->
+            <div class="section" style="margin-top:1.5rem;">
+                <h2>2029 XD Products - Corn Transition Guide</h2>
+                <p style="color:#666; margin-bottom:0.5rem;"><strong style="color:#28a745;">Final year of sales: 2028 growing season</strong> - Two more DP cycles, no DP for 2029</p>
+                <p style="color:#155724; margin-bottom:1rem; font-size:0.9rem; font-weight:600;">📉 Start decreasing volumes - DO NOT INCREASE VOLUME on these products</p>
+
+                <div class="data-table-container" style="max-height:none;">
+                    <table style="font-size:0.9rem;">
+                        <thead>
+                            <tr style="background:#d4edda;">
+                                <th style="color:#155724;">2029 XD (Plan Ahead)</th>
+                                <th style="color:#155724;">Go-to Products (Replacements)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="background:#e8f5e9;" rowspan="2"><strong>P0075AM/Q</strong></td>
+                                <td style="background:#f8f9fa;"><strong>P0075AM →</strong> P99491PCE, P03357PCUE, P03802PCE</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#f8f9fa;"><strong>P0075Q →</strong> P99491V, P02405V, P03115V, P04651V</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#e8f5e9;" rowspan="2"><strong>P0487 conv</strong></td>
+                                <td style="background:#f8f9fa;">P05081 conv</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#f8f9fa;">P05081PCUE, P08215PCUE, P09076PCE, P11259PCE</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#e8f5e9;"><strong>P0995AM</strong></td>
+                                <td style="background:#f8f9fa;">P11259PCE, P12517PCUE</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#e8f5e9;"><strong>P1122AML</strong></td>
+                                <td style="background:#f8f9fa;">P12517V, P12904V, P13777V</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#e8f5e9;"><strong>P13476Q</strong></td>
+                                <td style="background:#f8f9fa;">P14364PCUE</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#e8f5e9;"><strong>P1548AM</strong></td>
+                                <td style="background:#f8f9fa;">P14270V, P15517V, P17677V, P18512V</td>
+                            </tr>
+                            <tr>
+                                <td style="background:#e8f5e9;"><strong>P1828Q</strong></td>
+                                <td style="background:#f8f9fa;"><em>See local recommendations</em></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="margin-top:1rem; padding:0.75rem; background:#e8f5e9; border:1px solid #28a745; border-radius:4px;">
+                    <strong style="color:#155724;">Planning Horizon:</strong> <span style="color:#155724;">These products have two seasons remaining. Begin positioning replacement products now to ensure smooth grower transitions.</span>
+                </div>
             </div>
         </div>
     </div>
@@ -1353,14 +2061,40 @@
         }
 
         function predictValue(y2024, y2025, y2026) {
-            if (y2024 && y2025 && y2026) {
-                const growth1 = y2024 > 0 ? (y2025 - y2024) / y2024 : 0;
-                const growth2 = y2025 > 0 ? (y2026 - y2025) / y2025 : 0;
-                const avgGrowth = (growth1 + growth2) / 2;
-                return Math.max(0, Math.round(y2026 * (1 + avgGrowth)));
-            } else if (y2026) return Math.round(y2026 * 1.02);
-            else if (y2025) return Math.round(y2025);
-            else if (y2024) return Math.round(y2024);
+            // Conservative prediction logic - trends should be reasonable, not crazy
+            // Big changes only happen when moving away from hybrids or introducing new ones
+
+            const MAX_GROWTH = 0.25;  // Max 25% increase
+            const MAX_DECLINE = -0.30; // Max 30% decline (for exiting products)
+
+            if (y2026) {
+                // If we have 2026 data, use it as primary basis
+                if (y2025 && y2026) {
+                    // Calculate recent trend from 2025 to 2026
+                    const recentChange = y2025 > 0 ? (y2026 - y2025) / y2025 : 0;
+                    // Clamp the change to reasonable bounds
+                    const clampedChange = Math.max(MAX_DECLINE, Math.min(MAX_GROWTH, recentChange));
+                    // Apply a dampened version of the trend (don't extrapolate aggressively)
+                    const dampedChange = clampedChange * 0.5;
+                    return Math.max(0, Math.round(y2026 * (1 + dampedChange)));
+                }
+                // Only have 2026, assume stable with small increase
+                return Math.round(y2026 * 1.02);
+            } else if (y2025) {
+                // No 2026 data - product may be declining/exiting
+                if (y2024) {
+                    const change = y2024 > 0 ? (y2025 - y2024) / y2024 : 0;
+                    if (change < -0.3) {
+                        // Declining rapidly - likely exiting, project continued decline
+                        return Math.round(y2025 * 0.5);
+                    }
+                }
+                // Assume slight decline if no recent orders
+                return Math.round(y2025 * 0.8);
+            } else if (y2024) {
+                // Only 2024 data - likely exiting hybrid
+                return Math.round(y2024 * 0.3);
+            }
             return 0;
         }
 
