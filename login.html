@@ -130,9 +130,9 @@
         // To change credentials, update the values below:
         // ============================================
         const VALID_CREDENTIALS = [
-            { user: 'pioneer', passHash: '37ae632e6a69b03a2b1a1f06c86e0969' }, // password: forecast2027
+            { user: 'pioneer', pass: 'forecast2027' },
             // Add more users as needed:
-            // { user: 'username', passHash: 'md5-hash-of-password' }
+            // { user: 'username', pass: 'password' }
         ];
 
         // Simple MD5 hash function for password comparison
@@ -251,15 +251,14 @@
 
             const username = document.getElementById('username').value.toLowerCase().trim();
             const password = document.getElementById('password').value;
-            const passwordHash = md5(password);
 
             const validUser = VALID_CREDENTIALS.find(cred =>
-                cred.user.toLowerCase() === username && cred.passHash === passwordHash
+                cred.user.toLowerCase() === username && cred.pass === password
             );
 
             if (validUser) {
                 // Set session token
-                const token = md5(username + Date.now() + Math.random());
+                const token = 'auth_' + Date.now() + '_' + Math.random().toString(36).substr(2);
                 sessionStorage.setItem('pioneer_auth', token);
                 sessionStorage.setItem('pioneer_user', username);
 
