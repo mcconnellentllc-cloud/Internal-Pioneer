@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pioneer 2027 Hybrid Portfolio</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f5f5; }
+
+        .header {
+            background: linear-gradient(135deg, #1a5f2a, #134620);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 { font-size: 1.4rem; }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .btn-primary { background: white; color: #1a5f2a; font-weight: 600; }
+        .btn-secondary { background: rgba(255,255,255,0.2); color: white; }
+        .btn:hover { opacity: 0.9; }
+
+        .container { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
+
+        /* Summary Cards */
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, #1a5f2a, #2d8a42);
+            color: white;
+            padding: 1.25rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .summary-card.blue { background: linear-gradient(135deg, #0056b3, #007bff); }
+        .summary-card.red { background: linear-gradient(135deg, #c82333, #dc3545); }
+        .summary-card.gold { background: linear-gradient(135deg, #d39e00, #ffc107); color: #333; }
+
+        .summary-card .label { font-size: 0.75rem; opacity: 0.9; margin-bottom: 0.25rem; }
+        .summary-card .value { font-size: 1.75rem; font-weight: bold; }
+        .summary-card .sub { font-size: 0.7rem; opacity: 0.8; margin-top: 0.25rem; }
+
+        /* Section */
+        .section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .section h2 {
+            font-size: 1.1rem;
+            color: #1a5f2a;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e8f5e9;
+        }
+
+        /* Hybrid Grid */
+        .hybrid-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .hybrid-item {
+            background: #f8f8f8;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            transition: all 0.2s;
+        }
+
+        .hybrid-item:hover {
+            border-color: #1a5f2a;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .hybrid-item.discontinued {
+            background: #fff5f5;
+            border-color: #dc3545;
+            opacity: 0.7;
+        }
+
+        .hybrid-item.new {
+            background: #f0fff4;
+            border-color: #28a745;
+        }
+
+        .hybrid-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .hybrid-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #1a5f2a;
+        }
+
+        .hybrid-item.discontinued .hybrid-name {
+            color: #dc3545;
+            text-decoration: line-through;
+        }
+
+        .hybrid-badges {
+            display: flex;
+            gap: 0.25rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .badge-crm { background: #007bff; color: white; }
+        .badge-xd { background: #dc3545; color: white; }
+        .badge-new { background: #28a745; color: white; }
+        .badge-aquamax { background: #17a2b8; color: white; }
+        .badge-silage { background: #6c757d; color: white; }
+
+        .hybrid-specs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .spec {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .spec-label { color: #666; }
+        .spec-value { font-weight: 600; color: #333; }
+
+        .hybrid-notes {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 0.75rem;
+            padding: 0.5rem;
+            background: white;
+            border-radius: 4px;
+            max-height: 60px;
+            overflow-y: auto;
+        }
+
+        /* Percentage Slider */
+        .percentage-control {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid #ddd;
+        }
+
+        .percentage-control label {
+            font-size: 0.75rem;
+            color: #666;
+            white-space: nowrap;
+        }
+
+        .percentage-control input[type="range"] {
+            flex: 1;
+            height: 6px;
+            -webkit-appearance: none;
+            background: #ddd;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .percentage-control input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #1a5f2a;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .percentage-value {
+            background: #1a5f2a;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .hybrid-item.discontinued .percentage-value {
+            background: #dc3545;
+        }
+
+        /* Total Bar */
+        .total-bar {
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .total-label {
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .total-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .total-value.over { color: #dc3545; }
+        .total-value.under { color: #ffc107; }
+        .total-value.exact { color: #28a745; }
+
+        .progress-bar-container {
+            flex: 1;
+            margin: 0 2rem;
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #1a5f2a);
+            border-radius: 10px;
+            transition: width 0.3s;
+        }
+
+        .progress-bar.over {
+            background: linear-gradient(90deg, #ffc107, #dc3545);
+        }
+
+        /* Charts Row */
+        .charts-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+        }
+
+        /* Filter */
+        .filter-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-row select, .filter-row input {
+            padding: 0.4rem 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 768px) {
+            .charts-row { grid-template-columns: 1fr; }
+            .hybrid-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Pioneer 2027 Hybrid Portfolio</h1>
+        <div style="display:flex; gap:0.5rem;">
+            <a href="index.html" class="btn btn-secondary" style="text-decoration:none;">Forecast</a>
+            <a href="forecast.html" class="btn btn-secondary" style="text-decoration:none;">Hybrid Details</a>
+            <button class="btn btn-secondary" onclick="resetAllocations()">Reset All</button>
+            <button class="btn btn-primary" onclick="exportAllocations()">Export Plan</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Summary Cards -->
+        <div class="summary-cards">
+            <div class="summary-card">
+                <div class="label">Continuing Hybrids</div>
+                <div class="value" id="continuing-count">0</div>
+                <div class="sub">Available 2027</div>
+            </div>
+            <div class="summary-card blue">
+                <div class="label">New for 2027</div>
+                <div class="value" id="new-count">0</div>
+                <div class="sub">New launches</div>
+            </div>
+            <div class="summary-card red">
+                <div class="label">Discontinued (XD)</div>
+                <div class="value" id="xd-count">0</div>
+                <div class="sub">Not available 2027</div>
+            </div>
+            <div class="summary-card gold">
+                <div class="label">Total 2027 Portfolio</div>
+                <div class="value" id="total-portfolio">0</div>
+                <div class="sub">Hybrids available</div>
+            </div>
+        </div>
+
+        <!-- Total Allocation Bar -->
+        <div class="total-bar">
+            <span class="total-label">Total Business Allocation:</span>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <span class="total-value" id="total-allocation">0%</span>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-row">
+            <div class="section">
+                <h2>Business Allocation by Hybrid</h2>
+                <div class="chart-container">
+                    <canvas id="allocation-chart"></canvas>
+                </div>
+            </div>
+            <div class="section">
+                <h2>Portfolio Composition</h2>
+                <div class="chart-container">
+                    <canvas id="composition-chart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Legend -->
+        <div class="section">
+            <h2>2027 Hybrid Portfolio</h2>
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background:#f8f8f8; border:2px solid #ddd;"></div>
+                    <span>Continuing</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background:#f0fff4; border:2px solid #28a745;"></div>
+                    <span>New for 2027</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background:#fff5f5; border:2px solid #dc3545;"></div>
+                    <span>Discontinued (XD)</span>
+                </div>
+            </div>
+
+            <div class="filter-row">
+                <select id="filter-status" onchange="renderHybrids()">
+                    <option value="all">All Hybrids</option>
+                    <option value="available">Available 2027</option>
+                    <option value="continuing">Continuing</option>
+                    <option value="new">New for 2027</option>
+                    <option value="discontinued">Discontinued (XD)</option>
+                </select>
+                <select id="filter-crm" onchange="renderHybrids()">
+                    <option value="all">All CRM</option>
+                    <option value="early">Early (90-100)</option>
+                    <option value="mid">Mid (100-110)</option>
+                    <option value="full">Full (110+)</option>
+                </select>
+                <input type="text" id="search-hybrid" placeholder="Search hybrid..." oninput="renderHybrids()">
+            </div>
+
+            <div class="hybrid-grid" id="hybrid-grid"></div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // HYBRID DATA - Aggregated from Pioneer Site
+        // ============================================
+        const hybridData = {
+            // DISCONTINUED HYBRIDS (XD) - Not available 2027
+            discontinued: [
+                { name: 'P0157AM', crm: 101, notes: 'Discontinued 2027' },
+                { name: 'P0574AM', crm: 105, notes: 'Discontinued 2027' },
+                { name: 'P0720Q', crm: 107, notes: 'Discontinued 2027' },
+                { name: 'P0075Q', crm: 100, notes: 'Replaced by P04651V' },
+                { name: 'P0487Q', crm: 104, notes: 'Replaced by P04651V, P03802PCE' },
+                { name: 'P0622Q', crm: 106, notes: 'Replaced by newer AML/V options' },
+                { name: 'P0339Q', crm: 103, notes: 'Discontinued 2027' },
+                { name: 'P0924Q', crm: 109, notes: 'Discontinued 2027' },
+                { name: 'P1089AMXT', crm: 110, notes: 'Discontinued 2027' },
+                { name: 'P1278Q', crm: 112, notes: 'Discontinued 2027' },
+                { name: 'P1366Q', crm: 113, notes: 'Discontinued 2027' },
+                { name: 'P1828Q', crm: 118, notes: 'Replaced by P14270V, P15517V' },
+                { name: 'P9489AM', crm: 94, notes: 'Discontinued 2027' },
+                { name: 'P9845AM', crm: 98, notes: 'Replaced by P99491' }
+            ],
+
+            // NEW HYBRIDS FOR 2027
+            new2027: [
+                { name: 'P96567V/PCE', crm: 96, drought: 8, hiYield: '~235', stress: '~200', notes: 'Drought tolerance focus. V/PCE options. Replaces P95819V.', aquamax: false },
+                { name: 'P99491V/PCE', crm: 99, drought: 7, hiYield: '~242', stress: '~208', notes: 'Top Quadrant performer. +15 bu/a vs P00549YHRCE. Replaces P9955V, P00549PCE.', aquamax: false },
+                { name: 'P03802PCE', crm: 103, drought: 7, hiYield: '~244', stress: '~210', notes: 'Top-end yield on better dryland to irrigated. Taller plant. Replaces P03951PCE, P0487PCE.', aquamax: false },
+                { name: 'P04651V', crm: 104, drought: 9, hiYield: '~240', stress: '~205', notes: 'AquaMax Vorceed. Top drought tolerance. 220-250 bu/a environment. Replaces P0075Q, P0487Q, P0622Q.', aquamax: true },
+                { name: 'P08215PCUE', crm: 108, drought: 9, hiYield: '~241', stress: '~168', notes: 'SUPER TOUGH. AquaMax. Best for durability acres. Replaces P0995AM.', aquamax: true },
+                { name: 'P10705V', crm: 110, drought: 7, hiYield: '~250', stress: '~195', notes: 'LIMITED LAUNCH. Full irrigation. Very high yield. Top silage 108-112 CRM. Companion to P10300PCE.', aquamax: false, limited: true },
+                { name: 'P11259PCE', crm: 111, drought: 9, hiYield: '~250', stress: '~162', notes: 'TOP RIGHT ON CHART! AquaMax. Best stress + yield. Going after P1122AML acres.', aquamax: true },
+                { name: 'P14270V/PCE', crm: 114, drought: 8, hiYield: '~240', stress: '~193', notes: 'SILAGE PRODUCT. +2 Goss improvement. Replaces P14830AML, P1828AM. +10.3 bu/a vs P14830AML.', aquamax: false, silage: true },
+                { name: 'P15517V', crm: 115, drought: 5, hiYield: '~235', stress: '~180', notes: 'SILAGE ONLY! High quality silage. Replaces P1828AM. NEEDS WATER - drought is 5!', aquamax: false, silage: true },
+                { name: 'P18512V/PCE', crm: 118, drought: 7, hiYield: '~234', stress: '~185', notes: 'GRAIN product but TOP SILAGE in 112-118 CRM. Dual purpose grain/silage.', aquamax: false, silage: true }
+            ],
+
+            // CONTINUING HYBRIDS (Available 2027)
+            continuing: [
+                { name: 'P0075AM', crm: 100, drought: 7, hiYield: '~230', notes: 'Solid performer. Multiple year history.' },
+                { name: 'P0157AMXT', crm: 101, drought: 7, hiYield: '~235', notes: 'AMXT technology. Good yield stability.' },
+                { name: 'P03115V', crm: 103, drought: 7, hiYield: '~238', notes: 'Vorceed option. Companion to P04651V.' },
+                { name: 'P03357PCUE', crm: 103, drought: 7, hiYield: '~240', notes: 'PCUE tech. Companion to P03802PCE, P04651V.' },
+                { name: 'P05081AML', crm: 105, drought: 8, hiYield: '~242', notes: '90% PCUE, 10% AML volume for 2027.' },
+                { name: 'P05466V', crm: 105, drought: 7, hiYield: '~240', notes: 'Vorceed. Good dryland to irrigation.' },
+                { name: 'P0622AML', crm: 106, drought: 7, hiYield: '~238', notes: 'Strong performer. Multiple year success.' },
+                { name: 'P07340Q', crm: 107, drought: 6, hiYield: '~235', notes: 'Q technology option.' },
+                { name: 'P0817Q', crm: 108, drought: 6, hiYield: '~235', notes: 'Q technology.' },
+                { name: 'P08527V', crm: 108, drought: 7, hiYield: '~240', notes: 'Vorceed. Excellent 2025 observations.' },
+                { name: 'P0859AM', crm: 108, drought: 7, hiYield: '~238', notes: 'AM technology. Reliable performer.' },
+                { name: 'P0908AML', crm: 109, drought: 7, hiYield: '~236', notes: 'AML technology option.' },
+                { name: 'P0995AM', crm: 109, drought: 7, hiYield: '~238', notes: 'Targeted replacement by P08215PCUE.' },
+                { name: 'P10300PCE', crm: 110, drought: 7, hiYield: '~242', notes: 'PCE tech. Companion to P10705V.' },
+                { name: 'P10625V', crm: 110, drought: 8, hiYield: '~245', notes: 'Vorceed. Companion to P10705V.' },
+                { name: 'P1122AML', crm: 111, drought: 7, hiYield: '~242', notes: 'Strong volume. P11259PCE targeting these acres.' },
+                { name: 'P1151AM', crm: 111, drought: 7, hiYield: '~240', notes: 'AM technology. Multiple year performer.' },
+                { name: 'P12393V', crm: 112, drought: 7, hiYield: '~238', notes: 'Vorceed option.' },
+                { name: 'P1244AM', crm: 112, drought: 7, hiYield: '~240', notes: 'AM technology.' },
+                { name: 'P12517V', crm: 112, drought: 8, hiYield: '~248', notes: 'LOVES OUR AREA! Major player. +10 bu/a over P10705V.' },
+                { name: 'P12904V/AML', crm: 112, drought: 7, hiYield: '~240', notes: 'Dual tech options available.' },
+                { name: 'P13777V', crm: 113, drought: 7, hiYield: '~242', notes: 'Vorceed. P14270V is more stable.' },
+                { name: 'P13777PCUE', crm: 113, drought: 7, hiYield: '~242', notes: 'PCUE option available.' },
+                { name: 'P1366AML', crm: 113, drought: 6, hiYield: '~238', notes: 'AML technology.' },
+                { name: 'P14364PCUE', crm: 114, drought: 7, hiYield: '~240', notes: 'Companion to P14270.' },
+                { name: 'P14830AML', crm: 114, drought: 6, hiYield: '~235', notes: 'Being replaced by P14270. -10.3 bu/a vs P14270.' },
+                { name: 'P1413AM', crm: 114, drought: 6, hiYield: '~235', notes: 'AM technology.' },
+                { name: 'P1548AM', crm: 115, drought: 6, hiYield: '~238', notes: 'Full season AM option.' }
+            ]
+        };
+
+        // State
+        let allocations = {};
+        let charts = {};
+
+        // Initialize allocations
+        function initAllocations() {
+            const saved = localStorage.getItem('hybridAllocations');
+            if (saved) {
+                allocations = JSON.parse(saved);
+            } else {
+                [...hybridData.discontinued, ...hybridData.new2027, ...hybridData.continuing].forEach(h => {
+                    allocations[h.name] = 0;
+                });
+            }
+        }
+
+        function saveAllocations() {
+            localStorage.setItem('hybridAllocations', JSON.stringify(allocations));
+        }
+
+        // Render functions
+        function renderSummary() {
+            const continuingCount = hybridData.continuing.length;
+            const newCount = hybridData.new2027.length;
+            const xdCount = hybridData.discontinued.length;
+            const totalPortfolio = continuingCount + newCount;
+
+            document.getElementById('continuing-count').textContent = continuingCount;
+            document.getElementById('new-count').textContent = newCount;
+            document.getElementById('xd-count').textContent = xdCount;
+            document.getElementById('total-portfolio').textContent = totalPortfolio;
+        }
+
+        function renderTotalAllocation() {
+            let total = 0;
+            // Only count non-discontinued hybrids
+            [...hybridData.new2027, ...hybridData.continuing].forEach(h => {
+                total += allocations[h.name] || 0;
+            });
+
+            const progressBar = document.getElementById('progress-bar');
+            const totalValue = document.getElementById('total-allocation');
+
+            progressBar.style.width = Math.min(total, 100) + '%';
+            totalValue.textContent = total.toFixed(1) + '%';
+
+            if (total > 100) {
+                progressBar.classList.add('over');
+                totalValue.classList.add('over');
+                totalValue.classList.remove('under', 'exact');
+            } else if (total === 100) {
+                progressBar.classList.remove('over');
+                totalValue.classList.add('exact');
+                totalValue.classList.remove('over', 'under');
+            } else {
+                progressBar.classList.remove('over');
+                totalValue.classList.add('under');
+                totalValue.classList.remove('over', 'exact');
+            }
+        }
+
+        function renderHybrids() {
+            const statusFilter = document.getElementById('filter-status').value;
+            const crmFilter = document.getElementById('filter-crm').value;
+            const search = document.getElementById('search-hybrid').value.toLowerCase();
+
+            const grid = document.getElementById('hybrid-grid');
+            let html = '';
+
+            // Helper to filter
+            function filterHybrid(h) {
+                if (search && !h.name.toLowerCase().includes(search)) return false;
+                if (crmFilter !== 'all') {
+                    if (crmFilter === 'early' && (h.crm < 90 || h.crm >= 100)) return false;
+                    if (crmFilter === 'mid' && (h.crm < 100 || h.crm >= 110)) return false;
+                    if (crmFilter === 'full' && h.crm < 110) return false;
+                }
+                return true;
+            }
+
+            // Render discontinued
+            if (statusFilter === 'all' || statusFilter === 'discontinued') {
+                hybridData.discontinued.filter(filterHybrid).forEach(h => {
+                    html += renderHybridCard(h, 'discontinued');
+                });
+            }
+
+            // Render new
+            if (statusFilter === 'all' || statusFilter === 'available' || statusFilter === 'new') {
+                hybridData.new2027.filter(filterHybrid).forEach(h => {
+                    html += renderHybridCard(h, 'new');
+                });
+            }
+
+            // Render continuing
+            if (statusFilter === 'all' || statusFilter === 'available' || statusFilter === 'continuing') {
+                hybridData.continuing.filter(filterHybrid).forEach(h => {
+                    html += renderHybridCard(h, 'continuing');
+                });
+            }
+
+            grid.innerHTML = html || '<p style="color:#666; grid-column: 1/-1; text-align:center;">No hybrids match your filters.</p>';
+        }
+
+        function renderHybridCard(hybrid, type) {
+            const isDiscontinued = type === 'discontinued';
+            const isNew = type === 'new';
+            const allocation = allocations[hybrid.name] || 0;
+
+            let badges = `<span class="badge badge-crm">${hybrid.crm} CRM</span>`;
+            if (isDiscontinued) badges += '<span class="badge badge-xd">XD</span>';
+            if (isNew) badges += '<span class="badge badge-new">NEW</span>';
+            if (hybrid.aquamax) badges += '<span class="badge badge-aquamax">AquaMax</span>';
+            if (hybrid.silage) badges += '<span class="badge badge-silage">SILAGE</span>';
+            if (hybrid.limited) badges += '<span class="badge" style="background:#ffc107;color:#333;">LIMITED</span>';
+
+            let specs = '';
+            if (hybrid.drought) specs += `<div class="spec"><span class="spec-label">Drought:</span><span class="spec-value">${hybrid.drought}</span></div>`;
+            if (hybrid.hiYield) specs += `<div class="spec"><span class="spec-label">Hi-Yield:</span><span class="spec-value">${hybrid.hiYield}</span></div>`;
+            if (hybrid.stress) specs += `<div class="spec"><span class="spec-label">Stress:</span><span class="spec-value">${hybrid.stress}</span></div>`;
+
+            return `
+                <div class="hybrid-item ${isDiscontinued ? 'discontinued' : ''} ${isNew ? 'new' : ''}">
+                    <div class="hybrid-header">
+                        <span class="hybrid-name">${hybrid.name}</span>
+                        <div class="hybrid-badges">${badges}</div>
+                    </div>
+                    ${specs ? `<div class="hybrid-specs">${specs}</div>` : ''}
+                    <div class="hybrid-notes">${hybrid.notes || ''}</div>
+                    <div class="percentage-control">
+                        <label>% of Business:</label>
+                        <input type="range" min="0" max="50" step="0.5" value="${allocation}"
+                               onchange="updateAllocation('${hybrid.name}', this.value)"
+                               oninput="updateSliderDisplay('${hybrid.name}', this.value)"
+                               ${isDiscontinued ? 'disabled' : ''}>
+                        <span class="percentage-value" id="pct-${hybrid.name.replace(/[^a-zA-Z0-9]/g, '')}">${allocation.toFixed(1)}%</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateSliderDisplay(name, value) {
+            const id = 'pct-' + name.replace(/[^a-zA-Z0-9]/g, '');
+            document.getElementById(id).textContent = parseFloat(value).toFixed(1) + '%';
+        }
+
+        function updateAllocation(name, value) {
+            allocations[name] = parseFloat(value);
+            saveAllocations();
+            renderTotalAllocation();
+            renderCharts();
+        }
+
+        function resetAllocations() {
+            if (confirm('Reset all business allocations to 0%?')) {
+                Object.keys(allocations).forEach(k => allocations[k] = 0);
+                saveAllocations();
+                renderHybrids();
+                renderTotalAllocation();
+                renderCharts();
+            }
+        }
+
+        function renderCharts() {
+            // Destroy existing
+            Object.values(charts).forEach(c => c.destroy());
+            charts = {};
+
+            // Get allocated hybrids
+            const allocated = [];
+            [...hybridData.new2027, ...hybridData.continuing].forEach(h => {
+                if (allocations[h.name] > 0) {
+                    allocated.push({ name: h.name, value: allocations[h.name], isNew: hybridData.new2027.some(n => n.name === h.name) });
+                }
+            });
+
+            // Sort by value
+            allocated.sort((a, b) => b.value - a.value);
+
+            // Allocation chart
+            const colors = allocated.map(a => a.isNew ? '#28a745' : '#1a5f2a');
+            charts.allocation = new Chart(document.getElementById('allocation-chart'), {
+                type: 'bar',
+                data: {
+                    labels: allocated.map(a => a.name),
+                    datasets: [{
+                        label: '% of Business',
+                        data: allocated.map(a => a.value),
+                        backgroundColor: colors
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { max: 50, title: { display: true, text: 'Percentage' } }
+                    }
+                }
+            });
+
+            // Composition chart
+            const newTotal = hybridData.new2027.reduce((sum, h) => sum + (allocations[h.name] || 0), 0);
+            const continuingTotal = hybridData.continuing.reduce((sum, h) => sum + (allocations[h.name] || 0), 0);
+            const unallocated = Math.max(0, 100 - newTotal - continuingTotal);
+
+            charts.composition = new Chart(document.getElementById('composition-chart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['New 2027 Hybrids', 'Continuing Hybrids', 'Unallocated'],
+                    datasets: [{
+                        data: [newTotal, continuingTotal, unallocated],
+                        backgroundColor: ['#28a745', '#1a5f2a', '#e9ecef']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        function exportAllocations() {
+            let csv = 'Hybrid,CRM,Status,Allocation %\n';
+
+            hybridData.discontinued.forEach(h => {
+                csv += `"${h.name}",${h.crm},Discontinued (XD),0\n`;
+            });
+
+            hybridData.new2027.forEach(h => {
+                csv += `"${h.name}",${h.crm},New 2027,${allocations[h.name] || 0}\n`;
+            });
+
+            hybridData.continuing.forEach(h => {
+                csv += `"${h.name}",${h.crm},Continuing,${allocations[h.name] || 0}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'pioneer_2027_hybrid_allocation.csv';
+            a.click();
+        }
+
+        // Initialize
+        initAllocations();
+        renderSummary();
+        renderHybrids();
+        renderTotalAllocation();
+        renderCharts();
+    </script>
+</body>
+</html>
