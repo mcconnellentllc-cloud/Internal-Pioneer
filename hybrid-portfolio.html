@@ -415,19 +415,54 @@
             </div>
         </div>
 
-        <!-- CACTUS PROGRAM - NEW HYBRIDS -->
+        <!-- CACTUS PROGRAM - TOUGH DRYLAND OFFER -->
         <div class="cactus-section">
             <div class="cactus-header">
-                <h3>2027 CACTUS Program - New Hybrid Requests</h3>
-                <span class="cactus-badge">PLOT SET AVAILABLE</span>
+                <h3>2026 CACTUS - Tough Dryland Offer</h3>
+                <span class="cactus-badge">WESTERN CORN DISCOUNTS</span>
             </div>
-            <p style="color:#6f42c1; font-size:0.85rem; margin-bottom:1rem;">Enter the number of bags you want to request for each new 2027 hybrid. These are additional units from your plot set allocation.</p>
+            <p style="color:#6f42c1; font-size:0.85rem; margin-bottom:1rem;">
+                <strong>Purpose:</strong> Better value proposition for dryland acres. Blend CACTUS products with leader products to maximize yield potential and soften seed costs.
+            </p>
 
-            <div class="cactus-grid" id="cactus-grid"></div>
+            <div style="overflow-x:auto; margin-bottom:1rem;">
+                <table class="data-table" id="cactus-table">
+                    <thead>
+                        <tr style="background:#6f42c1;">
+                            <th>Product</th>
+                            <th>CRM</th>
+                            <th>Discount</th>
+                            <th>Invoicing</th>
+                            <th>2026 Invoiced</th>
+                            <th>Additional Ask</th>
+                            <th>Total Request</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cactus-table-body"></tbody>
+                    <tfoot>
+                        <tr style="background:#6f42c1; color:white; font-weight:bold;">
+                            <td colspan="4"><strong>TOTALS</strong></td>
+                            <td id="cactus-total-2026">0</td>
+                            <td id="cactus-total-ask">0</td>
+                            <td id="cactus-total-request">0</td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
 
-            <div class="cactus-total">
-                <div class="label">Total CACTUS Bag Requests</div>
-                <div class="value" id="cactus-total-bags">0</div>
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:1rem;">
+                <div class="cactus-total" style="margin:0;">
+                    <div class="label">2026 Invoiced</div>
+                    <div class="value" id="cactus-invoiced-display">0</div>
+                </div>
+                <div class="cactus-total" style="margin:0; background:#28a745;">
+                    <div class="label">Additional Warehouse Ask</div>
+                    <div class="value" id="cactus-ask-display">0</div>
+                </div>
+                <div class="cactus-total" style="margin:0; background:#007bff;">
+                    <div class="label">Total CACTUS Units</div>
+                    <div class="value" id="cactus-total-bags">0</div>
+                </div>
             </div>
         </div>
 
@@ -531,18 +566,16 @@
             { hybrid: 'P1548AM', bags: 180, crm: 115 }
         ];
 
-        // CACTUS Program - Brand New 2027 Hybrids
+        // CACTUS Program - Tough Dryland Offer Products (2026)
+        // These are the products with Western Corn Discounts for dryland acres
         const cactusHybrids = [
-            { name: 'P96567V', crm: 96, notes: 'Drought focus' },
-            { name: 'P99491V', crm: 99, notes: 'Top Quadrant' },
-            { name: 'P03802PCE', crm: 103, notes: 'Top-end yield' },
-            { name: 'P04651V', crm: 104, notes: 'AquaMax' },
-            { name: 'P08215PCUE', crm: 108, notes: 'SUPER TOUGH' },
-            { name: 'P10705V', crm: 110, notes: 'LIMITED' },
-            { name: 'P11259PCE', crm: 111, notes: 'AquaMax Top' },
-            { name: 'P14270V', crm: 114, notes: 'Silage' },
-            { name: 'P15517V', crm: 115, notes: 'Silage Only' },
-            { name: 'P18512V', crm: 118, notes: 'Dual Purpose' }
+            { name: 'P9845PCE', crm: 98, discount: '≤ $30', invoicing: 'Regular', bags2026: 66 },
+            { name: 'P0075AM', crm: 100, discount: '≤ $20', invoicing: 'Regular', bags2026: 320 },
+            { name: 'P0157AMXT', crm: 101, discount: '≤ 45%', invoicing: 'Other', bags2026: 77 },
+            { name: 'P0487Q', crm: 104, discount: '≤ $75', invoicing: 'Regular', bags2026: 0 },
+            { name: 'P0622Q', crm: 106, discount: 'NEW', invoicing: 'Regular', bags2026: 0 },
+            { name: 'P1244AM', crm: 112, discount: '≤ 32%', invoicing: 'Other', bags2026: 15 },
+            { name: 'P13476Q', crm: 113, discount: 'NEW', invoicing: 'Regular', bags2026: 0 }
         ];
 
         // All 2027 hybrids for allocation
@@ -643,40 +676,63 @@
             document.getElementById('locked-2026-body').innerHTML = html;
         }
 
-        // Render CACTUS Section
+        // Render CACTUS Section (Table format)
         function renderCactusSection() {
             let html = '';
+            let total2026 = 0;
+            let totalAsk = 0;
+
             cactusHybrids.forEach(h => {
+                const ask = cactusRequests[h.name] || 0;
+                const totalRequest = h.bags2026 + ask;
+                total2026 += h.bags2026;
+                totalAsk += ask;
+
                 html += `
-                    <div class="cactus-item">
-                        <h4>${h.name}</h4>
-                        <div class="crm">${h.crm} CRM - ${h.notes}</div>
-                        <div class="cactus-input">
-                            <label>Bags:</label>
-                            <input type="number" min="0" max="500" value="${cactusRequests[h.name] || 0}"
-                                   onchange="updateCactus('${h.name}', this.value)">
-                        </div>
-                    </div>
+                    <tr>
+                        <td><strong>${h.name}</strong></td>
+                        <td>${h.crm}</td>
+                        <td style="color:#28a745; font-weight:600;">${h.discount}</td>
+                        <td>${h.invoicing}</td>
+                        <td style="background:#f8f9fa;">${h.bags2026 > 0 ? h.bags2026.toLocaleString() : '-'}</td>
+                        <td>
+                            <input type="number" min="0" max="500" value="${ask}"
+                                   onchange="updateCactus('${h.name}', this.value)"
+                                   style="width:70px; padding:0.25rem; border:2px solid #c4b5fd; border-radius:4px; text-align:center; font-weight:bold;">
+                        </td>
+                        <td style="background:#e9d5ff; font-weight:bold;">${totalRequest > 0 ? totalRequest.toLocaleString() : '-'}</td>
+                    </tr>
                 `;
             });
-            document.getElementById('cactus-grid').innerHTML = html;
+
+            document.getElementById('cactus-table-body').innerHTML = html;
+            document.getElementById('cactus-total-2026').textContent = total2026.toLocaleString();
+            document.getElementById('cactus-total-ask').textContent = totalAsk.toLocaleString();
+            document.getElementById('cactus-total-request').textContent = (total2026 + totalAsk).toLocaleString();
+
             updateCactusTotal();
         }
 
         function updateCactus(name, value) {
             cactusRequests[name] = parseInt(value) || 0;
-            bagCounts[name] = cactusRequests[name];
             saveData();
-            updateCactusTotal();
+            renderCactusSection(); // Re-render to update totals
             updateSummary();
-            renderExportTable();
-            renderCharts();
         }
 
         function updateCactusTotal() {
-            const total = Object.values(cactusRequests).reduce((sum, v) => sum + v, 0);
-            document.getElementById('cactus-total-bags').textContent = total.toLocaleString();
-            document.getElementById('cactus-units').textContent = total.toLocaleString();
+            let total2026 = 0;
+            let totalAsk = 0;
+
+            cactusHybrids.forEach(h => {
+                total2026 += h.bags2026;
+                totalAsk += cactusRequests[h.name] || 0;
+            });
+
+            document.getElementById('cactus-invoiced-display').textContent = total2026.toLocaleString();
+            document.getElementById('cactus-ask-display').textContent = totalAsk.toLocaleString();
+            document.getElementById('cactus-total-bags').textContent = (total2026 + totalAsk).toLocaleString();
+            document.getElementById('cactus-units').textContent = totalAsk.toLocaleString();
         }
 
         // Render Allocation Grid
