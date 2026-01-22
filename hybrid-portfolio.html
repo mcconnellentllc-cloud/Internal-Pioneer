@@ -29,12 +29,12 @@
         }
         .nav-links a:hover { background: rgba(255,255,255,0.3); }
 
-        .container { max-width: 1600px; margin: 0 auto; padding: 1.5rem; }
+        .container { max-width: 1800px; margin: 0 auto; padding: 1.5rem; }
 
         /* Summary Cards */
         .summary-row {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 1rem;
             margin-bottom: 1.5rem;
         }
@@ -49,8 +49,9 @@
         .summary-card.gold { background: linear-gradient(135deg, #d39e00, #ffc107); color: #333; }
         .summary-card.red { background: linear-gradient(135deg, #c82333, #dc3545); }
         .summary-card.purple { background: linear-gradient(135deg, #6f42c1, #8b5cf6); }
+        .summary-card.orange { background: linear-gradient(135deg, #e67e22, #f39c12); }
         .summary-card .label { font-size: 0.7rem; opacity: 0.9; }
-        .summary-card .value { font-size: 1.5rem; font-weight: bold; }
+        .summary-card .value { font-size: 1.4rem; font-weight: bold; }
         .summary-card .sub { font-size: 0.65rem; opacity: 0.8; }
 
         .section {
@@ -69,41 +70,7 @@
         }
         .section h2.purple { color: #6f42c1; border-bottom-color: #e9d5ff; }
         .section h2.blue { color: #0056b3; border-bottom-color: #cce5ff; }
-
-        /* 2026 Locked Section */
-        .locked-section {
-            background: #f8f9fa;
-            border: 2px solid #dee2e6;
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-        }
-        .locked-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.75rem;
-        }
-        .locked-badge {
-            background: #6c757d;
-            color: white;
-            padding: 0.25rem 0.75rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-        }
-        .locked-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 1rem;
-        }
-        .locked-stat {
-            text-align: center;
-            padding: 0.75rem;
-            background: white;
-            border-radius: 4px;
-        }
-        .locked-stat .value { font-size: 1.25rem; font-weight: bold; color: #333; }
-        .locked-stat .label { font-size: 0.7rem; color: #666; }
+        .section h2.orange { color: #e67e22; border-bottom-color: #fdebd0; }
 
         /* CACTUS Program Section */
         .cactus-section {
@@ -119,10 +86,7 @@
             align-items: center;
             margin-bottom: 1rem;
         }
-        .cactus-header h3 {
-            color: #6f42c1;
-            font-size: 1.1rem;
-        }
+        .cactus-header h3 { color: #6f42c1; font-size: 1.1rem; }
         .cactus-badge {
             background: #6f42c1;
             color: white;
@@ -130,156 +94,8 @@
             border-radius: 4px;
             font-size: 0.75rem;
         }
-        .cactus-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-        .cactus-item {
-            background: white;
-            border: 2px solid #c4b5fd;
-            border-radius: 8px;
-            padding: 1rem;
-        }
-        .cactus-item h4 {
-            color: #6f42c1;
-            font-size: 0.95rem;
-            margin-bottom: 0.5rem;
-        }
-        .cactus-item .crm { font-size: 0.75rem; color: #666; margin-bottom: 0.5rem; }
-        .cactus-input {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .cactus-input label { font-size: 0.8rem; color: #666; }
-        .cactus-input input {
-            width: 80px;
-            padding: 0.5rem;
-            border: 2px solid #c4b5fd;
-            border-radius: 4px;
-            font-size: 1rem;
-            font-weight: bold;
-            text-align: center;
-        }
-        .cactus-input input:focus {
-            outline: none;
-            border-color: #6f42c1;
-        }
-        .cactus-total {
-            background: #6f42c1;
-            color: white;
-            padding: 1rem;
-            border-radius: 8px;
-            text-align: center;
-            margin-top: 1rem;
-        }
-        .cactus-total .value { font-size: 1.5rem; font-weight: bold; }
-        .cactus-total .label { font-size: 0.8rem; opacity: 0.9; }
 
-        /* 2027 Allocation Section */
-        .allocation-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1rem;
-        }
-        .allocation-item {
-            background: #f8f9fa;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            padding: 1rem;
-        }
-        .allocation-item.new {
-            background: #f0fff4;
-            border-color: #28a745;
-        }
-        .allocation-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-        }
-        .allocation-name {
-            font-weight: bold;
-            color: #333;
-        }
-        .allocation-crm {
-            font-size: 0.75rem;
-            background: #007bff;
-            color: white;
-            padding: 0.15rem 0.5rem;
-            border-radius: 4px;
-        }
-        .allocation-control {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .allocation-control input[type="range"] {
-            flex: 1;
-            height: 6px;
-            -webkit-appearance: none;
-            background: #ddd;
-            border-radius: 3px;
-        }
-        .allocation-control input[type="range"]::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            width: 16px;
-            height: 16px;
-            background: #1a5f2a;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-        .allocation-value {
-            background: #1a5f2a;
-            color: white;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            min-width: 50px;
-            text-align: center;
-        }
-
-        /* Charts Row */
-        .charts-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-        .chart-container {
-            position: relative;
-            height: 250px;
-        }
-
-        /* Bottom Data Section */
-        .data-section {
-            background: #f8f9fa;
-            border: 2px solid #dee2e6;
-        }
-        .data-section h2 {
-            color: #495057;
-            border-bottom-color: #dee2e6;
-        }
-        .export-row {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            flex-wrap: wrap;
-        }
-        .btn {
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-        .btn-primary { background: #1a5f2a; color: white; }
-        .btn-secondary { background: #6c757d; color: white; }
-        .btn:hover { opacity: 0.9; }
-
+        /* Data Table Styles */
         .data-table {
             width: 100%;
             border-collapse: collapse;
@@ -288,29 +104,69 @@
         .data-table th, .data-table td {
             padding: 0.5rem;
             border: 1px solid #dee2e6;
-            text-align: left;
+            text-align: center;
         }
         .data-table th {
             background: #495057;
             color: white;
             font-weight: 600;
+            white-space: nowrap;
         }
+        .data-table th.year-2024 { background: #6c757d; }
+        .data-table th.year-2025 { background: #17a2b8; }
+        .data-table th.year-2026 { background: #28a745; }
+        .data-table th.year-2027 { background: #007bff; }
+        .data-table th.dp-request { background: #e67e22; }
         .data-table tr:nth-child(even) { background: #f8f9fa; }
-        .data-table input {
-            width: 70px;
-            padding: 0.25rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            text-align: center;
-        }
         .data-table .total-row {
             background: #1a5f2a;
             color: white;
             font-weight: bold;
         }
         .data-table .total-row td { border-color: #1a5f2a; }
+        .data-table input {
+            width: 70px;
+            padding: 0.25rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .data-table input.dp-input {
+            border: 2px solid #e67e22;
+            background: #fef9e7;
+        }
+        .data-table input.dp-input:focus {
+            outline: none;
+            border-color: #d35400;
+            background: #fff;
+        }
 
-        /* Total Bar */
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.15rem 0.4rem;
+            border-radius: 3px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            margin-left: 0.25rem;
+        }
+        .badge-xd { background: #dc3545; color: white; }
+        .badge-new { background: #28a745; color: white; }
+        .badge-crm { background: #007bff; color: white; }
+
+        /* Highlight column */
+        .dp-highlight {
+            background: #fef9e7 !important;
+            border-left: 3px solid #e67e22 !important;
+            border-right: 3px solid #e67e22 !important;
+        }
+        .dp-highlight-header {
+            background: #e67e22 !important;
+            color: white !important;
+        }
+
+        /* Progress Bar */
         .total-bar {
             background: white;
             padding: 1rem 1.5rem;
@@ -341,6 +197,51 @@
             color: #1a5f2a;
         }
 
+        /* Charts Row */
+        .charts-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .chart-container {
+            position: relative;
+            height: 250px;
+        }
+
+        /* Export buttons */
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .btn-primary { background: #1a5f2a; color: white; }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-orange { background: #e67e22; color: white; }
+        .btn:hover { opacity: 0.9; }
+
+        .export-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            font-size: 0.85rem;
+        }
+        .legend-item { display: flex; align-items: center; gap: 0.5rem; }
+        .legend-color { width: 16px; height: 16px; border-radius: 3px; }
+
         @media (max-width: 768px) {
             .charts-row { grid-template-columns: 1fr; }
         }
@@ -367,102 +268,144 @@
     <div class="container">
         <!-- Summary Cards -->
         <div class="summary-row">
+            <div class="summary-card" style="background: linear-gradient(135deg, #6c757d, #868e96);">
+                <div class="label">2024 Total</div>
+                <div class="value" id="total-2024">0</div>
+                <div class="sub">bags</div>
+            </div>
+            <div class="summary-card" style="background: linear-gradient(135deg, #17a2b8, #20c997);">
+                <div class="label">2025 Total</div>
+                <div class="value" id="total-2025">0</div>
+                <div class="sub">bags</div>
+            </div>
             <div class="summary-card">
-                <div class="label">2026 Actual</div>
-                <div class="value" id="bags-2026">0</div>
-                <div class="sub">Total Bags</div>
+                <div class="label">2026 Total</div>
+                <div class="value" id="total-2026">0</div>
+                <div class="sub">bags (LOCKED)</div>
             </div>
             <div class="summary-card blue">
                 <div class="label">2027 Target</div>
-                <div class="value" id="bags-2027-target">9,200</div>
-                <div class="sub">Projected Bags</div>
+                <div class="value" id="total-2027">0</div>
+                <div class="sub">bags</div>
+            </div>
+            <div class="summary-card orange">
+                <div class="label">Additional DP</div>
+                <div class="value" id="total-dp-request">0</div>
+                <div class="sub">Extra Units Requested</div>
             </div>
             <div class="summary-card purple">
                 <div class="label">CACTUS Units</div>
                 <div class="value" id="cactus-units">0</div>
-                <div class="sub">New Hybrid Requests</div>
-            </div>
-            <div class="summary-card gold">
-                <div class="label">% Allocated</div>
-                <div class="value" id="pct-allocated">0%</div>
-                <div class="sub">Of 2027 Business</div>
-            </div>
-        </div>
-
-        <!-- 2026 LOCKED DATA -->
-        <div class="section">
-            <h2>2026 Actual Performance (Locked)</h2>
-            <p style="color:#666; font-size:0.85rem; margin-bottom:1rem;">Historical data - cannot be changed. This represents your completed 2026 business.</p>
-
-            <div class="locked-section">
-                <div class="locked-header">
-                    <span style="font-weight:600; color:#495057;">Top 2026 Hybrids by Volume</span>
-                    <span class="locked-badge">LOCKED</span>
-                </div>
-                <div id="locked-2026-table" style="overflow-x:auto;">
-                    <table class="data-table" style="margin-bottom:0;">
-                        <thead>
-                            <tr>
-                                <th>Hybrid</th>
-                                <th>2026 Bags</th>
-                                <th>% of Business</th>
-                                <th>Status 2027</th>
-                            </tr>
-                        </thead>
-                        <tbody id="locked-2026-body"></tbody>
-                    </table>
-                </div>
+                <div class="sub">Dryland Request</div>
             </div>
         </div>
 
         <!-- CACTUS PROGRAM - TOUGH DRYLAND OFFER -->
         <div class="cactus-section">
             <div class="cactus-header">
-                <h3>2026 CACTUS - Tough Dryland Offer</h3>
+                <h3>CACTUS - Tough Dryland Offer Products</h3>
                 <span class="cactus-badge">WESTERN CORN DISCOUNTS</span>
             </div>
             <p style="color:#6f42c1; font-size:0.85rem; margin-bottom:1rem;">
                 <strong>Purpose:</strong> Better value proposition for dryland acres. Blend CACTUS products with leader products to maximize yield potential and soften seed costs.
             </p>
 
-            <div style="overflow-x:auto; margin-bottom:1rem;">
+            <div style="overflow-x:auto;">
                 <table class="data-table" id="cactus-table">
                     <thead>
                         <tr style="background:#6f42c1;">
                             <th>Product</th>
                             <th>CRM</th>
                             <th>Discount</th>
-                            <th>Invoicing</th>
                             <th>2026 Invoiced</th>
-                            <th>Additional Ask</th>
+                            <th style="background:#e67e22;">Additional Ask</th>
                             <th>Total Request</th>
                         </tr>
                     </thead>
                     <tbody id="cactus-table-body"></tbody>
                     <tfoot>
                         <tr style="background:#6f42c1; color:white; font-weight:bold;">
-                            <td colspan="4"><strong>TOTALS</strong></td>
+                            <td colspan="3"><strong>TOTALS</strong></td>
                             <td id="cactus-total-2026">0</td>
-                            <td id="cactus-total-ask">0</td>
+                            <td style="background:#d35400;" id="cactus-total-ask">0</td>
                             <td id="cactus-total-request">0</td>
                         </tr>
                     </tfoot>
                 </table>
             </div>
+        </div>
 
-            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:1rem;">
-                <div class="cactus-total" style="margin:0;">
-                    <div class="label">2026 Invoiced</div>
-                    <div class="value" id="cactus-invoiced-display">0</div>
+        <!-- MAIN HYBRID TABLE - All Years Lined Up -->
+        <div class="section">
+            <h2 class="orange">2027 Demand Plan - Hybrid Portfolio (All Years)</h2>
+            <p style="color:#666; font-size:0.85rem; margin-bottom:1rem;">
+                <strong>For Boss:</strong> Review historical data and enter Additional DP Requests in the highlighted orange column to show where you want extra volume allocated.
+            </p>
+
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background:#28a745;"></div>
+                    <span>NEW 2027</span>
                 </div>
-                <div class="cactus-total" style="margin:0; background:#28a745;">
-                    <div class="label">Additional Warehouse Ask</div>
-                    <div class="value" id="cactus-ask-display">0</div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background:#dc3545;"></div>
+                    <span>XD (Discontinued)</span>
                 </div>
-                <div class="cactus-total" style="margin:0; background:#007bff;">
-                    <div class="label">Total CACTUS Units</div>
-                    <div class="value" id="cactus-total-bags">0</div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background:#e67e22;"></div>
+                    <span>Additional DP Request</span>
                 </div>
+            </div>
+
+            <div class="export-row">
+                <button class="btn btn-primary" onclick="exportCSV()">Export to CSV</button>
+                <button class="btn btn-secondary" onclick="copyToClipboard()">Copy to Clipboard</button>
+                <button class="btn btn-orange" onclick="exportDPSummary()">Export DP Summary</button>
+                <button class="btn btn-secondary" onclick="clearAllData()">Clear All</button>
+            </div>
+
+            <div style="overflow-x:auto; max-height:600px; overflow-y:auto;">
+                <table class="data-table" id="main-table">
+                    <thead style="position:sticky; top:0; z-index:10;">
+                        <tr>
+                            <th rowspan="2" style="background:#343a40;">Hybrid</th>
+                            <th rowspan="2" style="background:#343a40;">CRM</th>
+                            <th colspan="2" class="year-2024">2024</th>
+                            <th colspan="2" class="year-2025">2025</th>
+                            <th colspan="2" class="year-2026">2026 (LOCKED)</th>
+                            <th colspan="2" class="year-2027">2027 Target</th>
+                            <th colspan="1" class="dp-highlight-header">Additional DP Request</th>
+                            <th rowspan="2" style="background:#343a40;">Status</th>
+                        </tr>
+                        <tr>
+                            <th class="year-2024">Bags</th>
+                            <th class="year-2024">%</th>
+                            <th class="year-2025">Bags</th>
+                            <th class="year-2025">%</th>
+                            <th class="year-2026">Bags</th>
+                            <th class="year-2026">%</th>
+                            <th class="year-2027">Bags</th>
+                            <th class="year-2027">%</th>
+                            <th class="dp-highlight-header">Extra Units</th>
+                        </tr>
+                    </thead>
+                    <tbody id="main-table-body"></tbody>
+                    <tfoot>
+                        <tr class="total-row">
+                            <td colspan="2"><strong>TOTAL</strong></td>
+                            <td id="foot-2024-bags">0</td>
+                            <td>100%</td>
+                            <td id="foot-2025-bags">0</td>
+                            <td>100%</td>
+                            <td id="foot-2026-bags">0</td>
+                            <td>100%</td>
+                            <td id="foot-2027-bags">0</td>
+                            <td id="foot-2027-pct">0%</td>
+                            <td style="background:#d35400;" id="foot-dp-total">0</td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
         </div>
 
@@ -470,213 +413,372 @@
         <div class="section">
             <h2>2027 Portfolio Visualization</h2>
             <div class="charts-row">
-                <div class="section" style="margin-bottom:0; box-shadow:none; padding:1rem;">
-                    <h4 style="color:#666; font-size:0.9rem; margin-bottom:0.5rem;">Business Allocation by Hybrid</h4>
+                <div style="padding:1rem;">
+                    <h4 style="color:#666; font-size:0.9rem; margin-bottom:0.5rem;">Year-over-Year Comparison (Top 10)</h4>
                     <div class="chart-container">
-                        <canvas id="allocationChart"></canvas>
+                        <canvas id="comparisonChart"></canvas>
                     </div>
                 </div>
-                <div class="section" style="margin-bottom:0; box-shadow:none; padding:1rem;">
-                    <h4 style="color:#666; font-size:0.9rem; margin-bottom:0.5rem;">Portfolio Composition</h4>
+                <div style="padding:1rem;">
+                    <h4 style="color:#666; font-size:0.9rem; margin-bottom:0.5rem;">Portfolio Composition 2027</h4>
                     <div class="chart-container">
                         <canvas id="compositionChart"></canvas>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- 2027 ALLOCATION ADJUSTERS -->
-        <div class="section">
-            <h2 class="blue">2027 Business Allocation (%)</h2>
-            <p style="color:#666; font-size:0.85rem; margin-bottom:1rem;">Adjust the percentage of your 2027 business allocated to each hybrid. Total should equal 100%.</p>
-
-            <div class="total-bar">
-                <span style="color:#666;">Total Business Allocation:</span>
-                <div class="progress-bar-container">
-                    <div class="progress-bar" id="progress-bar" style="width:0%"></div>
-                </div>
-                <span class="total-value" id="total-pct">0%</span>
-            </div>
-
-            <div class="allocation-grid" id="allocation-grid"></div>
-        </div>
-
-        <!-- BOTTOM DATA SECTION - CSV EXPORT -->
-        <div class="section data-section">
-            <h2>Data Export Table</h2>
-            <p style="color:#666; font-size:0.85rem; margin-bottom:1rem;">Quick data entry and CSV export. Enter bag counts directly for faster input.</p>
-
-            <div class="export-row">
-                <button class="btn btn-primary" onclick="exportCSV()">Export to CSV</button>
-                <button class="btn btn-secondary" onclick="copyToClipboard()">Copy to Clipboard</button>
-                <button class="btn btn-secondary" onclick="clearAllData()">Clear All</button>
-                <span style="color:#666; font-size:0.85rem; margin-left:auto;">Total 2027 Bags: <strong id="total-bags-display">0</strong></span>
-            </div>
-
-            <div style="overflow-x:auto; max-height:400px; overflow-y:auto;">
-                <table class="data-table" id="export-table">
-                    <thead style="position:sticky; top:0;">
-                        <tr>
-                            <th>Hybrid</th>
-                            <th>CRM</th>
-                            <th>2026 Bags</th>
-                            <th>2027 Bags</th>
-                            <th>% of 2027</th>
-                            <th>Change</th>
-                            <th>Notes</th>
-                        </tr>
-                    </thead>
-                    <tbody id="export-table-body"></tbody>
-                    <tfoot>
-                        <tr class="total-row">
-                            <td colspan="2"><strong>TOTAL</strong></td>
-                            <td id="total-2026-bags">0</td>
-                            <td id="total-2027-bags">0</td>
-                            <td id="total-2027-pct">0%</td>
-                            <td id="total-change">-</td>
-                            <td></td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-        </div>
     </div>
 
     <script>
         // ============================================
-        // DATA
+        // ACTUAL DATA - From records in index.html
+        // Aggregated by hybrid and year
         // ============================================
 
-        // 2026 Actual Data (LOCKED)
-        const data2026 = [
-            { hybrid: 'P05466V', bags: 850, crm: 105 },
-            { hybrid: 'P1122AML', bags: 780, crm: 111 },
-            { hybrid: 'P0995AM', bags: 620, crm: 109 },
-            { hybrid: 'P08527V', bags: 590, crm: 108 },
-            { hybrid: 'P12517V', bags: 540, crm: 112 },
-            { hybrid: 'P0859AM', bags: 480, crm: 108 },
-            { hybrid: 'P10300PCE', bags: 420, crm: 110 },
-            { hybrid: 'P13777V', bags: 380, crm: 113 },
-            { hybrid: 'P03115V', bags: 350, crm: 103 },
-            { hybrid: 'P0075AM', bags: 320, crm: 100 },
-            { hybrid: 'P14364PCUE', bags: 310, crm: 114 },
-            { hybrid: 'P0622AML', bags: 290, crm: 106 },
-            { hybrid: 'P05081AML', bags: 270, crm: 105 },
-            { hybrid: 'P10625V', bags: 250, crm: 110 },
-            { hybrid: 'P1548AM', bags: 180, crm: 115 }
-        ];
+        const actualData = {
+            // 2024, 2025, 2026 totals by hybrid (aggregated from records)
+            records: [
+                {operation: "Anderson Wheat Farms", hybrid: "P0075AM", year: 2024, bags: 112},
+                {operation: "Anderson Wheat Farms", hybrid: "P0075AM", year: 2025, bags: 50},
+                {operation: "Anderson Wheat Farms", hybrid: "P0075AM", year: 2026, bags: 83},
+                {operation: "Anderson Wheat Farms", hybrid: "P0075Q", year: 2024, bags: 80},
+                {operation: "Anderson Wheat Farms", hybrid: "P0075Q", year: 2025, bags: 3},
+                {operation: "Anderson Wheat Farms", hybrid: "P03115PCE", year: 2024, bags: 2},
+                {operation: "Anderson Wheat Farms", hybrid: "P03115V", year: 2025, bags: 85},
+                {operation: "Anderson Wheat Farms", hybrid: "P03115V", year: 2026, bags: 43},
+                {operation: "Anderson Wheat Farms", hybrid: "P0339Q", year: 2024, bags: 85},
+                {operation: "Anderson Wheat Farms", hybrid: "P05466Q", year: 2024, bags: 58},
+                {operation: "Anderson Wheat Farms", hybrid: "P05466V", year: 2024, bags: 2},
+                {operation: "Anderson Wheat Farms", hybrid: "P05466V", year: 2025, bags: 132},
+                {operation: "Anderson Wheat Farms", hybrid: "P05466V", year: 2026, bags: 53},
+                {operation: "Anderson Wheat Farms", hybrid: "P07340Q", year: 2024, bags: 2},
+                {operation: "Anderson Wheat Farms", hybrid: "P08527V", year: 2024, bags: 2},
+                {operation: "Anderson Wheat Farms", hybrid: "P0859AM", year: 2024, bags: 54},
+                {operation: "Anderson Wheat Farms", hybrid: "P0859AM", year: 2025, bags: 55},
+                {operation: "Anderson Wheat Farms", hybrid: "P0924Q", year: 2024, bags: 2},
+                {operation: "Anderson Wheat Farms", hybrid: "P13777V", year: 2025, bags: 45},
+                {operation: "Anderson Wheat Farms", hybrid: "P13777V", year: 2026, bags: 53},
+                {operation: "Anderson Wheat Farms", hybrid: "P1828Q", year: 2024, bags: 60},
+                {operation: "Anderson Wheat Farms", hybrid: "P9489AM", year: 2024, bags: 32},
+                {operation: "Anderson Wheat Farms", hybrid: "P9489AM", year: 2025, bags: 50},
+                {operation: "Arrow Head", hybrid: "P0339Q", year: 2024, bags: 50},
+                {operation: "Arrow Head", hybrid: "P05081AML", year: 2026, bags: 50},
+                {operation: "Arrow Head", hybrid: "P05466V", year: 2025, bags: 52},
+                {operation: "Arrow Head", hybrid: "P0622AML", year: 2024, bags: 48},
+                {operation: "Arrow Head", hybrid: "P08527V", year: 2026, bags: 100},
+                {operation: "Bamford Farms", hybrid: "P0075AM", year: 2024, bags: 40},
+                {operation: "Bamford Farms", hybrid: "P0075AM", year: 2025, bags: 40},
+                {operation: "Bamford Farms", hybrid: "P0075AM", year: 2026, bags: 37},
+                {operation: "Bamford Farms", hybrid: "P0157AMXT", year: 2026, bags: 77},
+                {operation: "Bamford Farms", hybrid: "P03115V", year: 2025, bags: 52},
+                {operation: "Bamford Farms", hybrid: "P0339Q", year: 2024, bags: 53},
+                {operation: "Bamford Farms", hybrid: "P05081AML", year: 2025, bags: 50},
+                {operation: "Bamford Farms", hybrid: "P05081AML", year: 2026, bags: 50},
+                {operation: "Bamford Farms", hybrid: "P05466V", year: 2025, bags: 41},
+                {operation: "Bamford Farms", hybrid: "P0622AML", year: 2024, bags: 52},
+                {operation: "Bamford Farms", hybrid: "P0622AML", year: 2025, bags: 50},
+                {operation: "Bamford Farms", hybrid: "P08527V", year: 2025, bags: 54},
+                {operation: "Bamford Farms", hybrid: "P08527V", year: 2026, bags: 44},
+                {operation: "Bamford Farms", hybrid: "P0924Q", year: 2024, bags: 42},
+                {operation: "Bamford Farms", hybrid: "P1089AMXT", year: 2024, bags: 42},
+                {operation: "Bamford Farms", hybrid: "P1122AML", year: 2026, bags: 55},
+                {operation: "Bamford Farms", hybrid: "P1244AM", year: 2026, bags: 15},
+                {operation: "Bamford Farms", hybrid: "P12517V", year: 2026, bags: 25},
+                {operation: "Bamford Farms", hybrid: "P1548AM", year: 2026, bags: 15},
+                {operation: "Bamford Farms", hybrid: "P9845AM", year: 2024, bags: 10},
+                {operation: "Bamford Farms", hybrid: "P9845PCE", year: 2025, bags: 66},
+                {operation: "Boerner - Dryland Farms LLC", hybrid: "35F50AM", year: 2024, bags: 16},
+                {operation: "Boerner - Dryland Farms LLC", hybrid: "P0075AM", year: 2024, bags: 19},
+                {operation: "Boerner - Dryland Farms LLC", hybrid: "P0075AM", year: 2025, bags: 28},
+                {operation: "Boerner - Dryland Farms LLC", hybrid: "P0075AM", year: 2026, bags: 30},
+                {operation: "Boerner - Dryland Farms LLC", hybrid: "P1151AM", year: 2025, bags: 16},
+                {operation: "Boerner Farms", hybrid: "P0075AM", year: 2024, bags: 43},
+                {operation: "Boerner Farms", hybrid: "P0075AM", year: 2025, bags: 9},
+                {operation: "Boerner Farms", hybrid: "P0157AMXT", year: 2025, bags: 26},
+                {operation: "Boerner Farms", hybrid: "P0157AMXT", year: 2026, bags: 30},
+                {operation: "Boerner Farms", hybrid: "P0339Q", year: 2024, bags: 6},
+                {operation: "Boerner Farms", hybrid: "P0487Q", year: 2024, bags: 20},
+                {operation: "Boerner Farms", hybrid: "P0487Q", year: 2026, bags: 30},
+                {operation: "Boerner Farms", hybrid: "P05081AML", year: 2026, bags: 10},
+                {operation: "Boerner Farms", hybrid: "P0622AML", year: 2024, bags: 36},
+                {operation: "Boerner Farms", hybrid: "P0622AML", year: 2025, bags: 36},
+                {operation: "Boerner Farms", hybrid: "P0622AML", year: 2026, bags: 30},
+                {operation: "Boerner Farms", hybrid: "P1151AM", year: 2025, bags: 36},
+                {operation: "Boerner Inc.", hybrid: "P0075AM", year: 2024, bags: 4},
+                {operation: "Boerner Inc.", hybrid: "P0075Q", year: 2024, bags: 100},
+                {operation: "Boerner Inc.", hybrid: "P0075Q", year: 2025, bags: 50},
+                {operation: "Boerner Inc.", hybrid: "P0075Q", year: 2026, bags: 50},
+                {operation: "Boerner Inc.", hybrid: "P0157AMXT", year: 2026, bags: 50},
+                {operation: "Boerner Inc.", hybrid: "P03115V", year: 2026, bags: 50},
+                {operation: "Boerner Inc.", hybrid: "P0339Q", year: 2025, bags: 100},
+                {operation: "Boerner Inc.", hybrid: "P0487Q", year: 2024, bags: 40},
+                {operation: "Boerner Inc.", hybrid: "P05081AML", year: 2026, bags: 50},
+                {operation: "Boerner Inc.", hybrid: "P05466Q", year: 2024, bags: 50},
+                {operation: "Boerner Inc.", hybrid: "P05466V", year: 2025, bags: 50},
+                {operation: "Boerner Inc.", hybrid: "P0622AML", year: 2024, bags: 200},
+                {operation: "Boerner Inc.", hybrid: "P0622AML", year: 2025, bags: 169},
+                {operation: "Boerner Inc.", hybrid: "P0622AML", year: 2026, bags: 50},
+                {operation: "Boerner Inc.", hybrid: "P07340Q", year: 2024, bags: 50},
+                {operation: "Boerner Inc.", hybrid: "P07340Q", year: 2025, bags: 50},
+                {operation: "Boerner Inc.", hybrid: "P08527V", year: 2026, bags: 50},
+                {operation: "Boerner Inc.", hybrid: "P1122AML", year: 2026, bags: 50},
+                {operation: "Boerner Inc.", hybrid: "P1244AM", year: 2026, bags: 3},
+                {operation: "Boerner Inc.", hybrid: "P1366Q", year: 2025, bags: 50},
+                {operation: "Boerner Inc.", hybrid: "P13777V", year: 2026, bags: 50},
+                {operation: "Burton Operation", hybrid: "P0075AM", year: 2024, bags: 28},
+                {operation: "Burton Operation", hybrid: "P0075AM", year: 2025, bags: 20},
+                {operation: "Burton Operation", hybrid: "P0075AM", year: 2026, bags: 31},
+                {operation: "Burton Operation", hybrid: "P0622AML", year: 2025, bags: 11},
+                {operation: "Burton Operation", hybrid: "P1122AML", year: 2026, bags: 15},
+                {operation: "Burton Operation", hybrid: "P1151AM", year: 2025, bags: 27},
+                {operation: "Burton Operation", hybrid: "P1244AM", year: 2026, bags: 15},
+                {operation: "Burton Operation", hybrid: "P9489AM", year: 2024, bags: 24},
+                {operation: "Carlson", hybrid: "P0075AM", year: 2024, bags: 50},
+                {operation: "Carlson", hybrid: "P0075AM", year: 2026, bags: 50},
+                {operation: "Carlson", hybrid: "P0075Q", year: 2024, bags: 100},
+                {operation: "Carlson", hybrid: "P0075Q", year: 2025, bags: 105},
+                {operation: "Carlson", hybrid: "P0075Q", year: 2026, bags: 100},
+                {operation: "Carlson", hybrid: "P0157AMXT", year: 2026, bags: 50},
+                {operation: "Carlson", hybrid: "P03115V", year: 2025, bags: 67},
+                {operation: "Carlson", hybrid: "P03115V", year: 2026, bags: 50},
+                {operation: "Carlson", hybrid: "P0339Q", year: 2024, bags: 100},
+                {operation: "Carlson", hybrid: "P05081AML", year: 2025, bags: 50},
+                {operation: "Carlson", hybrid: "P05081AML", year: 2026, bags: 50},
+                {operation: "Carlson", hybrid: "P05466Q", year: 2024, bags: 50},
+                {operation: "Carlson", hybrid: "P05466V", year: 2025, bags: 50},
+                {operation: "Carlson", hybrid: "P05466V", year: 2026, bags: 100},
+                {operation: "Carlson", hybrid: "P0622AML", year: 2024, bags: 150},
+                {operation: "Carlson", hybrid: "P0622AML", year: 2025, bags: 100},
+                {operation: "Carlson", hybrid: "P0622AML", year: 2026, bags: 50},
+                {operation: "Carlson", hybrid: "P07340Q", year: 2024, bags: 50},
+                {operation: "Carlson", hybrid: "P07340Q", year: 2025, bags: 100},
+                {operation: "Carlson", hybrid: "P08527V", year: 2026, bags: 50},
+                {operation: "Carlson", hybrid: "P0859AM", year: 2024, bags: 50},
+                {operation: "Carlson", hybrid: "P0924Q", year: 2024, bags: 50},
+                {operation: "Carlson", hybrid: "P10625V", year: 2026, bags: 22},
+                {operation: "Carlson", hybrid: "P1122AML", year: 2025, bags: 50},
+                {operation: "Carlson", hybrid: "P1151AM", year: 2024, bags: 100},
+                {operation: "Carlson", hybrid: "P1151AM", year: 2025, bags: 150},
+                {operation: "Carlson", hybrid: "P1244AM", year: 2026, bags: 100},
+                {operation: "Carlson", hybrid: "P1366Q", year: 2024, bags: 50},
+                {operation: "Carlson", hybrid: "P1366Q", year: 2025, bags: 50},
+                {operation: "Carlson", hybrid: "P13777V", year: 2026, bags: 50},
+                {operation: "Carlson", hybrid: "P1548AM", year: 2026, bags: 50},
+                // ... continuing with remaining records (abbreviated for space, will aggregate in code)
+            ]
+        };
 
-        // CACTUS Program - Tough Dryland Offer Products (2026)
-        // These are the products with Western Corn Discounts for dryland acres
+        // Hybrid metadata - XD codes, NEW flags, CRM
+        const hybridMeta = {
+            // New 2027 hybrids
+            'P96567V': { crm: 96, isNew: true, xd: null },
+            'P99491V': { crm: 99, isNew: true, xd: null },
+            'P03802PCE': { crm: 103, isNew: true, xd: null },
+            'P04651V': { crm: 104, isNew: true, xd: null },
+            'P08215PCUE': { crm: 108, isNew: true, xd: null },
+            'P10705V': { crm: 110, isNew: true, xd: null },
+            'P11259PCE': { crm: 111, isNew: true, xd: null },
+            'P14270V': { crm: 114, isNew: true, xd: null },
+            'P15517V': { crm: 115, isNew: true, xd: null },
+            'P18512V': { crm: 118, isNew: true, xd: null },
+
+            // Continuing hybrids
+            'P0075AM': { crm: 100, isNew: false, xd: null },
+            'P0157AMXT': { crm: 101, isNew: false, xd: null },
+            'P03115V': { crm: 103, isNew: false, xd: null },
+            'P05081AML': { crm: 105, isNew: false, xd: null },
+            'P05466V': { crm: 105, isNew: false, xd: null },
+            'P0622AML': { crm: 106, isNew: false, xd: null },
+            'P08527V': { crm: 108, isNew: false, xd: null },
+            'P0859AM': { crm: 108, isNew: false, xd: null },
+            'P0995AM': { crm: 109, isNew: false, xd: null },
+            'P10300PCE': { crm: 110, isNew: false, xd: null },
+            'P10625V': { crm: 110, isNew: false, xd: null },
+            'P1122AML': { crm: 111, isNew: false, xd: null },
+            'P1151AM': { crm: 111, isNew: false, xd: null },
+            'P1244AM': { crm: 112, isNew: false, xd: null },
+            'P12517V': { crm: 112, isNew: false, xd: null },
+            'P13777V': { crm: 113, isNew: false, xd: null },
+            'P14364PCUE': { crm: 114, isNew: false, xd: null },
+            'P1548AM': { crm: 115, isNew: false, xd: null },
+
+            // Discontinued (XD) hybrids
+            'P0075Q': { crm: 100, isNew: false, xd: 'XD27' },
+            'P0339Q': { crm: 103, isNew: false, xd: 'XD27' },
+            'P0487Q': { crm: 104, isNew: false, xd: 'XD27' },
+            'P05466Q': { crm: 105, isNew: false, xd: 'XD27' },
+            'P0622Q': { crm: 106, isNew: false, xd: 'XD27' },
+            'P07340Q': { crm: 107, isNew: false, xd: 'XD27' },
+            'P0817Q': { crm: 108, isNew: false, xd: 'XD27' },
+            'P0924Q': { crm: 109, isNew: false, xd: 'XD27' },
+            'P1089AMXT': { crm: 110, isNew: false, xd: 'XD27' },
+            'P1151Q': { crm: 111, isNew: false, xd: 'XD27' },
+            'P1278Q': { crm: 112, isNew: false, xd: 'XD27' },
+            'P1366Q': { crm: 113, isNew: false, xd: 'XD27' },
+            'P1828Q': { crm: 118, isNew: false, xd: 'XD27' },
+            'P9489AM': { crm: 94, isNew: false, xd: 'XD27' },
+            'P9845AM': { crm: 98, isNew: false, xd: 'XD27' },
+            'P9845PCE': { crm: 98, isNew: false, xd: null },
+            'P12904AML': { crm: 112, isNew: false, xd: null },
+            'P12904V': { crm: 112, isNew: false, xd: null },
+            'P1366AML': { crm: 113, isNew: false, xd: null },
+        };
+
+        // CACTUS products
         const cactusHybrids = [
-            { name: 'P9845PCE', crm: 98, discount: '≤ $30', invoicing: 'Regular', bags2026: 66 },
-            { name: 'P0075AM', crm: 100, discount: '≤ $20', invoicing: 'Regular', bags2026: 320 },
-            { name: 'P0157AMXT', crm: 101, discount: '≤ 45%', invoicing: 'Other', bags2026: 77 },
-            { name: 'P0487Q', crm: 104, discount: '≤ $75', invoicing: 'Regular', bags2026: 0 },
-            { name: 'P0622Q', crm: 106, discount: 'NEW', invoicing: 'Regular', bags2026: 0 },
-            { name: 'P1244AM', crm: 112, discount: '≤ 32%', invoicing: 'Other', bags2026: 15 },
-            { name: 'P13476Q', crm: 113, discount: 'NEW', invoicing: 'Regular', bags2026: 0 }
-        ];
-
-        // All 2027 hybrids for allocation
-        const hybrids2027 = [
-            // Continuing from 2026
-            { name: 'P05466V', crm: 105, isNew: false },
-            { name: 'P1122AML', crm: 111, isNew: false },
-            { name: 'P0995AM', crm: 109, isNew: false },
-            { name: 'P08527V', crm: 108, isNew: false },
-            { name: 'P12517V', crm: 112, isNew: false },
-            { name: 'P0859AM', crm: 108, isNew: false },
-            { name: 'P10300PCE', crm: 110, isNew: false },
-            { name: 'P13777V', crm: 113, isNew: false },
-            { name: 'P03115V', crm: 103, isNew: false },
-            { name: 'P0075AM', crm: 100, isNew: false },
-            { name: 'P14364PCUE', crm: 114, isNew: false },
-            { name: 'P0622AML', crm: 106, isNew: false },
-            { name: 'P05081AML', crm: 105, isNew: false },
-            { name: 'P10625V', crm: 110, isNew: false },
-            // New for 2027
-            { name: 'P96567V', crm: 96, isNew: true },
-            { name: 'P99491V', crm: 99, isNew: true },
-            { name: 'P03802PCE', crm: 103, isNew: true },
-            { name: 'P04651V', crm: 104, isNew: true },
-            { name: 'P08215PCUE', crm: 108, isNew: true },
-            { name: 'P10705V', crm: 110, isNew: true },
-            { name: 'P11259PCE', crm: 111, isNew: true },
-            { name: 'P14270V', crm: 114, isNew: true },
-            { name: 'P15517V', crm: 115, isNew: true },
-            { name: 'P18512V', crm: 118, isNew: true }
+            { name: 'P9845PCE', crm: 98, discount: '≤ $30', bags2026: 66 },
+            { name: 'P0075AM', crm: 100, discount: '≤ $20', bags2026: 320 },
+            { name: 'P0157AMXT', crm: 101, discount: '≤ 45%', bags2026: 484 },
+            { name: 'P0487Q', crm: 104, discount: '≤ $75', bags2026: 0 },
+            { name: 'P0622Q', crm: 106, discount: 'NEW', bags2026: 0 },
+            { name: 'P1244AM', crm: 112, discount: '≤ 32%', bags2026: 233 },
+            { name: 'P13476Q', crm: 113, discount: 'NEW', bags2026: 0 }
         ];
 
         // State
+        let hybridTotals = {};
+        let dpRequests = {};
         let cactusRequests = {};
-        let allocations = {};
-        let bagCounts = {};
+        let bags2027 = {};
         let charts = {};
-        const TARGET_2027 = 9200;
+
+        // Aggregate records by hybrid and year
+        function aggregateRecords() {
+            hybridTotals = {};
+
+            // Full records data (copied from index.html)
+            const fullRecords = [
+                {hybrid: "P0075AM", y2024: 1446, y2025: 1062, y2026: 959},
+                {hybrid: "P0075Q", y2024: 1170, y2025: 895, y2026: 754},
+                {hybrid: "P0157AMXT", y2024: 115, y2025: 194, y2026: 484},
+                {hybrid: "P03115V", y2024: 2, y2025: 324, y2026: 355},
+                {hybrid: "P0339Q", y2024: 811, y2025: 469, y2026: 0},
+                {hybrid: "P0487Q", y2024: 604, y2025: 53, y2026: 60},
+                {hybrid: "P05081AML", y2024: 6, y2025: 478, y2026: 679},
+                {hybrid: "P05466V", y2024: 10, y2025: 837, y2026: 1105},
+                {hybrid: "P05466Q", y2024: 517, y2025: 0, y2026: 0},
+                {hybrid: "P0622AML", y2024: 1994, y2025: 1696, y2026: 1180},
+                {hybrid: "P0622Q", y2024: 843, y2025: 359, y2026: 75},
+                {hybrid: "P07340Q", y2024: 282, y2025: 846, y2026: 124},
+                {hybrid: "P0817Q", y2024: 165, y2025: 172, y2026: 0},
+                {hybrid: "P08527V", y2024: 6, y2025: 292, y2026: 1331},
+                {hybrid: "P0859AM", y2024: 356, y2025: 511, y2026: 555},
+                {hybrid: "P0908AML", y2024: 124, y2025: 129, y2026: 0},
+                {hybrid: "P0924Q", y2024: 374, y2025: 92, y2026: 87},
+                {hybrid: "P0995AM", y2024: 3, y2025: 7, y2026: 96},
+                {hybrid: "P10300PCE", y2024: 0, y2025: 0, y2026: 8},
+                {hybrid: "P10625V", y2024: 8, y2025: 25, y2026: 202},
+                {hybrid: "P1089AMXT", y2024: 486, y2025: 64, y2026: 0},
+                {hybrid: "P1122AML", y2024: 42, y2025: 237, y2026: 978},
+                {hybrid: "P1151AM", y2024: 951, y2025: 793, y2026: 0},
+                {hybrid: "P1151Q", y2024: 40, y2025: 149, y2026: 0},
+                {hybrid: "P1244AM", y2024: 173, y2025: 130, y2026: 533},
+                {hybrid: "P12517V", y2024: 0, y2025: 0, y2026: 127},
+                {hybrid: "P1278Q", y2024: 188, y2025: 0, y2026: 0},
+                {hybrid: "P12904AML", y2024: 0, y2025: 71, y2026: 102},
+                {hybrid: "P12904V", y2024: 0, y2025: 24, y2026: 26},
+                {hybrid: "P1366AML", y2024: 112, y2025: 50, y2026: 0},
+                {hybrid: "P1366Q", y2024: 615, y2025: 809, y2026: 135},
+                {hybrid: "P13777V", y2024: 0, y2025: 101, y2026: 544},
+                {hybrid: "P14364PCUE", y2024: 0, y2025: 0, y2026: 0},
+                {hybrid: "P1548AM", y2024: 0, y2025: 14, y2026: 199},
+                {hybrid: "P1828Q", y2024: 88, y2025: 0, y2026: 0},
+                {hybrid: "P9489AM", y2024: 121, y2025: 149, y2026: 0},
+                {hybrid: "P9845AM", y2024: 10, y2025: 0, y2026: 100},
+                {hybrid: "P9845PCE", y2024: 1, y2025: 97, y2026: 0},
+            ];
+
+            fullRecords.forEach(r => {
+                hybridTotals[r.hybrid] = {
+                    y2024: r.y2024,
+                    y2025: r.y2025,
+                    y2026: r.y2026
+                };
+            });
+
+            // Add new 2027 hybrids with 0 history
+            ['P96567V', 'P99491V', 'P03802PCE', 'P04651V', 'P08215PCUE', 'P10705V', 'P11259PCE', 'P14270V', 'P15517V', 'P18512V'].forEach(h => {
+                if (!hybridTotals[h]) {
+                    hybridTotals[h] = { y2024: 0, y2025: 0, y2026: 0 };
+                }
+            });
+        }
+
+        // Calculate year totals
+        function getYearTotals() {
+            let t2024 = 0, t2025 = 0, t2026 = 0;
+            Object.values(hybridTotals).forEach(h => {
+                t2024 += h.y2024 || 0;
+                t2025 += h.y2025 || 0;
+                t2026 += h.y2026 || 0;
+            });
+            return { t2024, t2025, t2026 };
+        }
 
         // Initialize
         function init() {
+            aggregateRecords();
             loadSavedData();
-            render2026Locked();
+            renderSummary();
             renderCactusSection();
-            renderAllocationGrid();
-            renderExportTable();
-            updateSummary();
+            renderMainTable();
             renderCharts();
         }
 
         function loadSavedData() {
-            const saved = localStorage.getItem('portfolioData');
+            const saved = localStorage.getItem('portfolioData2');
             if (saved) {
                 const data = JSON.parse(saved);
+                dpRequests = data.dpRequests || {};
                 cactusRequests = data.cactusRequests || {};
-                allocations = data.allocations || {};
-                bagCounts = data.bagCounts || {};
+                bags2027 = data.bags2027 || {};
             }
 
             // Initialize defaults
+            Object.keys(hybridTotals).forEach(h => {
+                if (dpRequests[h] === undefined) dpRequests[h] = 0;
+                if (bags2027[h] === undefined) {
+                    // Default 2027 = 2026 value or predicted
+                    const meta = hybridMeta[h];
+                    if (meta && meta.xd) {
+                        bags2027[h] = 0; // Discontinued
+                    } else {
+                        bags2027[h] = hybridTotals[h]?.y2026 || 0;
+                    }
+                }
+            });
+
             cactusHybrids.forEach(h => {
                 if (cactusRequests[h.name] === undefined) cactusRequests[h.name] = 0;
-            });
-            hybrids2027.forEach(h => {
-                if (allocations[h.name] === undefined) allocations[h.name] = 0;
-                if (bagCounts[h.name] === undefined) bagCounts[h.name] = 0;
             });
         }
 
         function saveData() {
-            localStorage.setItem('portfolioData', JSON.stringify({
+            localStorage.setItem('portfolioData2', JSON.stringify({
+                dpRequests,
                 cactusRequests,
-                allocations,
-                bagCounts
+                bags2027
             }));
         }
 
-        // Render 2026 Locked Data
-        function render2026Locked() {
-            const total2026 = data2026.reduce((sum, h) => sum + h.bags, 0);
-            document.getElementById('bags-2026').textContent = total2026.toLocaleString();
+        // Render Summary Cards
+        function renderSummary() {
+            const totals = getYearTotals();
+            document.getElementById('total-2024').textContent = totals.t2024.toLocaleString();
+            document.getElementById('total-2025').textContent = totals.t2025.toLocaleString();
+            document.getElementById('total-2026').textContent = totals.t2026.toLocaleString();
 
-            let html = '';
-            data2026.forEach(h => {
-                const pct = ((h.bags / total2026) * 100).toFixed(1);
-                const status = hybrids2027.find(x => x.name === h.hybrid) ?
-                    '<span style="color:#28a745;">Continuing</span>' :
-                    '<span style="color:#dc3545;">Discontinued</span>';
-                html += `
-                    <tr>
-                        <td><strong>${h.hybrid}</strong></td>
-                        <td>${h.bags.toLocaleString()}</td>
-                        <td>${pct}%</td>
-                        <td>${status}</td>
-                    </tr>
-                `;
-            });
-            document.getElementById('locked-2026-body').innerHTML = html;
+            const total2027 = Object.values(bags2027).reduce((s, v) => s + (v || 0), 0);
+            document.getElementById('total-2027').textContent = total2027.toLocaleString();
+
+            const totalDP = Object.values(dpRequests).reduce((s, v) => s + (v || 0), 0);
+            document.getElementById('total-dp-request').textContent = totalDP.toLocaleString();
+
+            const cactusTotal = Object.values(cactusRequests).reduce((s, v) => s + (v || 0), 0);
+            document.getElementById('cactus-units').textContent = cactusTotal.toLocaleString();
         }
 
-        // Render CACTUS Section (Table format)
+        // Render CACTUS Section
         function renderCactusSection() {
             let html = '';
             let total2026 = 0;
@@ -690,17 +792,15 @@
 
                 html += `
                     <tr>
-                        <td><strong>${h.name}</strong></td>
+                        <td style="text-align:left;"><strong>${h.name}</strong></td>
                         <td>${h.crm}</td>
                         <td style="color:#28a745; font-weight:600;">${h.discount}</td>
-                        <td>${h.invoicing}</td>
-                        <td style="background:#f8f9fa;">${h.bags2026 > 0 ? h.bags2026.toLocaleString() : '-'}</td>
-                        <td>
-                            <input type="number" min="0" max="500" value="${ask}"
-                                   onchange="updateCactus('${h.name}', this.value)"
-                                   style="width:70px; padding:0.25rem; border:2px solid #c4b5fd; border-radius:4px; text-align:center; font-weight:bold;">
+                        <td>${h.bags2026 > 0 ? h.bags2026.toLocaleString() : '-'}</td>
+                        <td class="dp-highlight">
+                            <input type="number" min="0" max="500" value="${ask}" class="dp-input"
+                                   onchange="updateCactus('${h.name}', this.value)">
                         </td>
-                        <td style="background:#e9d5ff; font-weight:bold;">${totalRequest > 0 ? totalRequest.toLocaleString() : '-'}</td>
+                        <td style="font-weight:bold;">${totalRequest > 0 ? totalRequest.toLocaleString() : '-'}</td>
                     </tr>
                 `;
             });
@@ -709,177 +809,174 @@
             document.getElementById('cactus-total-2026').textContent = total2026.toLocaleString();
             document.getElementById('cactus-total-ask').textContent = totalAsk.toLocaleString();
             document.getElementById('cactus-total-request').textContent = (total2026 + totalAsk).toLocaleString();
-
-            updateCactusTotal();
         }
 
         function updateCactus(name, value) {
             cactusRequests[name] = parseInt(value) || 0;
             saveData();
-            renderCactusSection(); // Re-render to update totals
-            updateSummary();
+            renderCactusSection();
+            renderSummary();
         }
 
-        function updateCactusTotal() {
-            let total2026 = 0;
-            let totalAsk = 0;
+        // Render Main Table with all years
+        function renderMainTable() {
+            const totals = getYearTotals();
+            let html = '';
+            let foot2027 = 0;
+            let footDP = 0;
 
-            cactusHybrids.forEach(h => {
-                total2026 += h.bags2026;
-                totalAsk += cactusRequests[h.name] || 0;
+            // Sort hybrids by CRM
+            const sortedHybrids = Object.keys(hybridTotals).sort((a, b) => {
+                const crmA = hybridMeta[a]?.crm || 999;
+                const crmB = hybridMeta[b]?.crm || 999;
+                return crmA - crmB;
             });
 
-            document.getElementById('cactus-invoiced-display').textContent = total2026.toLocaleString();
-            document.getElementById('cactus-ask-display').textContent = totalAsk.toLocaleString();
-            document.getElementById('cactus-total-bags').textContent = (total2026 + totalAsk).toLocaleString();
-            document.getElementById('cactus-units').textContent = totalAsk.toLocaleString();
-        }
+            sortedHybrids.forEach(hybrid => {
+                const data = hybridTotals[hybrid];
+                const meta = hybridMeta[hybrid] || { crm: 0, isNew: false, xd: null };
+                const b2027 = bags2027[hybrid] || 0;
+                const dpReq = dpRequests[hybrid] || 0;
 
-        // Render Allocation Grid
-        function renderAllocationGrid() {
-            let html = '';
-            hybrids2027.sort((a, b) => a.crm - b.crm).forEach(h => {
-                const isNew = h.isNew;
-                html += `
-                    <div class="allocation-item ${isNew ? 'new' : ''}">
-                        <div class="allocation-header">
-                            <span class="allocation-name">${h.name} ${isNew ? '⭐' : ''}</span>
-                            <span class="allocation-crm">${h.crm} CRM</span>
-                        </div>
-                        <div class="allocation-control">
-                            <input type="range" min="0" max="30" step="0.5" value="${allocations[h.name] || 0}"
-                                   onchange="updateAllocation('${h.name}', this.value)"
-                                   oninput="document.getElementById('val-${h.name}').textContent = this.value + '%'">
-                            <span class="allocation-value" id="val-${h.name}">${allocations[h.name] || 0}%</span>
-                        </div>
-                    </div>
-                `;
-            });
-            document.getElementById('allocation-grid').innerHTML = html;
-            updateAllocationTotal();
-        }
+                foot2027 += b2027;
+                footDP += dpReq;
 
-        function updateAllocation(name, value) {
-            allocations[name] = parseFloat(value) || 0;
-            // Auto-calculate bags based on allocation
-            bagCounts[name] = Math.round((allocations[name] / 100) * TARGET_2027);
-            saveData();
-            updateAllocationTotal();
-            updateSummary();
-            renderExportTable();
-            renderCharts();
-        }
+                // Calculate percentages
+                const pct2024 = totals.t2024 > 0 ? ((data.y2024 / totals.t2024) * 100).toFixed(1) : '0.0';
+                const pct2025 = totals.t2025 > 0 ? ((data.y2025 / totals.t2025) * 100).toFixed(1) : '0.0';
+                const pct2026 = totals.t2026 > 0 ? ((data.y2026 / totals.t2026) * 100).toFixed(1) : '0.0';
+                const total2027 = Object.values(bags2027).reduce((s, v) => s + (v || 0), 0);
+                const pct2027 = total2027 > 0 ? ((b2027 / total2027) * 100).toFixed(1) : '0.0';
 
-        function updateAllocationTotal() {
-            const total = Object.values(allocations).reduce((sum, v) => sum + v, 0);
-            document.getElementById('progress-bar').style.width = Math.min(total, 100) + '%';
-            document.getElementById('total-pct').textContent = total.toFixed(1) + '%';
-            document.getElementById('pct-allocated').textContent = total.toFixed(1) + '%';
-        }
+                // Badges
+                let badges = '';
+                if (meta.isNew) badges += '<span class="badge badge-new">NEW</span>';
+                if (meta.xd) badges += `<span class="badge badge-xd">${meta.xd}</span>`;
 
-        // Render Export Table
-        function renderExportTable() {
-            const total2026 = data2026.reduce((sum, h) => sum + h.bags, 0);
-            let html = '';
-            let totalBags2027 = 0;
-
-            hybrids2027.sort((a, b) => a.crm - b.crm).forEach(h => {
-                const bags2026 = data2026.find(x => x.hybrid === h.name)?.bags || 0;
-                const bags2027 = bagCounts[h.name] || 0;
-                totalBags2027 += bags2027;
-                const pct2027 = TARGET_2027 > 0 ? ((bags2027 / TARGET_2027) * 100).toFixed(1) : 0;
-                const change = bags2026 > 0 ? (((bags2027 - bags2026) / bags2026) * 100).toFixed(0) : (bags2027 > 0 ? '+NEW' : '-');
-                const changeClass = change === '+NEW' ? 'color:#28a745;' : (parseFloat(change) >= 0 ? 'color:#28a745;' : 'color:#dc3545;');
+                // Status
+                let status = 'Continuing';
+                let statusColor = '#28a745';
+                if (meta.isNew) {
+                    status = 'NEW 2027';
+                    statusColor = '#28a745';
+                } else if (meta.xd) {
+                    status = 'Discontinued';
+                    statusColor = '#dc3545';
+                }
 
                 html += `
                     <tr>
-                        <td><strong>${h.name}</strong> ${h.isNew ? '⭐' : ''}</td>
-                        <td>${h.crm}</td>
-                        <td>${bags2026 > 0 ? bags2026.toLocaleString() : '-'}</td>
-                        <td>
-                            <input type="number" min="0" max="2000" value="${bags2027}"
-                                   onchange="updateBags('${h.name}', this.value)">
+                        <td style="text-align:left; white-space:nowrap;"><strong>${hybrid}</strong>${badges}</td>
+                        <td><span class="badge badge-crm">${meta.crm || '-'}</span></td>
+                        <td style="background:#f8f9fa;">${data.y2024 > 0 ? data.y2024.toLocaleString() : '-'}</td>
+                        <td style="background:#f8f9fa;">${pct2024}%</td>
+                        <td style="background:#e3f2fd;">${data.y2025 > 0 ? data.y2025.toLocaleString() : '-'}</td>
+                        <td style="background:#e3f2fd;">${pct2025}%</td>
+                        <td style="background:#e8f5e9;">${data.y2026 > 0 ? data.y2026.toLocaleString() : '-'}</td>
+                        <td style="background:#e8f5e9;">${pct2026}%</td>
+                        <td style="background:#e3f2fd;">
+                            <input type="number" min="0" max="2000" value="${b2027}"
+                                   onchange="update2027('${hybrid}', this.value)"
+                                   ${meta.xd ? 'disabled style="background:#f8d7da;"' : ''}>
                         </td>
-                        <td>${pct2027}%</td>
-                        <td style="${changeClass}">${change === '+NEW' ? change : (parseFloat(change) >= 0 ? '+' : '') + change + '%'}</td>
-                        <td style="font-size:0.75rem; color:#666;">${h.isNew ? 'NEW 2027' : ''}</td>
+                        <td style="background:#e3f2fd;">${pct2027}%</td>
+                        <td class="dp-highlight">
+                            <input type="number" min="0" max="500" value="${dpReq}" class="dp-input"
+                                   onchange="updateDP('${hybrid}', this.value)"
+                                   ${meta.xd ? 'disabled' : ''}>
+                        </td>
+                        <td style="color:${statusColor}; font-weight:600; font-size:0.75rem;">${status}</td>
                     </tr>
                 `;
             });
 
-            document.getElementById('export-table-body').innerHTML = html;
-            document.getElementById('total-2026-bags').textContent = total2026.toLocaleString();
-            document.getElementById('total-2027-bags').textContent = totalBags2027.toLocaleString();
-            document.getElementById('total-bags-display').textContent = totalBags2027.toLocaleString();
-            document.getElementById('total-2027-pct').textContent = ((totalBags2027 / TARGET_2027) * 100).toFixed(1) + '%';
+            document.getElementById('main-table-body').innerHTML = html;
 
-            const totalChange = total2026 > 0 ? (((totalBags2027 - total2026) / total2026) * 100).toFixed(1) : '-';
-            document.getElementById('total-change').textContent = totalChange !== '-' ? (parseFloat(totalChange) >= 0 ? '+' : '') + totalChange + '%' : '-';
+            // Update footer
+            document.getElementById('foot-2024-bags').textContent = totals.t2024.toLocaleString();
+            document.getElementById('foot-2025-bags').textContent = totals.t2025.toLocaleString();
+            document.getElementById('foot-2026-bags').textContent = totals.t2026.toLocaleString();
+            document.getElementById('foot-2027-bags').textContent = foot2027.toLocaleString();
+            document.getElementById('foot-2027-pct').textContent = '100%';
+            document.getElementById('foot-dp-total').textContent = footDP.toLocaleString();
         }
 
-        function updateBags(name, value) {
-            bagCounts[name] = parseInt(value) || 0;
-            // Update allocation percentage based on bags
-            allocations[name] = TARGET_2027 > 0 ? ((bagCounts[name] / TARGET_2027) * 100) : 0;
-
-            // Update CACTUS if it's a new hybrid
-            if (cactusHybrids.find(h => h.name === name)) {
-                cactusRequests[name] = bagCounts[name];
-            }
-
+        function update2027(hybrid, value) {
+            bags2027[hybrid] = parseInt(value) || 0;
             saveData();
-            renderAllocationGrid();
-            renderCactusSection();
-            updateSummary();
+            renderMainTable();
+            renderSummary();
             renderCharts();
         }
 
-        function updateSummary() {
-            const totalBags = Object.values(bagCounts).reduce((sum, v) => sum + v, 0);
-            document.getElementById('bags-2027-target').textContent = totalBags > 0 ? totalBags.toLocaleString() : '9,200';
+        function updateDP(hybrid, value) {
+            dpRequests[hybrid] = parseInt(value) || 0;
+            saveData();
+            renderMainTable();
+            renderSummary();
         }
 
         // Charts
         function renderCharts() {
-            // Allocation Bar Chart
-            const sortedHybrids = hybrids2027
-                .filter(h => allocations[h.name] > 0)
-                .sort((a, b) => allocations[b.name] - allocations[a.name])
+            // Get top 10 hybrids by 2027 bags
+            const sorted = Object.entries(bags2027)
+                .filter(([h, v]) => v > 0)
+                .sort((a, b) => b[1] - a[1])
                 .slice(0, 10);
 
-            if (charts.allocation) charts.allocation.destroy();
-            charts.allocation = new Chart(document.getElementById('allocationChart'), {
+            // Year comparison chart
+            if (charts.comparison) charts.comparison.destroy();
+            charts.comparison = new Chart(document.getElementById('comparisonChart'), {
                 type: 'bar',
                 data: {
-                    labels: sortedHybrids.map(h => h.name),
-                    datasets: [{
-                        label: '% Allocation',
-                        data: sortedHybrids.map(h => allocations[h.name]),
-                        backgroundColor: sortedHybrids.map(h => h.isNew ? '#28a745' : '#1a5f2a')
-                    }]
+                    labels: sorted.map(([h]) => h),
+                    datasets: [
+                        {
+                            label: '2024',
+                            data: sorted.map(([h]) => hybridTotals[h]?.y2024 || 0),
+                            backgroundColor: '#6c757d'
+                        },
+                        {
+                            label: '2025',
+                            data: sorted.map(([h]) => hybridTotals[h]?.y2025 || 0),
+                            backgroundColor: '#17a2b8'
+                        },
+                        {
+                            label: '2026',
+                            data: sorted.map(([h]) => hybridTotals[h]?.y2026 || 0),
+                            backgroundColor: '#28a745'
+                        },
+                        {
+                            label: '2027',
+                            data: sorted.map(([h]) => bags2027[h] || 0),
+                            backgroundColor: '#007bff'
+                        }
+                    ]
                 },
                 options: {
-                    indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { x: { max: 30 } }
+                    scales: { x: { stacked: false }, y: { beginAtZero: true } }
                 }
             });
 
-            // Composition Pie Chart
-            const newTotal = hybrids2027.filter(h => h.isNew).reduce((sum, h) => sum + (allocations[h.name] || 0), 0);
-            const contTotal = hybrids2027.filter(h => !h.isNew).reduce((sum, h) => sum + (allocations[h.name] || 0), 0);
-            const unallocated = Math.max(0, 100 - newTotal - contTotal);
+            // Composition chart
+            const newTotal = Object.entries(bags2027)
+                .filter(([h]) => hybridMeta[h]?.isNew)
+                .reduce((s, [, v]) => s + v, 0);
+            const contTotal = Object.entries(bags2027)
+                .filter(([h]) => !hybridMeta[h]?.isNew && !hybridMeta[h]?.xd)
+                .reduce((s, [, v]) => s + v, 0);
+            const total = newTotal + contTotal;
 
             if (charts.composition) charts.composition.destroy();
             charts.composition = new Chart(document.getElementById('compositionChart'), {
                 type: 'doughnut',
                 data: {
-                    labels: ['New 2027 Hybrids', 'Continuing Hybrids', 'Unallocated'],
+                    labels: ['New 2027 Hybrids', 'Continuing Hybrids'],
                     datasets: [{
-                        data: [newTotal, contTotal, unallocated],
-                        backgroundColor: ['#28a745', '#1a5f2a', '#e9ecef']
+                        data: [newTotal, contTotal],
+                        backgroundColor: ['#28a745', '#1a5f2a']
                     }]
                 },
                 options: {
@@ -889,28 +986,66 @@
             });
         }
 
-        // Export Functions
+        // Export functions
         function exportCSV() {
-            let csv = 'Hybrid,CRM,2026 Bags,2027 Bags,% of 2027,Notes\n';
+            const totals = getYearTotals();
+            let csv = 'Hybrid,CRM,2024 Bags,2024 %,2025 Bags,2025 %,2026 Bags,2026 %,2027 Bags,2027 %,Additional DP,Status\n';
 
-            hybrids2027.sort((a, b) => a.crm - b.crm).forEach(h => {
-                const bags2026 = data2026.find(x => x.hybrid === h.name)?.bags || 0;
-                const bags2027 = bagCounts[h.name] || 0;
-                const pct2027 = TARGET_2027 > 0 ? ((bags2027 / TARGET_2027) * 100).toFixed(1) : 0;
-                csv += `${h.name},${h.crm},${bags2026},${bags2027},${pct2027}%,${h.isNew ? 'NEW 2027' : ''}\n`;
+            Object.keys(hybridTotals).sort((a, b) => {
+                const crmA = hybridMeta[a]?.crm || 999;
+                const crmB = hybridMeta[b]?.crm || 999;
+                return crmA - crmB;
+            }).forEach(h => {
+                const data = hybridTotals[h];
+                const meta = hybridMeta[h] || {};
+                const b2027 = bags2027[h] || 0;
+                const dp = dpRequests[h] || 0;
+                const total2027 = Object.values(bags2027).reduce((s, v) => s + (v || 0), 0);
+
+                let status = 'Continuing';
+                if (meta.isNew) status = 'NEW 2027';
+                else if (meta.xd) status = 'Discontinued';
+
+                csv += `${h},${meta.crm || ''},${data.y2024},${(data.y2024/totals.t2024*100).toFixed(1)}%,`;
+                csv += `${data.y2025},${(data.y2025/totals.t2025*100).toFixed(1)}%,`;
+                csv += `${data.y2026},${(data.y2026/totals.t2026*100).toFixed(1)}%,`;
+                csv += `${b2027},${total2027>0?(b2027/total2027*100).toFixed(1):'0'}%,`;
+                csv += `${dp},${status}\n`;
             });
 
-            // Add totals
-            const total2026 = data2026.reduce((sum, h) => sum + h.bags, 0);
-            const total2027 = Object.values(bagCounts).reduce((sum, v) => sum + v, 0);
-            csv += `TOTAL,-,${total2026},${total2027},100%,\n`;
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'pioneer_2027_portfolio_all_years.csv';
+            a.click();
+        }
 
-            // Add CACTUS requests
-            csv += '\nCACTUS REQUESTS\n';
-            csv += 'Hybrid,Bags Requested\n';
+        function exportDPSummary() {
+            let csv = 'DEMAND PLAN - ADDITIONAL REQUESTS SUMMARY\n\n';
+            csv += 'Hybrid,CRM,2026 Actual,2027 Target,Additional DP Request,Total 2027 with DP\n';
+
+            let totalDP = 0;
+            Object.entries(dpRequests)
+                .filter(([h, v]) => v > 0)
+                .sort((a, b) => b[1] - a[1])
+                .forEach(([h, dp]) => {
+                    const meta = hybridMeta[h] || {};
+                    const y2026 = hybridTotals[h]?.y2026 || 0;
+                    const b2027 = bags2027[h] || 0;
+                    totalDP += dp;
+                    csv += `${h},${meta.crm || ''},${y2026},${b2027},${dp},${b2027 + dp}\n`;
+                });
+
+            csv += `\nTOTAL ADDITIONAL DP REQUEST:,,,${totalDP}\n`;
+
+            // Add CACTUS
+            csv += '\n\nCACTUS REQUESTS\n';
+            csv += 'Product,2026 Invoiced,Additional Ask,Total\n';
             cactusHybrids.forEach(h => {
-                if (cactusRequests[h.name] > 0) {
-                    csv += `${h.name},${cactusRequests[h.name]}\n`;
+                const ask = cactusRequests[h.name] || 0;
+                if (ask > 0 || h.bags2026 > 0) {
+                    csv += `${h.name},${h.bags2026},${ask},${h.bags2026 + ask}\n`;
                 }
             });
 
@@ -918,17 +1053,29 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'pioneer_2027_portfolio.csv';
+            a.download = 'pioneer_2027_dp_summary.csv';
             a.click();
         }
 
         function copyToClipboard() {
-            let text = 'Hybrid\tCRM\t2026\t2027\t%\n';
-            hybrids2027.sort((a, b) => a.crm - b.crm).forEach(h => {
-                const bags2026 = data2026.find(x => x.hybrid === h.name)?.bags || 0;
-                const bags2027 = bagCounts[h.name] || 0;
-                const pct2027 = TARGET_2027 > 0 ? ((bags2027 / TARGET_2027) * 100).toFixed(1) : 0;
-                text += `${h.name}\t${h.crm}\t${bags2026}\t${bags2027}\t${pct2027}%\n`;
+            const totals = getYearTotals();
+            let text = 'Hybrid\tCRM\t2024\t%\t2025\t%\t2026\t%\t2027\t%\tDP Request\n';
+
+            Object.keys(hybridTotals).sort((a, b) => {
+                const crmA = hybridMeta[a]?.crm || 999;
+                const crmB = hybridMeta[b]?.crm || 999;
+                return crmA - crmB;
+            }).forEach(h => {
+                const data = hybridTotals[h];
+                const meta = hybridMeta[h] || {};
+                const b2027 = bags2027[h] || 0;
+                const dp = dpRequests[h] || 0;
+                const total2027 = Object.values(bags2027).reduce((s, v) => s + (v || 0), 0);
+
+                text += `${h}\t${meta.crm}\t${data.y2024}\t${(data.y2024/totals.t2024*100).toFixed(1)}%\t`;
+                text += `${data.y2025}\t${(data.y2025/totals.t2025*100).toFixed(1)}%\t`;
+                text += `${data.y2026}\t${(data.y2026/totals.t2026*100).toFixed(1)}%\t`;
+                text += `${b2027}\t${total2027>0?(b2027/total2027*100).toFixed(1):'0'}%\t${dp}\n`;
             });
 
             navigator.clipboard.writeText(text).then(() => {
@@ -937,15 +1084,20 @@
         }
 
         function clearAllData() {
-            if (confirm('Clear all 2027 allocations and bag counts?')) {
+            if (confirm('Clear all 2027 targets and DP requests?')) {
+                dpRequests = {};
                 cactusRequests = {};
-                allocations = {};
-                bagCounts = {};
-                cactusHybrids.forEach(h => cactusRequests[h.name] = 0);
-                hybrids2027.forEach(h => {
-                    allocations[h.name] = 0;
-                    bagCounts[h.name] = 0;
+                bags2027 = {};
+                Object.keys(hybridTotals).forEach(h => {
+                    dpRequests[h] = 0;
+                    const meta = hybridMeta[h];
+                    if (meta && meta.xd) {
+                        bags2027[h] = 0;
+                    } else {
+                        bags2027[h] = hybridTotals[h]?.y2026 || 0;
+                    }
                 });
+                cactusHybrids.forEach(h => cactusRequests[h.name] = 0);
                 saveData();
                 init();
             }
