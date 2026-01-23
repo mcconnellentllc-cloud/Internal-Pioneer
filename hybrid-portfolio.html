@@ -305,6 +305,31 @@
             font-weight: bold;
         }
 
+        /* RC Request input on cards (for NEW hybrids) */
+        .rc-request-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            background: #f5eef8;
+            border: 2px solid #9b59b6;
+            border-radius: 4px;
+        }
+        .rc-request-row label {
+            font-size: 0.75rem;
+            color: #9b59b6;
+            font-weight: 600;
+        }
+        .rc-request-row input {
+            width: 70px;
+            padding: 0.25rem;
+            border: 2px solid #9b59b6;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+        }
+
         /* Highlight column */
         .dp-highlight {
             background: #fef9e7 !important;
@@ -732,6 +757,7 @@
         function renderCard(h, type) {
             const key = h.name.replace('/PCE', '').replace('/AML', '');
             const dp = dpRequests[key] || 0;
+            const rc = rcAllocations[key] || 0;
             const t2024 = 8886, t2025 = 7933, t2026 = 7669; // Totals for %
 
             let badges = `<span class="badge badge-crm">${h.crm} CRM</span>`;
@@ -740,6 +766,24 @@
             if (h.aquamax) badges += '<span class="badge badge-aquamax">AquaMax</span>';
             if (h.silage) badges += '<span class="badge badge-silage">Silage</span>';
             if (h.limited) badges += '<span class="badge badge-limited">LIMITED</span>';
+
+            // NEW hybrids get RC Request, Continuing get DP Request
+            let requestRow = '';
+            if (type === 'new') {
+                requestRow = `
+                    <div class="rc-request-row">
+                        <label>Additional RC Request:</label>
+                        <input type="number" min="0" value="${rc}" onchange="updateRCCard('${key}', this.value)">
+                        <span style="font-size:0.75rem; color:#666;">bags</span>
+                    </div>`;
+            } else if (type === 'cont') {
+                requestRow = `
+                    <div class="dp-request-row">
+                        <label>Additional DP Request:</label>
+                        <input type="number" min="0" value="${dp}" onchange="updateDPCard('${key}', this.value)">
+                        <span style="font-size:0.75rem; color:#666;">bags</span>
+                    </div>`;
+            }
 
             return `
                 <div class="hybrid-card ${type}">
@@ -759,12 +803,7 @@
                         <div class="history-item"><div class="year">2026</div><div class="bags">${h.y2026 || '-'}</div><div class="pct">${h.y2026 ? ((h.y2026/t2026)*100).toFixed(1)+'%' : ''}</div></div>
                         <div class="history-item" style="background:#e3f2fd;"><div class="year">2027</div><div class="bags">${bags2027[key] || '-'}</div><div class="pct"></div></div>
                     </div>
-                    ${type !== 'xd' ? `
-                    <div class="dp-request-row">
-                        <label>Additional DP Request:</label>
-                        <input type="number" min="0" value="${dp}" onchange="updateDPCard('${key}', this.value)">
-                        <span style="font-size:0.75rem; color:#666;">bags</span>
-                    </div>` : ''}
+                    ${requestRow}
                 </div>
             `;
         }
@@ -783,6 +822,13 @@
 
         function updateDPCard(key, value) {
             dpRequests[key] = parseInt(value) || 0;
+            saveData();
+            renderDataTable();
+            renderSummary();
+        }
+
+        function updateRCCard(key, value) {
+            rcAllocations[key] = parseInt(value) || 0;
             saveData();
             renderDataTable();
             renderSummary();
