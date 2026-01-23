@@ -130,6 +130,10 @@
             border: 2px solid #e67e22;
             background: #fef9e7;
         }
+        .data-table input.rc-input {
+            border: 2px solid #9b59b6;
+            background: #f5eef8;
+        }
 
         /* Hybrid Cards */
         .hybrid-grid {
@@ -311,6 +315,15 @@
             background: #e67e22 !important;
             color: white !important;
         }
+        .rc-highlight {
+            background: #f5eef8 !important;
+            border-left: 3px solid #9b59b6 !important;
+            border-right: 3px solid #9b59b6 !important;
+        }
+        .rc-highlight-header {
+            background: #9b59b6 !important;
+            color: white !important;
+        }
 
         /* Export buttons */
         .btn {
@@ -395,6 +408,11 @@
                 <div class="value" id="cactus-units">0</div>
                 <div class="sub">Dryland Request</div>
             </div>
+            <div class="summary-card" style="background:linear-gradient(135deg, #7d3c98, #9b59b6);">
+                <div class="label">Extra RC Allocation</div>
+                <div class="value" id="total-rc">0</div>
+                <div class="sub">Regional Center</div>
+            </div>
         </div>
 
         <!-- CACTUS PROGRAM -->
@@ -444,6 +462,7 @@
                             <th colspan="2" class="year-2026">2026</th>
                             <th colspan="2" class="year-2027">2027</th>
                             <th rowspan="2" class="dp-highlight-header">DP Request</th>
+                            <th rowspan="2" class="rc-highlight-header">Extra RC Allocation</th>
                         </tr>
                         <tr>
                             <th class="year-2024">Bags</th>
@@ -469,6 +488,7 @@
                             <td id="foot-2027">0</td>
                             <td>100%</td>
                             <td style="background:#d35400;" id="foot-dp">0</td>
+                            <td style="background:#7d3c98;" id="foot-rc">0</td>
                         </tr>
                     </tfoot>
                 </table>
@@ -578,6 +598,7 @@
         let dpRequests = {};
         let cactusRequests = {};
         let bags2027 = {};
+        let rcAllocations = {};
 
         function init() {
             loadSavedData();
@@ -596,6 +617,7 @@
                 dpRequests = data.dpRequests || {};
                 cactusRequests = data.cactusRequests || {};
                 bags2027 = data.bags2027 || {};
+                rcAllocations = data.rcAllocations || {};
             }
 
             // Initialize defaults
@@ -603,6 +625,7 @@
                 const key = h.name.replace('/PCE', '').replace('/AML', '');
                 if (dpRequests[key] === undefined) dpRequests[key] = 0;
                 if (bags2027[key] === undefined) bags2027[key] = h.y2026 || 0;
+                if (rcAllocations[key] === undefined) rcAllocations[key] = 0;
             });
             cactusHybrids.forEach(h => {
                 if (cactusRequests[h.name] === undefined) cactusRequests[h.name] = 0;
@@ -610,7 +633,7 @@
         }
 
         function saveData() {
-            localStorage.setItem('portfolioData3', JSON.stringify({ dpRequests, cactusRequests, bags2027 }));
+            localStorage.setItem('portfolioData3', JSON.stringify({ dpRequests, cactusRequests, bags2027, rcAllocations }));
         }
 
         function renderSummary() {
@@ -619,6 +642,7 @@
             document.getElementById('cont-count').textContent = contHybrids.length;
             document.getElementById('total-dp-request').textContent = Object.values(dpRequests).reduce((s, v) => s + v, 0).toLocaleString();
             document.getElementById('cactus-units').textContent = Object.values(cactusRequests).reduce((s, v) => s + v, 0).toLocaleString();
+            document.getElementById('total-rc').textContent = Object.values(rcAllocations).reduce((s, v) => s + v, 0).toLocaleString();
         }
 
         function renderCactusSection() {
@@ -649,15 +673,17 @@
             const t2024 = allHybrids.reduce((s, h) => s + (h.y2024 || 0), 0);
             const t2025 = allHybrids.reduce((s, h) => s + (h.y2025 || 0), 0);
             const t2026 = allHybrids.reduce((s, h) => s + (h.y2026 || 0), 0);
-            let t2027 = 0, tDP = 0;
+            let t2027 = 0, tDP = 0, tRC = 0;
 
             let html = '';
             allHybrids.sort((a, b) => a.crm - b.crm).forEach(h => {
                 const key = h.name.replace('/PCE', '').replace('/AML', '');
                 const b2027 = bags2027[key] || 0;
                 const dp = dpRequests[key] || 0;
+                const rc = rcAllocations[key] || 0;
                 t2027 += b2027;
                 tDP += dp;
+                tRC += rc;
 
                 html += `<tr>
                     <td style="text-align:left;"><strong>${h.name}</strong></td>
@@ -670,6 +696,7 @@
                     <td style="background:#e3f2fd;"><input type="number" min="0" value="${b2027}" onchange="update2027('${key}', this.value)"></td>
                     <td style="background:#e3f2fd;">-</td>
                     <td class="dp-highlight"><input type="number" min="0" value="${dp}" class="dp-input" onchange="updateDP('${key}', this.value)"></td>
+                    <td class="rc-highlight"><input type="number" min="0" value="${rc}" class="rc-input" onchange="updateRC('${key}', this.value)"></td>
                 </tr>`;
             });
 
@@ -679,6 +706,7 @@
             document.getElementById('foot-2026').textContent = t2026.toLocaleString();
             document.getElementById('foot-2027').textContent = t2027.toLocaleString();
             document.getElementById('foot-dp').textContent = tDP.toLocaleString();
+            document.getElementById('foot-rc').textContent = tRC.toLocaleString();
         }
 
         function update2027(key, value) {
@@ -689,6 +717,13 @@
 
         function updateDP(key, value) {
             dpRequests[key] = parseInt(value) || 0;
+            saveData();
+            renderDataTable();
+            renderSummary();
+        }
+
+        function updateRC(key, value) {
+            rcAllocations[key] = parseInt(value) || 0;
             saveData();
             renderDataTable();
             renderSummary();
@@ -754,13 +789,13 @@
         }
 
         function exportCSV() {
-            let csv = 'Hybrid,CRM,2024,2024%,2025,2025%,2026,2026%,2027,DP Request,Status,Notes\n';
+            let csv = 'Hybrid,CRM,2024,2024%,2025,2025%,2026,2026%,2027,DP Request,Extra RC Allocation,Status,Notes\n';
             const allHybrids = [...xdHybrids.map(h => ({...h, status: 'Discontinued'})), ...new2027Hybrids.map(h => ({...h, status: 'NEW 2027'})), ...contHybrids.map(h => ({...h, status: 'Continuing'}))];
             const t2024 = 8886, t2025 = 7933, t2026 = 7669;
 
             allHybrids.sort((a, b) => a.crm - b.crm).forEach(h => {
                 const key = h.name.replace('/PCE', '').replace('/AML', '');
-                csv += `"${h.name}",${h.crm},${h.y2024 || 0},${((h.y2024||0)/t2024*100).toFixed(1)}%,${h.y2025 || 0},${((h.y2025||0)/t2025*100).toFixed(1)}%,${h.y2026 || 0},${((h.y2026||0)/t2026*100).toFixed(1)}%,${bags2027[key] || 0},${dpRequests[key] || 0},"${h.status}","${h.notes.replace(/"/g, '""')}"\n`;
+                csv += `"${h.name}",${h.crm},${h.y2024 || 0},${((h.y2024||0)/t2024*100).toFixed(1)}%,${h.y2025 || 0},${((h.y2025||0)/t2025*100).toFixed(1)}%,${h.y2026 || 0},${((h.y2026||0)/t2026*100).toFixed(1)}%,${bags2027[key] || 0},${dpRequests[key] || 0},${rcAllocations[key] || 0},"${h.status}","${h.notes.replace(/"/g, '""')}"\n`;
             });
 
             const blob = new Blob([csv], { type: 'text/csv' });
@@ -783,6 +818,17 @@
             });
             csv += `\nTOTAL DP REQUEST:,,,${total}\n`;
 
+            csv += '\n\nEXTRA RC ALLOCATION\nHybrid,CRM,2026 Actual,RC Allocation,Notes\n';
+            let totalRC = 0;
+            Object.entries(rcAllocations).filter(([k, v]) => v > 0).sort((a, b) => b[1] - a[1]).forEach(([key, rc]) => {
+                const h = [...xdHybrids, ...new2027Hybrids, ...contHybrids].find(x => x.name.replace('/PCE', '').replace('/AML', '') === key);
+                if (h) {
+                    csv += `"${h.name}",${h.crm},${h.y2026 || 0},${rc},"${h.notes.replace(/"/g, '""')}"\n`;
+                    totalRC += rc;
+                }
+            });
+            csv += `\nTOTAL RC ALLOCATION:,,,${totalRC}\n`;
+
             csv += '\n\nCACTUS REQUESTS\nProduct,2026 Invoiced,Additional Ask,Total\n';
             cactusHybrids.forEach(h => {
                 const ask = cactusRequests[h.name] || 0;
@@ -797,10 +843,10 @@
         }
 
         function copyToClipboard() {
-            let text = 'Hybrid\tCRM\t2024\t2025\t2026\t2027\tDP Request\n';
+            let text = 'Hybrid\tCRM\t2024\t2025\t2026\t2027\tDP Request\tExtra RC Allocation\n';
             [...xdHybrids, ...new2027Hybrids, ...contHybrids].sort((a, b) => a.crm - b.crm).forEach(h => {
                 const key = h.name.replace('/PCE', '').replace('/AML', '');
-                text += `${h.name}\t${h.crm}\t${h.y2024||0}\t${h.y2025||0}\t${h.y2026||0}\t${bags2027[key]||0}\t${dpRequests[key]||0}\n`;
+                text += `${h.name}\t${h.crm}\t${h.y2024||0}\t${h.y2025||0}\t${h.y2026||0}\t${bags2027[key]||0}\t${dpRequests[key]||0}\t${rcAllocations[key]||0}\n`;
             });
             navigator.clipboard.writeText(text).then(() => alert('Copied!'));
         }
