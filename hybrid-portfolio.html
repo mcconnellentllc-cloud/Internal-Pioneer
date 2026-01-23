@@ -457,7 +457,7 @@
                             <th>CRM</th>
                             <th>Discount</th>
                             <th>2026 Invoiced</th>
-                            <th style="background:#e67e22;">Additional Ask</th>
+                            <th style="background:#17a2b8;">2027 Anticipated Volumes</th>
                             <th>Total Request</th>
                         </tr>
                     </thead>
@@ -679,7 +679,7 @@
                     <td>${h.crm}</td>
                     <td style="color:#28a745; font-weight:600;">${h.discount}</td>
                     <td>${h.bags2026 || '-'}</td>
-                    <td class="dp-highlight"><input type="number" min="0" value="${ask}" class="dp-input" onchange="updateCactus('${h.name}', this.value)"></td>
+                    <td style="background:#e0f7fa; border-left:3px solid #17a2b8; border-right:3px solid #17a2b8;"><input type="number" min="0" value="${ask}" style="border:2px solid #17a2b8; background:#e0f7fa;" onchange="updateCactus('${h.name}', this.value)"></td>
                     <td style="font-weight:bold;">${(h.bags2026 + ask) || '-'}</td>
                 </tr>`;
             });
