@@ -7,9 +7,11 @@
 // CONFIGURATION & CONSTANTS
 // ============================================
 const CONFIG = {
-    ACCESS_CODE: 'pioneer2024',
+    AUTH_EMAIL: 'kyle@togoag.com',
+    AUTH_PASSWORD: 'Pioneer2026',
+    ACCESS_CODE: 'pioneer2024',  // legacy fallback
     STORAGE_KEY: 'pioneer_grower_data',
-    SESSION_KEY: 'pioneer_session',
+    SESSION_KEY: 'pioneer_auth',
     SYNC_KEY: 'pioneer_last_sync',
     USE_API: true,  // Enable API integration
     PRODUCTS: [
@@ -47,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function checkAuthentication() {
     const session = sessionStorage.getItem(CONFIG.SESSION_KEY);
-    if (session === 'authenticated') {
+    if (session === 'true' || session === 'authenticated') {
         state.isAuthenticated = true;
         showDashboard();
     }
@@ -99,9 +101,10 @@ function handleLogin(e) {
     const code = document.getElementById('access-code').value;
     const errorEl = document.getElementById('login-error');
 
-    if (code === CONFIG.ACCESS_CODE) {
+    // Accept legacy access code or new password
+    if (code === CONFIG.ACCESS_CODE || code === CONFIG.AUTH_PASSWORD) {
         state.isAuthenticated = true;
-        sessionStorage.setItem(CONFIG.SESSION_KEY, 'authenticated');
+        sessionStorage.setItem(CONFIG.SESSION_KEY, 'true');
         showDashboard();
     } else {
         errorEl.textContent = 'Invalid access code. Please try again.';

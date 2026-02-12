@@ -417,8 +417,8 @@
         // AUTHENTICATION
         // ============================================
         const VALID_CREDENTIALS = {
-            username: 'kyle',
-            password: 'customerdata'
+            username: 'kyle@togoag.com',
+            password: 'Pioneer2026'
         };
 
         let isAuthenticated = false;
@@ -427,12 +427,12 @@
 
         document.getElementById('login-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            const username = document.getElementById('username').value.toLowerCase();
+            const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
             if (username === VALID_CREDENTIALS.username && password === VALID_CREDENTIALS.password) {
                 isAuthenticated = true;
-                sessionStorage.setItem('customerDataAuth', 'true');
+                sessionStorage.setItem('pioneer_auth', 'true');
                 document.getElementById('login-screen').classList.add('hidden');
                 document.getElementById('dashboard').classList.remove('hidden');
                 document.getElementById('user-display').textContent = 'Welcome, Kyle';
@@ -444,7 +444,7 @@
 
         function logout() {
             isAuthenticated = false;
-            sessionStorage.removeItem('customerDataAuth');
+            sessionStorage.removeItem('pioneer_auth');
             document.getElementById('dashboard').classList.add('hidden');
             document.getElementById('login-screen').classList.remove('hidden');
             document.getElementById('username').value = '';
@@ -453,7 +453,7 @@
         }
 
         // Check for existing session
-        if (sessionStorage.getItem('customerDataAuth') === 'true') {
+        if (sessionStorage.getItem('pioneer_auth') === 'true') {
             isAuthenticated = true;
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('dashboard').classList.remove('hidden');

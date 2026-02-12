@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Next Year Planning - Demand Plan Agency Master</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0077c8 0%, #005a9e 100%);
+            color: white;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .menu-icon {
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .header-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .summary-bar {
+            background: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .summary-stats {
+            display: flex;
+            gap: 30px;
+        }
+
+        .stat-item {
+            font-size: 0.9rem;
+        }
+
+        .stat-item span {
+            font-weight: 600;
+        }
+
+        .copy-units-btn {
+            background: none;
+            border: none;
+            color: #0077c8;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .copy-units-btn:hover {
+            text-decoration: underline;
+        }
+
+        .table-container {
+            background: white;
+            margin: 0;
+            overflow-x: auto;
+            max-height: calc(100vh - 180px);
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        thead {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        th {
+            background: #f8f9fa;
+            border-bottom: 2px solid #dee2e6;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #495057;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .input-cell {
+            width: 100px;
+        }
+
+        .input-cell input {
+            width: 80px;
+            padding: 6px 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-align: right;
+            font-size: 0.85rem;
+        }
+
+        .input-cell input:focus {
+            outline: none;
+            border-color: #0077c8;
+            box-shadow: 0 0 0 2px rgba(0, 119, 200, 0.1);
+        }
+
+        .footer {
+            background: white;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 20px;
+            border-top: 1px solid #e0e0e0;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .last-submitted {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .submit-btn {
+            background: #0077c8;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .submit-btn:hover {
+            background: #005a9e;
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Highlight rows with planned units */
+        tr.has-planned {
+            background: #f0f7ff;
+        }
+
+        tr.has-planned:hover {
+            background: #e6f2ff;
+        }
+
+        /* Toast notifications */
+        #toast-container {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .toast {
+            background: #333;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .toast.success {
+            background: #28a745;
+        }
+
+        .toast.error {
+            background: #dc3545;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .summary-stats {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <span class="menu-icon">&#9776;</span>
+            <span class="header-title">Next Year Planning - Demand Plan Agency Master - McConnell Enterprises LLC (7161753)</span>
+        </div>
+        <div class="header-right">
+            <!-- Additional header items can go here -->
+        </div>
+    </header>
+
+    <!-- Summary Bar -->
+    <div class="summary-bar">
+        <div class="summary-stats">
+            <div class="stat-item">Corn Target Units: <span id="corn-target">8500</span></div>
+            <div class="stat-item">Total Agency Demand Units: <span id="agency-demand-total">8500</span></div>
+            <div class="stat-item">Total Operation Planned Units: <span id="operation-planned-total">9200</span></div>
+        </div>
+        <button class="copy-units-btn" onclick="copyUnits()">COPY UNITS</button>
+    </div>
+
+    <!-- Data Table -->
+    <div class="table-container">
+        <table id="demand-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Technology Segment</th>
+                    <th>Hybrid/Family</th>
+                    <th class="text-center">Maturity</th>
+                    <th class="text-center">2025 Invoiced</th>
+                    <th class="text-center">2026 Invoiced</th>
+                    <th class="text-center">XD Year</th>
+                    <th class="text-center">Minimum Unit Limit</th>
+                    <th class="text-center">Maximum Unit Limit</th>
+                    <th class="text-center">2027 Operation Planned Units</th>
+                    <th class="text-center">2027 Agency Demand Plan</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <!-- Data will be populated by JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <span class="last-submitted">Last Submitted: <span id="last-submitted-date">01/21/2026</span></span>
+        <button class="submit-btn" onclick="submitPlan()">SUBMIT</button>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <script>
+        // Product data based on screenshots
+        const productData = [
+            { product: 'P1151Q', techSegment: 'Q/LL/RR2/AQ', hybrid: 'P1151', maturity: '111', inv2025: 149, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 0, opPlanned: 0, agencyPlan: 0 },
+            { product: 'P11591Q', techSegment: 'BOV/Q/LL/RR2', hybrid: 'P11591', maturity: '113', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 0, agencyPlan: 0 },
+            { product: 'P12393V', techSegment: 'V/LL/RR2/ENL', hybrid: 'P12393', maturity: '113', inv2025: 10, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 0, agencyPlan: 0 },
+            { product: 'P1244AM', techSegment: 'AM/LL/RR2/AQ', hybrid: 'P1244', maturity: '113', inv2025: 130, inv2026: 340, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 360, agencyPlan: 360 },
+            { product: 'P12517PCUE', techSegment: 'PWU/ENL-RA', hybrid: 'P12517', maturity: '113', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 0, agencyPlan: 0 },
+            { product: 'P12517V', techSegment: 'V/LL/RR2/ENL', hybrid: 'P12517', maturity: '113', inv2025: 3, inv2026: 127, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 680, agencyPlan: 630 },
+            { product: 'P1278Q', techSegment: 'Q/LL/RR2', hybrid: 'P1278', maturity: '113', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 0, opPlanned: 0, agencyPlan: 0 },
+            { product: 'P12836PCE', techSegment: 'PW/ENL-RIB', hybrid: 'P12836', maturity: '113', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 0, opPlanned: 0, agencyPlan: 0 },
+            { product: 'P12904AML', techSegment: 'AML/LL/RR2', hybrid: 'P12904', maturity: '113', inv2025: 71, inv2026: 102, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 50, agencyPlan: 50 },
+            { product: 'P12904Q', techSegment: 'Q/LL/RR2', hybrid: 'P12904', maturity: '112', inv2025: 62, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 0, opPlanned: 0, agencyPlan: 0 },
+            { product: 'P12904V', techSegment: 'V/LL/RR2/ENL', hybrid: 'P12904', maturity: '113', inv2025: 26, inv2026: 26, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 0, agencyPlan: 0 },
+            { product: 'P13476Q', techSegment: 'Q/LL/RR2/AQ', hybrid: 'P13476', maturity: '113', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 0, agencyPlan: 0 },
+            { product: 'P1366AML', techSegment: 'AML/LL/RR2', hybrid: 'P1366', maturity: '113', inv2025: 50, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 0, opPlanned: 0, agencyPlan: 0 },
+            { product: 'P1366Q', techSegment: 'Q/LL/RR2', hybrid: 'P1366', maturity: '113', inv2025: 709, inv2026: 135, xdYear: '', minLimit: 0, maxLimit: 0, opPlanned: 0, agencyPlan: 0 },
+            { product: 'P13777', techSegment: 'CONV', hybrid: 'P13777', maturity: '113', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 0, agencyPlan: 0 },
+            { product: 'P13777PCUE', techSegment: 'PWU/ENL-RA', hybrid: 'P13777', maturity: '113', inv2025: 0, inv2026: 45, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 50, agencyPlan: 50 },
+            { product: 'P13777V', techSegment: 'V/LL/RR2/ENL', hybrid: 'P13777', maturity: '113', inv2025: 101, inv2026: 341, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 250, agencyPlan: 250 },
+            { product: 'P13841PWUE', techSegment: 'AVBL/VTP/HX1/LL/RR2/ENL/AQ', hybrid: 'P13841', maturity: '113', inv2025: 0, inv2026: 7, xdYear: '', minLimit: 0, maxLimit: 0, opPlanned: 0, agencyPlan: 0 },
+            { product: 'P1413AM', techSegment: 'AM/LL/RR2/AQ', hybrid: 'P1413', maturity: '113', inv2025: 14, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 0, opPlanned: 0, agencyPlan: 0 },
+            { product: 'P14270PCE', techSegment: 'PW/ENL-RIB', hybrid: 'P14270', maturity: '113', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 15, opPlanned: 0, agencyPlan: 0 },
+            { product: 'P14270V', techSegment: 'V/LL/RR2/ENL', hybrid: 'P14270', maturity: '113', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 50, opPlanned: 0, agencyPlan: 0 },
+            { product: 'P14364PCUE', techSegment: 'PWU/ENL/AQ-RA', hybrid: 'P14364', maturity: '113', inv2025: 1, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 0, agencyPlan: 0 },
+            { product: 'P14830AML', techSegment: 'AML/LL/RR2', hybrid: 'P14830', maturity: '113', inv2025: 0, inv2026: 7, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 20, agencyPlan: 20 },
+            { product: 'P14830VYHR', techSegment: 'AVBL/YGCB/HX1/LL/RR2', hybrid: 'P14830', maturity: '113', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 0, opPlanned: 0, agencyPlan: 0 },
+            { product: 'P1548AM', techSegment: 'AM/LL/RR2/AQ', hybrid: 'P1548', maturity: '113', inv2025: 14, inv2026: 142, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 180, agencyPlan: 180 },
+            { product: 'P15517V', techSegment: 'V/LL/RR2/ENL', hybrid: 'P15517', maturity: '113', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 0, agencyPlan: 0 },
+            { product: 'P1718AML', techSegment: 'AML/LL/RR2', hybrid: 'P1718', maturity: '118', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 0, agencyPlan: 0 },
+            { product: 'P1742PCE', techSegment: 'PW/ENL-RIB', hybrid: 'P1742', maturity: '118', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 0, agencyPlan: 0 },
+            { product: 'P1742Q', techSegment: 'Q/LL/RR2', hybrid: 'P1742', maturity: '118', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 0, agencyPlan: 0 },
+            { product: 'P17677', techSegment: 'CONV', hybrid: 'P17677', maturity: '118', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 0, agencyPlan: 0 },
+            { product: 'P17677V', techSegment: 'V/LL/RR2/ENL', hybrid: 'P17677', maturity: '118', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 0, agencyPlan: 0 },
+            { product: 'P18216PCUE', techSegment: 'PWU/ENL-RA', hybrid: 'P18216', maturity: '118', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 0, agencyPlan: 0 },
+            { product: 'P1828Q', techSegment: 'Q/LL/RR2', hybrid: 'P1828', maturity: '118', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 0, agencyPlan: 0 },
+            { product: 'P1847AML', techSegment: 'AML/LL/RR2', hybrid: 'P1847', maturity: '118', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 0, agencyPlan: 0 },
+            { product: 'P18512PCE', techSegment: 'PW/ENL-RIB', hybrid: 'P18512', maturity: '118', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 0, opPlanned: 0, agencyPlan: 0 },
+            { product: 'P18512V', techSegment: 'V/LL/RR2/ENL', hybrid: 'P18512', maturity: '118', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 0, opPlanned: 0, agencyPlan: 0 },
+            { product: 'P1870LRE', techSegment: 'LL/RR2/ENL', hybrid: 'P1870', maturity: '118', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 0, agencyPlan: 0 },
+            { product: 'P92399PCE', techSegment: 'PW/ENL/AQ-RIB', hybrid: 'P92399', maturity: '090', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 0, agencyPlan: 0 },
+            { product: 'P92399V', techSegment: 'V/LL/RR2/ENL/AQ', hybrid: 'P92399', maturity: '090', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 0, agencyPlan: 0 },
+            { product: 'P9489AM', techSegment: 'AM/LL/RR2', hybrid: 'P9489', maturity: '095', inv2025: 99, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 0, opPlanned: 0, agencyPlan: 0 },
+            { product: 'P96567PCE', techSegment: 'PW/ENL-RIB', hybrid: 'P96567', maturity: '095', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 0, agencyPlan: 0 },
+            { product: 'P96567V', techSegment: 'V/LL/RR2/ENL', hybrid: 'P96567', maturity: '095', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 0, agencyPlan: 0 },
+            { product: 'P9845AM', techSegment: 'AM/LL/RR2/AQ', hybrid: 'P9845', maturity: '100', inv2025: 0, inv2026: 100, xdYear: '', minLimit: 0, maxLimit: 0, opPlanned: 0, agencyPlan: 0 },
+            { product: 'P9845PCE', techSegment: 'PW/ENL/AQ-RIB', hybrid: 'P9845', maturity: '100', inv2025: 98, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 0, agencyPlan: 0 },
+            { product: 'P9845V', techSegment: 'V/LL/RR2/ENL/AQ', hybrid: 'P9845', maturity: '100', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 0, agencyPlan: 0 },
+            { product: 'P99491PCE', techSegment: 'PW/ENL-RIB', hybrid: 'P99491', maturity: '100', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 98, opPlanned: 0, agencyPlan: 0 },
+            { product: 'P99491V', techSegment: 'V/LL/RR2/ENL', hybrid: 'P99491', maturity: '100', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 73, opPlanned: 0, agencyPlan: 0 },
+            { product: 'P9955', techSegment: 'CONV', hybrid: 'P9955', maturity: '100', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 0, agencyPlan: 0 },
+            { product: 'P9955V', techSegment: 'V/LL/RR2/ENL', hybrid: 'P9955', maturity: '100', inv2025: 0, inv2026: 0, xdYear: '', minLimit: 0, maxLimit: 'None', opPlanned: 0, agencyPlan: 0 }
+        ];
+
+        // Storage key for localStorage
+        const STORAGE_KEY = 'pioneer_demand_plan';
+
+        // Initialize the table
+        function initializeTable() {
+            const tbody = document.getElementById('table-body');
+
+            // Load saved data if exists
+            const savedData = loadData();
+
+            productData.forEach((item, index) => {
+                // Use saved values if available
+                const saved = savedData[item.product] || {};
+                const opPlanned = saved.opPlanned !== undefined ? saved.opPlanned : item.opPlanned;
+                const agencyPlan = saved.agencyPlan !== undefined ? saved.agencyPlan : item.agencyPlan;
+
+                const row = document.createElement('tr');
+                row.dataset.index = index;
+
+                // Add class if has planned units
+                if (opPlanned > 0 || agencyPlan > 0) {
+                    row.classList.add('has-planned');
+                }
+
+                row.innerHTML = `
+                    <td>${item.product}</td>
+                    <td>${item.techSegment}</td>
+                    <td>${item.hybrid}</td>
+                    <td class="text-center">${item.maturity}</td>
+                    <td class="text-center">${item.inv2025}</td>
+                    <td class="text-center">${item.inv2026}</td>
+                    <td class="text-center">${item.xdYear}</td>
+                    <td class="text-center">${item.minLimit}</td>
+                    <td class="text-center">${typeof item.maxLimit === 'number' ? item.maxLimit : item.maxLimit}</td>
+                    <td class="input-cell text-center">
+                        <input type="number"
+                               id="op-${index}"
+                               value="${opPlanned}"
+                               min="0"
+                               onchange="updateValue(${index}, 'opPlanned', this.value)"
+                               onfocus="this.select()">
+                    </td>
+                    <td class="input-cell text-center">
+                        <input type="number"
+                               id="agency-${index}"
+                               value="${agencyPlan}"
+                               min="0"
+                               onchange="updateValue(${index}, 'agencyPlan', this.value)"
+                               onfocus="this.select()">
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            // Update totals
+            updateTotals();
+
+            // Load last submitted date
+            loadLastSubmitted();
+        }
+
+        // Update a value in the data
+        function updateValue(index, field, value) {
+            productData[index][field] = parseInt(value) || 0;
+
+            // Update row highlighting
+            const row = document.querySelector(`tr[data-index="${index}"]`);
+            if (productData[index].opPlanned > 0 || productData[index].agencyPlan > 0) {
+                row.classList.add('has-planned');
+            } else {
+                row.classList.remove('has-planned');
+            }
+
+            // Update totals
+            updateTotals();
+
+            // Auto-save
+            saveData();
+        }
+
+        // Update total counts
+        function updateTotals() {
+            let opTotal = 0;
+            let agencyTotal = 0;
+
+            productData.forEach(item => {
+                opTotal += parseInt(item.opPlanned) || 0;
+                agencyTotal += parseInt(item.agencyPlan) || 0;
+            });
+
+            document.getElementById('operation-planned-total').textContent = opTotal.toLocaleString();
+            document.getElementById('agency-demand-total').textContent = agencyTotal.toLocaleString();
+        }
+
+        // Copy Operation Planned Units to Agency Demand Plan
+        function copyUnits() {
+            productData.forEach((item, index) => {
+                const opValue = parseInt(item.opPlanned) || 0;
+                item.agencyPlan = opValue;
+                document.getElementById(`agency-${index}`).value = opValue;
+
+                // Update row highlighting
+                const row = document.querySelector(`tr[data-index="${index}"]`);
+                if (item.opPlanned > 0 || item.agencyPlan > 0) {
+                    row.classList.add('has-planned');
+                } else {
+                    row.classList.remove('has-planned');
+                }
+            });
+
+            updateTotals();
+            saveData();
+            showToast('Operation Planned Units copied to Agency Demand Plan', 'success');
+        }
+
+        // Submit the plan
+        function submitPlan() {
+            // Validate totals
+            let agencyTotal = 0;
+            productData.forEach(item => {
+                agencyTotal += parseInt(item.agencyPlan) || 0;
+            });
+
+            const targetUnits = parseInt(document.getElementById('corn-target').textContent.replace(/,/g, ''));
+
+            // Save data
+            saveData();
+
+            // Update last submitted date
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-US', {
+                month: '2-digit',
+                day: '2-digit',
+                year: 'numeric'
+            });
+            document.getElementById('last-submitted-date').textContent = dateStr;
+            localStorage.setItem(STORAGE_KEY + '_lastSubmitted', dateStr);
+
+            showToast(`Plan submitted successfully! Total Agency Demand: ${agencyTotal.toLocaleString()} units`, 'success');
+        }
+
+        // Save data to localStorage
+        function saveData() {
+            const dataToSave = {};
+            productData.forEach(item => {
+                dataToSave[item.product] = {
+                    opPlanned: item.opPlanned,
+                    agencyPlan: item.agencyPlan
+                };
+            });
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
+        }
+
+        // Load data from localStorage
+        function loadData() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            return saved ? JSON.parse(saved) : {};
+        }
+
+        // Load last submitted date
+        function loadLastSubmitted() {
+            const lastSubmitted = localStorage.getItem(STORAGE_KEY + '_lastSubmitted');
+            if (lastSubmitted) {
+                document.getElementById('last-submitted-date').textContent = lastSubmitted;
+            }
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'slideIn 0.3s ease reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initializeTable);
+    </script>
+</body>
+</html>
