@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yield Zone Performance Analysis - Pioneer 2027</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f5f5f5; }
+        .header {
+            background: linear-gradient(135deg, #1a5f2a, #2d8f4a);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header h1 { font-size: 1.4rem; }
+        .nav-links { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+        .nav-links a:hover { background: rgba(255,255,255,0.3); }
+        .nav-links a.active { background: rgba(255,255,255,0.4); font-weight: 600; }
+        .container { max-width: 1600px; margin: 0 auto; padding: 1.5rem; }
+        .section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+        .section h2 {
+            font-size: 1.2rem;
+            color: #1a5f2a;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #c8e6c9;
+        }
+        .section h3 {
+            font-size: 1rem;
+            color: #333;
+            margin: 1.5rem 0 1rem 0;
+        }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 0.6rem 0.5rem; border: 1px solid #dee2e6; font-size: 0.85rem; }
+        th { background: #1a5f2a; color: white; font-weight: 600; }
+        .text-center { text-align: center; }
+
+        /* Zone Cards */
+        .zone-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .zone-card {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .zone-header {
+            padding: 1rem 1.25rem;
+            color: white;
+            font-weight: 600;
+        }
+        .zone-header h3 { margin: 0; font-size: 1.1rem; }
+        .zone-header p { margin: 0.25rem 0 0 0; font-size: 0.85rem; opacity: 0.9; }
+        .zone-content { padding: 1rem 1.25rem; background: white; }
+        .zone-content h4 { color: #333; font-size: 0.9rem; margin-bottom: 0.5rem; }
+        .zone-content ul { margin: 0 0 1rem 1.25rem; }
+        .zone-content li { margin-bottom: 0.35rem; font-size: 0.9rem; }
+
+        /* Zone colors */
+        .zone-dryland .zone-header { background: linear-gradient(135deg, #dc3545, #c82333); }
+        .zone-transition .zone-header { background: linear-gradient(135deg, #fd7e14, #e55a00); }
+        .zone-irrigated .zone-header { background: linear-gradient(135deg, #28a745, #1e7e34); }
+        .zone-elite .zone-header { background: linear-gradient(135deg, #007bff, #0056b3); }
+
+        /* Product badges */
+        .product-badge {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin: 0.15rem;
+        }
+        .badge-elite { background: #007bff; color: white; }
+        .badge-strong { background: #28a745; color: white; }
+        .badge-good { background: #ffc107; color: #333; }
+        .badge-avoid { background: #dc3545; color: white; }
+        .badge-new { background: #6f42c1; color: white; }
+
+        /* Key insight boxes */
+        .insight-box {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        .insight-critical {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+        }
+        .insight-success {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+        }
+        .insight-info {
+            background: #cce5ff;
+            border-left: 4px solid #007bff;
+        }
+        .insight-warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+        }
+
+        /* Summary cards */
+        .summary-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .summary-card {
+            background: linear-gradient(135deg, #1a5f2a, #2d8f4a);
+            color: white;
+            padding: 1.25rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .summary-card .value { font-size: 2rem; font-weight: bold; }
+        .summary-card .label { font-size: 0.85rem; opacity: 0.9; margin-top: 0.25rem; }
+
+        /* Highlight rows */
+        .highlight-row { background: #f0fff0; }
+        .new-product { font-weight: 600; }
+
+        /* Responsive table container */
+        .table-container { overflow-x: auto; }
+
+        /* Print styles */
+        @media print {
+            .header { background: #1a5f2a !important; -webkit-print-color-adjust: exact; }
+            .zone-header { -webkit-print-color-adjust: exact; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Auth check -->
+    <script>
+        if (!sessionStorage.getItem('pioneer_auth')) {
+            window.location.href = 'login.html';
+        }
+    </script>
+
+    <div class="header">
+        <h1>Yield Zone Performance Analysis</h1>
+        <div class="nav-links">
+            <a href="index.html">Corn Dashboard</a>
+            <a href="yield-zone.html" class="active">Yield Zones</a>
+            <a href="sorghum.html">Sorghum</a>
+            <a href="soybeans.html">Soybeans</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Critical Context Banner -->
+        <div class="insight-box insight-critical" style="margin-bottom:1.5rem;">
+            <h3 style="color:#721c24; margin:0 0 0.5rem 0;">2027 DEMAND PLAN REQUIREMENT: 13%</h3>
+            <p style="color:#721c24; margin:0; font-size:0.95rem;">These products must represent <strong>13% of your 2027 orders</strong>. Use this analysis to match the right hybrid to each grower's yield environment for maximum competitive win rate.</p>
+        </div>
+
+        <!-- Quick Summary Stats -->
+        <div class="summary-row">
+            <div class="summary-card">
+                <div class="value">22</div>
+                <div class="label">Hybrids Analyzed</div>
+            </div>
+            <div class="summary-card">
+                <div class="value">4</div>
+                <div class="label">Yield Zones</div>
+            </div>
+            <div class="summary-card" style="background:linear-gradient(135deg, #007bff, #0056b3);">
+                <div class="value">P14364</div>
+                <div class="label">Most Versatile</div>
+            </div>
+            <div class="summary-card" style="background:linear-gradient(135deg, #28a745, #1e7e34);">
+                <div class="value">P03357</div>
+                <div class="label">Elite Zone Champion</div>
+            </div>
+        </div>
+
+        <!-- Zone-by-Zone Analysis -->
+        <div class="section">
+            <h2>Zone-by-Zone Recommendations</h2>
+            <p style="color:#666; margin-bottom:1rem;">2025-2023 District CD data, Pioneer vs Competition (+/- 3 CRM, >10 comparisons per cell)</p>
+
+            <div class="zone-grid">
+                <!-- DRYLAND ZONE (<150 bu/a) -->
+                <div class="zone-card zone-dryland">
+                    <div class="zone-header">
+                        <h3>&lt;150 bu/a - Tough Dryland</h3>
+                        <p>Stress management is critical</p>
+                    </div>
+                    <div class="zone-content">
+                        <h4 style="color:#28a745;">TOP PERFORMERS (75%+ wins)</h4>
+                        <div style="margin-bottom:1rem;">
+                            <span class="product-badge badge-elite">P09076 - 82%</span>
+                            <span class="product-badge badge-elite">P14364 - 80%</span>
+                        </div>
+
+                        <h4 style="color:#ffc107;">COMPETITIVE (60-74% wins)</h4>
+                        <div style="margin-bottom:1rem;">
+                            <span class="product-badge badge-good">P03115 - 65%</span>
+                            <span class="product-badge badge-good">P00549 - 63%</span>
+                            <span class="product-badge badge-good">P10300 - 63%</span>
+                            <span class="product-badge badge-good">P1122 - 63%</span>
+                            <span class="product-badge badge-good">P08527 - 60%</span>
+                            <span class="product-badge badge-good">P0859 - 60%</span>
+                            <span class="product-badge badge-good">P10625 - 60%</span>
+                        </div>
+
+                        <h4 style="color:#dc3545;">AVOID IN THIS ZONE (&lt;50%)</h4>
+                        <div>
+                            <span class="product-badge badge-avoid">P12904 - 17%</span>
+                            <span class="product-badge badge-avoid">P05466 - 18%</span>
+                            <span class="product-badge badge-avoid">P14830 - 20%</span>
+                            <span class="product-badge badge-avoid">P12393 - 33%</span>
+                            <span class="product-badge badge-avoid">P03951 - 43%</span>
+                            <span class="product-badge badge-avoid">P13777 - 45%</span>
+                            <span class="product-badge badge-avoid">P12517 - 46%</span>
+                            <span class="product-badge badge-avoid">P03357 - 47%</span>
+                            <span class="product-badge badge-avoid">P02405 - 48%</span>
+                        </div>
+
+                        <div class="insight-box insight-success" style="margin-top:1rem;">
+                            <strong>Strategy:</strong> Lead with P09076 and P14364. These are your drought fighters. Don't waste premium genetics on stress acres.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TRANSITION ZONE (150-200 bu/a) -->
+                <div class="zone-card zone-transition">
+                    <div class="zone-header">
+                        <h3>150-200 bu/a - Transition Zone</h3>
+                        <p>Balanced performance needed</p>
+                    </div>
+                    <div class="zone-content">
+                        <h4 style="color:#28a745;">TOP PERFORMERS (75%+ wins)</h4>
+                        <div style="margin-bottom:1rem;">
+                            <span class="product-badge badge-elite">P14364 - 100%</span>
+                            <span class="product-badge badge-elite">P12393 - 90%</span>
+                            <span class="product-badge badge-elite">P05466 - 88%</span>
+                            <span class="product-badge badge-elite">P1742 - 86%</span>
+                            <span class="product-badge badge-strong">P0859 - 83%</span>
+                            <span class="product-badge badge-strong">P10300 - 80%</span>
+                            <span class="product-badge badge-strong">P08527 - 78%</span>
+                            <span class="product-badge badge-strong">P09076 - 77%</span>
+                            <span class="product-badge badge-strong">P13777 - 79%</span>
+                            <span class="product-badge badge-strong">P12517 - 75%</span>
+                        </div>
+
+                        <h4 style="color:#dc3545;">AVOID IN THIS ZONE (&lt;50%)</h4>
+                        <div>
+                            <span class="product-badge badge-avoid">P03115 - 38%</span>
+                            <span class="product-badge badge-avoid">P1548 - 47%</span>
+                        </div>
+
+                        <div class="insight-box insight-info" style="margin-top:1rem;">
+                            <strong>Strategy:</strong> P14364 is UNDEFEATED (100%) in this zone! Lead with it. P12393 (90%) and P05466 (88%) are strong backups.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- IRRIGATED ZONE (200-250 bu/a) -->
+                <div class="zone-card zone-irrigated">
+                    <div class="zone-header">
+                        <h3>200-250 bu/a - Good Irrigated</h3>
+                        <p>Yield potential starts to show</p>
+                    </div>
+                    <div class="zone-content">
+                        <h4 style="color:#28a745;">TOP PERFORMERS (75%+ wins)</h4>
+                        <div style="margin-bottom:1rem;">
+                            <span class="product-badge badge-elite">P09076 - 90%</span>
+                            <span class="product-badge badge-elite">P10300 - 89%</span>
+                            <span class="product-badge badge-elite">P1548 - 89%</span>
+                            <span class="product-badge badge-elite">P14830 - 88%</span>
+                            <span class="product-badge badge-strong">P12517 - 85%</span>
+                            <span class="product-badge badge-strong">P14364 - 85%</span>
+                            <span class="product-badge badge-strong">P00549 - 82%</span>
+                            <span class="product-badge badge-strong">P03357 - 79%</span>
+                            <span class="product-badge badge-strong">P13777 - 79%</span>
+                            <span class="product-badge badge-strong">P10625 - 75%</span>
+                        </div>
+
+                        <h4 style="color:#dc3545;">AVOID IN THIS ZONE (&lt;50%)</h4>
+                        <div>
+                            <span class="product-badge badge-avoid">P03115 - 41%</span>
+                        </div>
+
+                        <div class="insight-box insight-success" style="margin-top:1rem;">
+                            <strong>Strategy:</strong> P09076 dominates here (90%). Strong options across the lineup. Only avoid P03115.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ELITE ZONE (>250 bu/a) -->
+                <div class="zone-card zone-elite">
+                    <div class="zone-header">
+                        <h3>&gt;250 bu/a - Elite / High Yield</h3>
+                        <p>Maximum yield potential</p>
+                    </div>
+                    <div class="zone-content">
+                        <h4 style="color:#28a745;">TOP PERFORMERS (75%+ wins)</h4>
+                        <div style="margin-bottom:1rem;">
+                            <span class="product-badge badge-elite">P03357 - 100%</span>
+                            <span class="product-badge badge-elite">P12517 - 91%</span>
+                            <span class="product-badge badge-elite">P03951 - 89%</span>
+                            <span class="product-badge badge-elite">P14364 - 89%</span>
+                            <span class="product-badge badge-strong">P12393 - 83%</span>
+                            <span class="product-badge badge-strong">P10300 - 82%</span>
+                            <span class="product-badge badge-strong">P1742 - 82%</span>
+                            <span class="product-badge badge-strong">P02405 - 80%</span>
+                            <span class="product-badge badge-strong">P05466 - 80%</span>
+                            <span class="product-badge badge-strong">P0859 - 79%</span>
+                            <span class="product-badge badge-strong">P13777 - 78%</span>
+                            <span class="product-badge badge-strong">P08527 - 75%</span>
+                        </div>
+
+                        <h4 style="color:#dc3545;">AVOID IN THIS ZONE (&lt;50%)</h4>
+                        <div>
+                            <span class="product-badge badge-avoid">P1548 - 27%</span>
+                            <span class="product-badge badge-avoid">P03115 - 41%</span>
+                        </div>
+
+                        <div class="insight-box insight-info" style="margin-top:1rem;">
+                            <strong>Strategy:</strong> P03357 is UNDEFEATED (100%) at elite yields! Follow with P12517 (91%) and P03951 (89%). Many strong options here.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Versatility Analysis -->
+        <div class="section">
+            <h2>Product Versatility Rankings</h2>
+            <p style="color:#666; margin-bottom:1rem;">Which products perform consistently across ALL yield environments?</p>
+
+            <div class="zone-grid">
+                <!-- All-Around Champions -->
+                <div style="background:#d4edda; padding:1.25rem; border-radius:8px; border-left:4px solid #28a745;">
+                    <h3 style="color:#155724; margin:0 0 1rem 0;">ALL-AROUND CHAMPIONS</h3>
+                    <p style="color:#155724; font-size:0.9rem; margin-bottom:1rem;">Strong in 3+ zones (75%+ wins)</p>
+
+                    <div style="margin-bottom:1rem;">
+                        <strong style="color:#155724; font-size:1.1rem;">P14364</strong>
+                        <span style="color:#155724;"> - THE VERSATILITY KING</span>
+                        <div style="margin-top:0.5rem; font-size:0.85rem; color:#333;">
+                            <span class="product-badge badge-strong">&lt;150: 80%</span>
+                            <span class="product-badge badge-elite">150-200: 100%</span>
+                            <span class="product-badge badge-strong">200-250: 85%</span>
+                            <span class="product-badge badge-strong">&gt;250: 89%</span>
+                        </div>
+                        <p style="color:#155724; font-size:0.85rem; margin-top:0.5rem;"><strong>Position EVERYWHERE.</strong> Never below 80%. This is your do-it-all hybrid.</p>
+                    </div>
+
+                    <div style="margin-bottom:1rem; padding-top:1rem; border-top:1px solid #c3e6cb;">
+                        <strong style="color:#155724; font-size:1.1rem;">P10300</strong>
+                        <div style="margin-top:0.5rem; font-size:0.85rem; color:#333;">
+                            <span class="product-badge badge-good">&lt;150: 63%</span>
+                            <span class="product-badge badge-strong">150-200: 80%</span>
+                            <span class="product-badge badge-strong">200-250: 89%</span>
+                            <span class="product-badge badge-strong">&gt;250: 82%</span>
+                        </div>
+                        <p style="color:#155724; font-size:0.85rem; margin-top:0.5rem;">Excellent 150+ performer. Competitive even in dryland.</p>
+                    </div>
+
+                    <div style="padding-top:1rem; border-top:1px solid #c3e6cb;">
+                        <strong style="color:#155724; font-size:1.1rem;">P09076</strong>
+                        <div style="margin-top:0.5rem; font-size:0.85rem; color:#333;">
+                            <span class="product-badge badge-strong">&lt;150: 82%</span>
+                            <span class="product-badge badge-strong">150-200: 77%</span>
+                            <span class="product-badge badge-elite">200-250: 90%</span>
+                            <span class="product-badge badge-good">&gt;250: 64%</span>
+                        </div>
+                        <p style="color:#155724; font-size:0.85rem; margin-top:0.5rem;">Dryland specialist that holds up through irrigated. Slightly weaker at elite yields.</p>
+                    </div>
+                </div>
+
+                <!-- Specialists -->
+                <div style="background:#cce5ff; padding:1.25rem; border-radius:8px; border-left:4px solid #007bff;">
+                    <h3 style="color:#004085; margin:0 0 1rem 0;">ZONE SPECIALISTS</h3>
+                    <p style="color:#004085; font-size:0.9rem; margin-bottom:1rem;">Dominant in specific environments</p>
+
+                    <div style="margin-bottom:1rem;">
+                        <strong style="color:#004085; font-size:1.1rem;">P03357</strong>
+                        <span style="color:#004085;"> - ELITE YIELD SPECIALIST</span>
+                        <div style="margin-top:0.5rem; font-size:0.85rem; color:#333;">
+                            <span class="product-badge badge-avoid">&lt;150: 47%</span>
+                            <span class="product-badge badge-good">150-200: 63%</span>
+                            <span class="product-badge badge-strong">200-250: 79%</span>
+                            <span class="product-badge badge-elite">&gt;250: 100%</span>
+                        </div>
+                        <p style="color:#004085; font-size:0.85rem; margin-top:0.5rem;"><strong>UNDEFEATED at &gt;250!</strong> Keep on high-yield acres only.</p>
+                    </div>
+
+                    <div style="margin-bottom:1rem; padding-top:1rem; border-top:1px solid #b8daff;">
+                        <strong style="color:#004085; font-size:1.1rem;">P12517</strong>
+                        <span style="color:#004085;"> - HIGH YIELD CLIMBER</span>
+                        <div style="margin-top:0.5rem; font-size:0.85rem; color:#333;">
+                            <span class="product-badge badge-avoid">&lt;150: 46%</span>
+                            <span class="product-badge badge-strong">150-200: 75%</span>
+                            <span class="product-badge badge-strong">200-250: 85%</span>
+                            <span class="product-badge badge-elite">&gt;250: 91%</span>
+                        </div>
+                        <p style="color:#004085; font-size:0.85rem; margin-top:0.5rem;">Gets better as yields go up. Avoid on dryland.</p>
+                    </div>
+
+                    <div style="padding-top:1rem; border-top:1px solid #b8daff;">
+                        <strong style="color:#004085; font-size:1.1rem;">P05466 / P12393</strong>
+                        <span style="color:#004085;"> - TRANSITION ZONE STARS</span>
+                        <div style="margin-top:0.5rem; font-size:0.85rem; color:#333;">
+                            P05466: <span class="product-badge badge-avoid">&lt;150: 18%</span> <span class="product-badge badge-strong">150-200: 88%</span><br>
+                            P12393: <span class="product-badge badge-avoid">&lt;150: 33%</span> <span class="product-badge badge-elite">150-200: 90%</span>
+                        </div>
+                        <p style="color:#004085; font-size:0.85rem; margin-top:0.5rem;">Dominant in transition but WEAK in dryland. Know your acres!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- The Master Table -->
+        <div class="section">
+            <h2>Complete Performance Matrix</h2>
+            <p style="color:#666; margin-bottom:0.5rem;">2025-2023, District CD, Pioneer vs Competition, +/- 3 CRM, >10 Comparisons</p>
+            <p style="color:#1a5f2a; margin-bottom:1rem; font-weight:600;">Color Key: <span style="background:#28a745;color:white;padding:0.2rem 0.5rem;border-radius:4px;margin:0 0.25rem;">75%+ Elite</span> <span style="background:#d4edda;padding:0.2rem 0.5rem;border-radius:4px;margin:0 0.25rem;">65-74% Strong</span> <span style="background:#fff3cd;padding:0.2rem 0.5rem;border-radius:4px;margin:0 0.25rem;">50-64% Competitive</span> <span style="background:#f8d7da;padding:0.2rem 0.5rem;border-radius:4px;margin:0 0.25rem;">&lt;50% Weak</span></p>
+
+            <div class="table-container">
+                <table id="master-table">
+                    <thead>
+                        <tr>
+                            <th>Hybrid</th>
+                            <th class="text-center" style="background:#dc3545;">&lt;150 bu/a<br><span style="font-weight:normal;font-size:0.7rem;">Dryland</span></th>
+                            <th class="text-center" style="background:#fd7e14;">150-200 bu/a<br><span style="font-weight:normal;font-size:0.7rem;">Transition</span></th>
+                            <th class="text-center" style="background:#28a745;">200-250 bu/a<br><span style="font-weight:normal;font-size:0.7rem;">Irrigated</span></th>
+                            <th class="text-center" style="background:#007bff;">&gt;250 bu/a<br><span style="font-weight:normal;font-size:0.7rem;">Elite</span></th>
+                            <th class="text-center" style="background:#6c757d;">Avg Win %</th>
+                            <th class="text-center" style="background:#6c757d;">Best Zone</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="highlight-row">
+                            <td><strong>P14364</strong> <span class="product-badge badge-new">NEW</span></td>
+                            <td class="text-center" style="background:#d4edda; font-weight:600;">80%</td>
+                            <td class="text-center" style="background:#28a745; color:white; font-weight:bold;">100%</td>
+                            <td class="text-center" style="background:#d4edda; font-weight:600;">85%</td>
+                            <td class="text-center" style="background:#d4edda; font-weight:600;">89%</td>
+                            <td class="text-center" style="background:#d4edda; font-weight:bold;">88.5%</td>
+                            <td class="text-center">ALL ZONES</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td><strong>P09076</strong> <span class="product-badge badge-new">NEW</span></td>
+                            <td class="text-center" style="background:#d4edda; font-weight:600;">82%</td>
+                            <td class="text-center" style="background:#d4edda;">77%</td>
+                            <td class="text-center" style="background:#28a745; color:white; font-weight:bold;">90%</td>
+                            <td class="text-center" style="background:#fff3cd;">64%</td>
+                            <td class="text-center" style="background:#d4edda;">78.3%</td>
+                            <td class="text-center">200-250</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td><strong>P10300</strong> <span class="product-badge badge-new">NEW</span></td>
+                            <td class="text-center" style="background:#fff3cd;">63%</td>
+                            <td class="text-center" style="background:#d4edda;">80%</td>
+                            <td class="text-center" style="background:#d4edda; font-weight:600;">89%</td>
+                            <td class="text-center" style="background:#d4edda;">82%</td>
+                            <td class="text-center" style="background:#d4edda;">78.5%</td>
+                            <td class="text-center">200-250</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td><strong>P03357</strong> <span class="product-badge badge-new">NEW</span></td>
+                            <td class="text-center" style="background:#f8d7da;">47%</td>
+                            <td class="text-center" style="background:#fff3cd;">63%</td>
+                            <td class="text-center" style="background:#d4edda;">79%</td>
+                            <td class="text-center" style="background:#28a745; color:white; font-weight:bold;">100%</td>
+                            <td class="text-center" style="background:#fff3cd;">72.3%</td>
+                            <td class="text-center">&gt;250 ONLY</td>
+                        </tr>
+                        <tr class="highlight-row">
+                            <td><strong>P12517</strong> <span class="product-badge badge-new">NEW</span></td>
+                            <td class="text-center" style="background:#f8d7da;">46%</td>
+                            <td class="text-center" style="background:#d4edda;">75%</td>
+                            <td class="text-center" style="background:#d4edda; font-weight:600;">85%</td>
+                            <td class="text-center" style="background:#28a745; color:white; font-weight:bold;">91%</td>
+                            <td class="text-center" style="background:#fff3cd;">74.3%</td>
+                            <td class="text-center">&gt;250</td>
+                        </tr>
+                        <tr>
+                            <td><strong>P0859</strong></td>
+                            <td class="text-center" style="background:#fff3cd;">60%</td>
+                            <td class="text-center" style="background:#d4edda;">83%</td>
+                            <td class="text-center" style="background:#d4edda;">74%</td>
+                            <td class="text-center" style="background:#d4edda;">79%</td>
+                            <td class="text-center" style="background:#d4edda;">74.0%</td>
+                            <td class="text-center">150-200</td>
+                        </tr>
+                        <tr>
+                            <td><strong>P08527</strong></td>
+                            <td class="text-center" style="background:#fff3cd;">60%</td>
+                            <td class="text-center" style="background:#d4edda;">78%</td>
+                            <td class="text-center" style="background:#d4edda;">72%</td>
+                            <td class="text-center" style="background:#d4edda;">75%</td>
+                            <td class="text-center" style="background:#d4edda;">71.3%</td>
+                            <td class="text-center">150-200</td>
+                        </tr>
+                        <tr>
+                            <td><strong>P1742</strong></td>
+                            <td class="text-center" style="background:#f8f9fa;">N/A</td>
+                            <td class="text-center" style="background:#d4edda; font-weight:600;">86%</td>
+                            <td class="text-center" style="background:#d4edda;">71%</td>
+                            <td class="text-center" style="background:#d4edda;">82%</td>
+                            <td class="text-center" style="background:#d4edda;">79.7%</td>
+                            <td class="text-center">150-200</td>
+                        </tr>
+                        <tr>
+                            <td><strong>P12393</strong></td>
+                            <td class="text-center" style="background:#dc3545; color:white;">33%</td>
+                            <td class="text-center" style="background:#28a745; color:white; font-weight:bold;">90%</td>
+                            <td class="text-center" style="background:#d4edda;">68%</td>
+                            <td class="text-center" style="background:#d4edda;">83%</td>
+                            <td class="text-center" style="background:#fff3cd;">68.5%</td>
+                            <td class="text-center">150-200</td>
+                        </tr>
+                        <tr>
+                            <td><strong>P05466</strong></td>
+                            <td class="text-center" style="background:#dc3545; color:white;">18%</td>
+                            <td class="text-center" style="background:#d4edda; font-weight:600;">88%</td>
+                            <td class="text-center" style="background:#d4edda;">70%</td>
+                            <td class="text-center" style="background:#d4edda;">80%</td>
+                            <td class="text-center" style="background:#fff3cd;">64.0%</td>
+                            <td class="text-center">150-200</td>
+                        </tr>
+                        <tr>
+                            <td><strong>P00549</strong></td>
+                            <td class="text-center" style="background:#fff3cd;">63%</td>
+                            <td class="text-center" style="background:#f8f9fa;">N/A</td>
+                            <td class="text-center" style="background:#d4edda;">82%</td>
+                            <td class="text-center" style="background:#d4edda;">73%</td>
+                            <td class="text-center" style="background:#d4edda;">72.7%</td>
+                            <td class="text-center">200-250</td>
+                        </tr>
+                        <tr>
+                            <td><strong>P02405</strong></td>
+                            <td class="text-center" style="background:#f8d7da;">48%</td>
+                            <td class="text-center" style="background:#d4edda;">73%</td>
+                            <td class="text-center" style="background:#fff3cd;">61%</td>
+                            <td class="text-center" style="background:#d4edda;">80%</td>
+                            <td class="text-center" style="background:#fff3cd;">65.5%</td>
+                            <td class="text-center">&gt;250</td>
+                        </tr>
+                        <tr>
+                            <td><strong>P03951</strong></td>
+                            <td class="text-center" style="background:#f8d7da;">43%</td>
+                            <td class="text-center" style="background:#fff3cd;">63%</td>
+                            <td class="text-center" style="background:#fff3cd;">61%</td>
+                            <td class="text-center" style="background:#d4edda; font-weight:600;">89%</td>
+                            <td class="text-center" style="background:#fff3cd;">64.0%</td>
+                            <td class="text-center">&gt;250</td>
+                        </tr>
+                        <tr>
+                            <td><strong>P05081</strong></td>
+                            <td class="text-center" style="background:#fff3cd;">51%</td>
+                            <td class="text-center" style="background:#fff3cd;">66%</td>
+                            <td class="text-center" style="background:#d4edda;">74%</td>
+                            <td class="text-center" style="background:#d4edda;">70%</td>
+                            <td class="text-center" style="background:#fff3cd;">65.3%</td>
+                            <td class="text-center">200-250</td>
+                        </tr>
+                        <tr>
+                            <td><strong>P10625</strong></td>
+                            <td class="text-center" style="background:#fff3cd;">60%</td>
+                            <td class="text-center" style="background:#d4edda;">72%</td>
+                            <td class="text-center" style="background:#d4edda;">75%</td>
+                            <td class="text-center" style="background:#d4edda;">74%</td>
+                            <td class="text-center" style="background:#d4edda;">70.3%</td>
+                            <td class="text-center">200-250</td>
+                        </tr>
+                        <tr>
+                            <td><strong>P14830</strong></td>
+                            <td class="text-center" style="background:#dc3545; color:white;">20%</td>
+                            <td class="text-center" style="background:#d4edda;">72%</td>
+                            <td class="text-center" style="background:#d4edda; font-weight:600;">88%</td>
+                            <td class="text-center" style="background:#d4edda;">74%</td>
+                            <td class="text-center" style="background:#fff3cd;">63.5%</td>
+                            <td class="text-center">200-250</td>
+                        </tr>
+                        <tr>
+                            <td><strong>P13777</strong></td>
+                            <td class="text-center" style="background:#f8d7da;">45%</td>
+                            <td class="text-center" style="background:#d4edda;">79%</td>
+                            <td class="text-center" style="background:#d4edda;">79%</td>
+                            <td class="text-center" style="background:#d4edda;">78%</td>
+                            <td class="text-center" style="background:#d4edda;">70.3%</td>
+                            <td class="text-center">150-250</td>
+                        </tr>
+                        <tr>
+                            <td><strong>P0995</strong></td>
+                            <td class="text-center" style="background:#fff3cd;">56%</td>
+                            <td class="text-center" style="background:#d4edda;">71%</td>
+                            <td class="text-center" style="background:#fff3cd;">61%</td>
+                            <td class="text-center" style="background:#fff3cd;">69%</td>
+                            <td class="text-center" style="background:#fff3cd;">64.3%</td>
+                            <td class="text-center">150-200</td>
+                        </tr>
+                        <tr>
+                            <td><strong>P1122</strong></td>
+                            <td class="text-center" style="background:#fff3cd;">63%</td>
+                            <td class="text-center" style="background:#fff3cd;">58%</td>
+                            <td class="text-center" style="background:#fff3cd;">57%</td>
+                            <td class="text-center" style="background:#fff3cd;">68%</td>
+                            <td class="text-center" style="background:#fff3cd;">61.5%</td>
+                            <td class="text-center">&gt;250</td>
+                        </tr>
+                        <tr>
+                            <td><strong>P12904</strong></td>
+                            <td class="text-center" style="background:#dc3545; color:white;">17%</td>
+                            <td class="text-center" style="background:#fff3cd;">67%</td>
+                            <td class="text-center" style="background:#fff3cd;">56%</td>
+                            <td class="text-center" style="background:#fff3cd;">69%</td>
+                            <td class="text-center" style="background:#fff3cd;">52.3%</td>
+                            <td class="text-center">&gt;250</td>
+                        </tr>
+                        <tr style="background:#fff5f5;">
+                            <td><strong>P03115</strong></td>
+                            <td class="text-center" style="background:#fff3cd;">65%</td>
+                            <td class="text-center" style="background:#f8d7da;">38%</td>
+                            <td class="text-center" style="background:#f8d7da;">41%</td>
+                            <td class="text-center" style="background:#f8d7da;">41%</td>
+                            <td class="text-center" style="background:#f8d7da;">46.3%</td>
+                            <td class="text-center" style="color:#dc3545;">&lt;150 ONLY</td>
+                        </tr>
+                        <tr style="background:#fff5f5;">
+                            <td><strong>P1548</strong></td>
+                            <td class="text-center" style="background:#f8f9fa;">N/A</td>
+                            <td class="text-center" style="background:#f8d7da;">47%</td>
+                            <td class="text-center" style="background:#fff3cd;">54%</td>
+                            <td class="text-center" style="background:#dc3545; color:white;">27%</td>
+                            <td class="text-center" style="background:#f8d7da;">42.7%</td>
+                            <td class="text-center" style="color:#dc3545;">WEAK</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Action Summary -->
+        <div class="section" style="background:linear-gradient(135deg, #1a5f2a, #2d8f4a); color:white;">
+            <h2 style="color:white; border-bottom-color:rgba(255,255,255,0.3);">Quick Reference: Know Your Acres</h2>
+
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1.5rem; margin-top:1rem;">
+                <div style="background:rgba(255,255,255,0.15); padding:1rem; border-radius:8px;">
+                    <h4 style="margin:0 0 0.5rem 0;">Tough Dryland (&lt;150)</h4>
+                    <p style="font-size:1.1rem; margin:0;"><strong>Lead: P09076, P14364</strong></p>
+                    <p style="font-size:0.85rem; opacity:0.9; margin:0.5rem 0 0 0;">Avoid: P12904, P05466, P14830</p>
+                </div>
+                <div style="background:rgba(255,255,255,0.15); padding:1rem; border-radius:8px;">
+                    <h4 style="margin:0 0 0.5rem 0;">Transition (150-200)</h4>
+                    <p style="font-size:1.1rem; margin:0;"><strong>Lead: P14364, P12393, P05466</strong></p>
+                    <p style="font-size:0.85rem; opacity:0.9; margin:0.5rem 0 0 0;">Avoid: P03115, P1548</p>
+                </div>
+                <div style="background:rgba(255,255,255,0.15); padding:1rem; border-radius:8px;">
+                    <h4 style="margin:0 0 0.5rem 0;">Good Irrigated (200-250)</h4>
+                    <p style="font-size:1.1rem; margin:0;"><strong>Lead: P09076, P10300, P14830</strong></p>
+                    <p style="font-size:0.85rem; opacity:0.9; margin:0.5rem 0 0 0;">Avoid: P03115</p>
+                </div>
+                <div style="background:rgba(255,255,255,0.15); padding:1rem; border-radius:8px;">
+                    <h4 style="margin:0 0 0.5rem 0;">Elite Yield (&gt;250)</h4>
+                    <p style="font-size:1.1rem; margin:0;"><strong>Lead: P03357, P12517, P03951</strong></p>
+                    <p style="font-size:0.85rem; opacity:0.9; margin:0.5rem 0 0 0;">Avoid: P1548, P03115</p>
+                </div>
+            </div>
+
+            <div style="margin-top:1.5rem; padding:1rem; background:rgba(255,255,255,0.2); border-radius:8px; text-align:center;">
+                <p style="font-size:1.1rem; margin:0;"><strong>Remember: These products = 13% of 2027 Demand Plan</strong></p>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

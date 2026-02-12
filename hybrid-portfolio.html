@@ -17,48 +17,43 @@
             justify-content: space-between;
             align-items: center;
         }
-
         .header h1 { font-size: 1.4rem; }
-
-        .btn {
+        .nav-links { display: flex; gap: 0.5rem; align-items: center; }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
             padding: 0.5rem 1rem;
-            border: none;
+            background: rgba(255,255,255,0.2);
             border-radius: 4px;
-            cursor: pointer;
             font-size: 0.85rem;
         }
+        .nav-links a:hover { background: rgba(255,255,255,0.3); }
 
-        .btn-primary { background: white; color: #1a5f2a; font-weight: 600; }
-        .btn-secondary { background: rgba(255,255,255,0.2); color: white; }
-        .btn:hover { opacity: 0.9; }
-
-        .container { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
+        .container { max-width: 1800px; margin: 0 auto; padding: 1.5rem; }
 
         /* Summary Cards */
-        .summary-cards {
+        .summary-row {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 1rem;
             margin-bottom: 1.5rem;
         }
-
         .summary-card {
             background: linear-gradient(135deg, #1a5f2a, #2d8a42);
             color: white;
-            padding: 1.25rem;
+            padding: 1rem;
             border-radius: 8px;
             text-align: center;
         }
-
         .summary-card.blue { background: linear-gradient(135deg, #0056b3, #007bff); }
-        .summary-card.red { background: linear-gradient(135deg, #c82333, #dc3545); }
         .summary-card.gold { background: linear-gradient(135deg, #d39e00, #ffc107); color: #333; }
+        .summary-card.red { background: linear-gradient(135deg, #c82333, #dc3545); }
+        .summary-card.purple { background: linear-gradient(135deg, #6f42c1, #8b5cf6); }
+        .summary-card.orange { background: linear-gradient(135deg, #e67e22, #f39c12); }
+        .summary-card .label { font-size: 0.7rem; opacity: 0.9; }
+        .summary-card .value { font-size: 1.4rem; font-weight: bold; }
+        .summary-card .sub { font-size: 0.65rem; opacity: 0.8; }
 
-        .summary-card .label { font-size: 0.75rem; opacity: 0.9; margin-bottom: 0.25rem; }
-        .summary-card .value { font-size: 1.75rem; font-weight: bold; }
-        .summary-card .sub { font-size: 0.7rem; opacity: 0.8; margin-top: 0.25rem; }
-
-        /* Section */
         .section {
             background: white;
             padding: 1.5rem;
@@ -66,7 +61,6 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             margin-bottom: 1.5rem;
         }
-
         .section h2 {
             font-size: 1.1rem;
             color: #1a5f2a;
@@ -74,34 +68,100 @@
             padding-bottom: 0.5rem;
             border-bottom: 2px solid #e8f5e9;
         }
+        .section h2.red { color: #dc3545; border-bottom-color: #f8d7da; }
+        .section h2.green { color: #28a745; border-bottom-color: #d4edda; }
+        .section h2.orange { color: #e67e22; border-bottom-color: #fdebd0; }
 
-        /* Hybrid Grid */
+        /* CACTUS Program Section */
+        .cactus-section {
+            background: linear-gradient(135deg, #f3e8ff, #ede9fe);
+            border: 2px solid #c4b5fd;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .cactus-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .cactus-header h3 { color: #6f42c1; font-size: 1.1rem; }
+        .cactus-badge {
+            background: #6f42c1;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+        }
+
+        /* Data Table Styles */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+        }
+        .data-table th, .data-table td {
+            padding: 0.5rem;
+            border: 1px solid #dee2e6;
+            text-align: center;
+        }
+        .data-table th {
+            background: #495057;
+            color: white;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .data-table th.year-2024 { background: #6c757d; }
+        .data-table th.year-2025 { background: #17a2b8; }
+        .data-table th.year-2026 { background: #28a745; }
+        .data-table th.year-2027 { background: #007bff; }
+        .data-table tr:nth-child(even) { background: #f8f9fa; }
+        .data-table .total-row { background: #1a5f2a; color: white; font-weight: bold; }
+        .data-table input {
+            width: 70px;
+            padding: 0.25rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .data-table input.dp-input {
+            border: 2px solid #e67e22;
+            background: #fef9e7;
+        }
+        .data-table input.rc-input {
+            border: 2px solid #9b59b6;
+            background: #f5eef8;
+        }
+
+        /* Hybrid Cards */
         .hybrid-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
             gap: 1rem;
         }
 
-        .hybrid-item {
-            background: #f8f8f8;
+        .hybrid-card {
+            background: #f8f9fa;
             border: 2px solid #ddd;
             border-radius: 8px;
             padding: 1rem;
             transition: all 0.2s;
         }
-
-        .hybrid-item:hover {
+        .hybrid-card:hover {
             border-color: #1a5f2a;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-
-        .hybrid-item.discontinued {
+        .hybrid-card.xd {
             background: #fff5f5;
             border-color: #dc3545;
-            opacity: 0.7;
         }
-
-        .hybrid-item.new {
+        .hybrid-card.xd .hybrid-name {
+            color: #dc3545;
+            text-decoration: line-through;
+        }
+        .hybrid-card.new {
             background: #f0fff4;
             border-color: #28a745;
         }
@@ -110,65 +170,73 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.5rem;
         }
-
         .hybrid-name {
             font-size: 1.1rem;
             font-weight: bold;
             color: #1a5f2a;
         }
-
-        .hybrid-item.discontinued .hybrid-name {
-            color: #dc3545;
-            text-decoration: line-through;
-        }
-
         .hybrid-badges {
             display: flex;
             gap: 0.25rem;
             flex-wrap: wrap;
         }
-
         .badge {
             padding: 0.2rem 0.5rem;
             border-radius: 4px;
             font-size: 0.7rem;
             font-weight: 600;
         }
-
         .badge-crm { background: #007bff; color: white; }
         .badge-xd { background: #dc3545; color: white; }
         .badge-new { background: #28a745; color: white; }
         .badge-aquamax { background: #17a2b8; color: white; }
         .badge-silage { background: #6c757d; color: white; }
+        .badge-limited { background: #ffc107; color: #333; }
 
         .hybrid-specs {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 0.5rem;
+            gap: 0.25rem 1rem;
             font-size: 0.8rem;
-            margin-bottom: 0.75rem;
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+            background: white;
+            border-radius: 4px;
         }
-
-        .spec {
-            display: flex;
-            justify-content: space-between;
-        }
-
+        .spec { display: flex; justify-content: space-between; }
         .spec-label { color: #666; }
         .spec-value { font-weight: 600; color: #333; }
 
         .hybrid-notes {
             font-size: 0.8rem;
-            color: #666;
-            margin-bottom: 0.75rem;
+            color: #495057;
+            background: white;
             padding: 0.5rem;
+            border-radius: 4px;
+            border-left: 3px solid #1a5f2a;
+            margin: 0.5rem 0;
+        }
+        .hybrid-card.xd .hybrid-notes { border-left-color: #dc3545; }
+        .hybrid-card.new .hybrid-notes { border-left-color: #28a745; }
+
+        .hybrid-history {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+            margin: 0.5rem 0;
+            font-size: 0.75rem;
+        }
+        .history-item {
+            text-align: center;
+            padding: 0.25rem;
             background: white;
             border-radius: 4px;
-            max-height: 60px;
-            overflow-y: auto;
         }
+        .history-item .year { color: #666; font-size: 0.65rem; }
+        .history-item .bags { font-weight: bold; color: #333; }
+        .history-item .pct { color: #28a745; font-size: 0.65rem; }
 
         /* Percentage Slider */
         .percentage-control {
@@ -179,22 +247,18 @@
             padding-top: 0.75rem;
             border-top: 1px solid #ddd;
         }
-
         .percentage-control label {
             font-size: 0.75rem;
             color: #666;
             white-space: nowrap;
         }
-
         .percentage-control input[type="range"] {
             flex: 1;
             height: 6px;
             -webkit-appearance: none;
             background: #ddd;
             border-radius: 3px;
-            cursor: pointer;
         }
-
         .percentage-control input[type="range"]::-webkit-slider-thumb {
             -webkit-appearance: none;
             width: 16px;
@@ -203,7 +267,6 @@
             border-radius: 50%;
             cursor: pointer;
         }
-
         .percentage-value {
             background: #1a5f2a;
             color: white;
@@ -214,83 +277,98 @@
             min-width: 50px;
             text-align: center;
         }
+        .hybrid-card.xd .percentage-value { background: #dc3545; }
+        .hybrid-card.new .percentage-value { background: #28a745; }
 
-        .hybrid-item.discontinued .percentage-value {
-            background: #dc3545;
-        }
-
-        /* Total Bar */
-        .total-bar {
-            background: white;
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
+        /* DP Request input on cards */
+        .dp-request-row {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            background: #fef9e7;
+            border: 2px solid #e67e22;
+            border-radius: 4px;
         }
-
-        .total-label {
-            font-size: 1rem;
-            color: #333;
+        .dp-request-row label {
+            font-size: 0.75rem;
+            color: #e67e22;
+            font-weight: 600;
         }
-
-        .total-value {
-            font-size: 1.5rem;
+        .dp-request-row input {
+            width: 70px;
+            padding: 0.25rem;
+            border: 2px solid #e67e22;
+            border-radius: 4px;
+            text-align: center;
             font-weight: bold;
         }
 
-        .total-value.over { color: #dc3545; }
-        .total-value.under { color: #ffc107; }
-        .total-value.exact { color: #28a745; }
-
-        .progress-bar-container {
-            flex: 1;
-            margin: 0 2rem;
-            height: 20px;
-            background: #e9ecef;
-            border-radius: 10px;
-            overflow: hidden;
+        /* RC Request input on cards (for NEW hybrids) */
+        .rc-request-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            background: #f5eef8;
+            border: 2px solid #9b59b6;
+            border-radius: 4px;
+        }
+        .rc-request-row label {
+            font-size: 0.75rem;
+            color: #9b59b6;
+            font-weight: 600;
+        }
+        .rc-request-row input {
+            width: 70px;
+            padding: 0.25rem;
+            border: 2px solid #9b59b6;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
         }
 
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #28a745, #1a5f2a);
-            border-radius: 10px;
-            transition: width 0.3s;
+        /* Highlight column */
+        .dp-highlight {
+            background: #fef9e7 !important;
+            border-left: 3px solid #e67e22 !important;
+            border-right: 3px solid #e67e22 !important;
+        }
+        .dp-highlight-header {
+            background: #e67e22 !important;
+            color: white !important;
+        }
+        .rc-highlight {
+            background: #f5eef8 !important;
+            border-left: 3px solid #9b59b6 !important;
+            border-right: 3px solid #9b59b6 !important;
+        }
+        .rc-highlight-header {
+            background: #9b59b6 !important;
+            color: white !important;
         }
 
-        .progress-bar.over {
-            background: linear-gradient(90deg, #ffc107, #dc3545);
+        /* Export buttons */
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
         }
+        .btn-primary { background: #1a5f2a; color: white; }
+        .btn-secondary { background: #6c757d; color: white; }
+        .btn-orange { background: #e67e22; color: white; }
+        .btn:hover { opacity: 0.9; }
 
-        /* Charts Row */
-        .charts-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-        }
-
-        .chart-container {
-            position: relative;
-            height: 300px;
-        }
-
-        /* Filter */
-        .filter-row {
+        .export-row {
             display: flex;
             gap: 1rem;
             margin-bottom: 1rem;
             flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .filter-row select, .filter-row input {
-            padding: 0.4rem 0.75rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 0.85rem;
         }
 
         /* Legend */
@@ -299,454 +377,527 @@
             gap: 1.5rem;
             margin-bottom: 1rem;
             flex-wrap: wrap;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
             font-size: 0.85rem;
         }
-
-        .legend-color {
-            width: 16px;
-            height: 16px;
-            border-radius: 4px;
-        }
+        .legend-item { display: flex; align-items: center; gap: 0.5rem; }
+        .legend-color { width: 20px; height: 20px; border-radius: 4px; border: 2px solid; }
 
         @media (max-width: 768px) {
-            .charts-row { grid-template-columns: 1fr; }
             .hybrid-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
+    <!-- Auth check -->
+    <script>
+        if (!sessionStorage.getItem('pioneer_auth')) {
+            window.location.href = 'login.html';
+        }
+    </script>
+
     <div class="header">
-        <h1>Pioneer 2027 Hybrid Portfolio</h1>
-        <div style="display:flex; gap:0.5rem;">
-            <a href="index.html" class="btn btn-secondary" style="text-decoration:none;">Forecast</a>
-            <a href="forecast.html" class="btn btn-secondary" style="text-decoration:none;">Hybrid Details</a>
-            <button class="btn btn-secondary" onclick="resetAllocations()">Reset All</button>
-            <button class="btn btn-primary" onclick="exportAllocations()">Export Plan</button>
+        <h1>2027 Hybrid Portfolio Planning</h1>
+        <div class="nav-links">
+            <a href="index.html">Dashboard</a>
+            <a href="yield-zone.html">Yield Zones</a>
+            <a href="sorghum.html">Sorghum</a>
+            <a href="#" onclick="sessionStorage.clear(); window.location.href='login.html'; return false;">Logout</a>
         </div>
     </div>
 
     <div class="container">
         <!-- Summary Cards -->
-        <div class="summary-cards">
-            <div class="summary-card">
-                <div class="label">Continuing Hybrids</div>
-                <div class="value" id="continuing-count">0</div>
-                <div class="sub">Available 2027</div>
+        <div class="summary-row">
+            <div class="summary-card red">
+                <div class="label">Discontinued (XD)</div>
+                <div class="value" id="xd-count">0</div>
+                <div class="sub">Not Available 2027</div>
             </div>
             <div class="summary-card blue">
                 <div class="label">New for 2027</div>
                 <div class="value" id="new-count">0</div>
-                <div class="sub">New launches</div>
+                <div class="sub">New Launches</div>
             </div>
-            <div class="summary-card red">
-                <div class="label">Discontinued (XD)</div>
-                <div class="value" id="xd-count">0</div>
-                <div class="sub">Not available 2027</div>
+            <div class="summary-card">
+                <div class="label">Continuing</div>
+                <div class="value" id="cont-count">0</div>
+                <div class="sub">Available 2027</div>
             </div>
-            <div class="summary-card gold">
-                <div class="label">Total 2027 Portfolio</div>
-                <div class="value" id="total-portfolio">0</div>
-                <div class="sub">Hybrids available</div>
+            <div class="summary-card orange">
+                <div class="label">Additional DP</div>
+                <div class="value" id="total-dp-request">0</div>
+                <div class="sub">Extra Units Requested</div>
             </div>
-        </div>
-
-        <!-- Total Allocation Bar -->
-        <div class="total-bar">
-            <span class="total-label">Total Business Allocation:</span>
-            <div class="progress-bar-container">
-                <div class="progress-bar" id="progress-bar"></div>
+            <div class="summary-card purple">
+                <div class="label">CACTUS Units</div>
+                <div class="value" id="cactus-units">0</div>
+                <div class="sub">Dryland Request</div>
             </div>
-            <span class="total-value" id="total-allocation">0%</span>
-        </div>
-
-        <!-- Charts -->
-        <div class="charts-row">
-            <div class="section">
-                <h2>Business Allocation by Hybrid</h2>
-                <div class="chart-container">
-                    <canvas id="allocation-chart"></canvas>
-                </div>
-            </div>
-            <div class="section">
-                <h2>Portfolio Composition</h2>
-                <div class="chart-container">
-                    <canvas id="composition-chart"></canvas>
-                </div>
+            <div class="summary-card" style="background:linear-gradient(135deg, #7d3c98, #9b59b6);">
+                <div class="label">Extra RC Allocation</div>
+                <div class="value" id="total-rc">0</div>
+                <div class="sub">Regional Center</div>
             </div>
         </div>
 
-        <!-- Legend -->
+        <!-- CACTUS PROGRAM -->
+        <div class="cactus-section">
+            <div class="cactus-header">
+                <h3>CACTUS - Tough Dryland Offer Products</h3>
+                <span class="cactus-badge">WESTERN CORN DISCOUNTS</span>
+            </div>
+            <p style="color:#6f42c1; font-size:0.85rem; margin-bottom:1rem;">
+                <strong>Purpose:</strong> Better value proposition for dryland acres. Blend CACTUS products with leader products.
+            </p>
+            <div style="overflow-x:auto;">
+                <table class="data-table" id="cactus-table">
+                    <thead>
+                        <tr style="background:#6f42c1;">
+                            <th>Product</th>
+                            <th>CRM</th>
+                            <th>Discount</th>
+                            <th>2026 Invoiced</th>
+                            <th style="background:#17a2b8;">2027 Anticipated Volumes</th>
+                            <th>Total Request</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cactus-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- DATA TABLE - All Years with DP Request -->
         <div class="section">
-            <h2>2027 Hybrid Portfolio</h2>
-            <div class="legend">
-                <div class="legend-item">
-                    <div class="legend-color" style="background:#f8f8f8; border:2px solid #ddd;"></div>
-                    <span>Continuing</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background:#f0fff4; border:2px solid #28a745;"></div>
-                    <span>New for 2027</span>
-                </div>
-                <div class="legend-item">
-                    <div class="legend-color" style="background:#fff5f5; border:2px solid #dc3545;"></div>
-                    <span>Discontinued (XD)</span>
-                </div>
+            <h2 class="orange">Demand Plan Data - All Years</h2>
+            <p style="color:#666; font-size:0.85rem; margin-bottom:1rem;">
+                Enter Additional DP Requests in the highlighted orange column to show where you want extra volume.
+            </p>
+            <div class="export-row">
+                <button class="btn btn-primary" onclick="exportCSV()">Export to CSV</button>
+                <button class="btn btn-orange" onclick="exportDPSummary()">Export DP Summary</button>
+                <button class="btn btn-secondary" onclick="copyToClipboard()">Copy to Clipboard</button>
             </div>
-
-            <div class="filter-row">
-                <select id="filter-status" onchange="renderHybrids()">
-                    <option value="all">All Hybrids</option>
-                    <option value="available">Available 2027</option>
-                    <option value="continuing">Continuing</option>
-                    <option value="new">New for 2027</option>
-                    <option value="discontinued">Discontinued (XD)</option>
-                </select>
-                <select id="filter-crm" onchange="renderHybrids()">
-                    <option value="all">All CRM</option>
-                    <option value="early">Early (90-100)</option>
-                    <option value="mid">Mid (100-110)</option>
-                    <option value="full">Full (110+)</option>
-                </select>
-                <input type="text" id="search-hybrid" placeholder="Search hybrid..." oninput="renderHybrids()">
+            <div style="overflow-x:auto; max-height:400px; overflow-y:auto;">
+                <table class="data-table" id="main-table">
+                    <thead style="position:sticky; top:0; z-index:10;">
+                        <tr>
+                            <th rowspan="2" style="background:#343a40;">Hybrid</th>
+                            <th colspan="2" class="year-2024">2024</th>
+                            <th colspan="2" class="year-2025">2025</th>
+                            <th colspan="2" class="year-2026">2026</th>
+                            <th colspan="2" class="year-2027">2027</th>
+                            <th rowspan="2" class="dp-highlight-header">DP Request</th>
+                            <th rowspan="2" class="rc-highlight-header">Extra RC Allocation</th>
+                        </tr>
+                        <tr>
+                            <th class="year-2024">Bags</th>
+                            <th class="year-2024">%</th>
+                            <th class="year-2025">Bags</th>
+                            <th class="year-2025">%</th>
+                            <th class="year-2026">Bags</th>
+                            <th class="year-2026">%</th>
+                            <th class="year-2027">Bags</th>
+                            <th class="year-2027">%</th>
+                        </tr>
+                    </thead>
+                    <tbody id="main-table-body"></tbody>
+                    <tfoot>
+                        <tr class="total-row">
+                            <td><strong>TOTAL</strong></td>
+                            <td id="foot-2024">0</td>
+                            <td>100%</td>
+                            <td id="foot-2025">0</td>
+                            <td>100%</td>
+                            <td id="foot-2026">0</td>
+                            <td>100%</td>
+                            <td id="foot-2027">0</td>
+                            <td>100%</td>
+                            <td style="background:#d35400;" id="foot-dp">0</td>
+                            <td style="background:#7d3c98;" id="foot-rc">0</td>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
+        </div>
 
-            <div class="hybrid-grid" id="hybrid-grid"></div>
+        <!-- DISCONTINUED (XD) HYBRIDS - RED AT TOP -->
+        <div class="section" style="background:#fff5f5; border:2px solid #dc3545;">
+            <h2 class="red">DISCONTINUED (XD) - Not Available 2027</h2>
+            <p style="color:#dc3545; font-size:0.85rem; margin-bottom:1rem;">
+                <strong>These hybrids are being discontinued.</strong> See notes for recommended replacements.
+            </p>
+            <div class="hybrid-grid" id="xd-grid"></div>
+        </div>
+
+        <!-- NEW 2027 HYBRIDS - GREEN -->
+        <div class="section" style="background:#f0fff4; border:2px solid #28a745;">
+            <h2 class="green">NEW FOR 2027 - New Launches</h2>
+            <p style="color:#28a745; font-size:0.85rem; margin-bottom:1rem;">
+                <strong>13% Demand Plan Requirement.</strong> These new hybrids should make up 13% of your 2027 portfolio.
+            </p>
+            <div class="hybrid-grid" id="new-grid"></div>
+        </div>
+
+        <!-- CONTINUING HYBRIDS -->
+        <div class="section">
+            <h2>CONTINUING - Available 2027</h2>
+            <p style="color:#666; font-size:0.85rem; margin-bottom:1rem;">
+                These hybrids continue to be available for 2027. Adjust allocations as needed.
+            </p>
+            <div class="hybrid-grid" id="cont-grid"></div>
         </div>
     </div>
 
     <script>
         // ============================================
-        // HYBRID DATA - Aggregated from Pioneer Site
+        // HYBRID DATA WITH DETAILS
         // ============================================
-        const hybridData = {
-            // DISCONTINUED HYBRIDS (XD) - Not available 2027
-            discontinued: [
-                { name: 'P0157AM', crm: 101, notes: 'Discontinued 2027' },
-                { name: 'P0574AM', crm: 105, notes: 'Discontinued 2027' },
-                { name: 'P0720Q', crm: 107, notes: 'Discontinued 2027' },
-                { name: 'P0075Q', crm: 100, notes: 'Replaced by P04651V' },
-                { name: 'P0487Q', crm: 104, notes: 'Replaced by P04651V, P03802PCE' },
-                { name: 'P0622Q', crm: 106, notes: 'Replaced by newer AML/V options' },
-                { name: 'P0339Q', crm: 103, notes: 'Discontinued 2027' },
-                { name: 'P0924Q', crm: 109, notes: 'Discontinued 2027' },
-                { name: 'P1089AMXT', crm: 110, notes: 'Discontinued 2027' },
-                { name: 'P1278Q', crm: 112, notes: 'Discontinued 2027' },
-                { name: 'P1366Q', crm: 113, notes: 'Discontinued 2027' },
-                { name: 'P1828Q', crm: 118, notes: 'Replaced by P14270V, P15517V' },
-                { name: 'P9489AM', crm: 94, notes: 'Discontinued 2027' },
-                { name: 'P9845AM', crm: 98, notes: 'Replaced by P99491' }
-            ],
 
-            // NEW HYBRIDS FOR 2027
-            new2027: [
-                { name: 'P96567V/PCE', crm: 96, drought: 8, hiYield: '~235', stress: '~200', notes: 'Drought tolerance focus. V/PCE options. Replaces P95819V.', aquamax: false },
-                { name: 'P99491V/PCE', crm: 99, drought: 7, hiYield: '~242', stress: '~208', notes: 'Top Quadrant performer. +15 bu/a vs P00549YHRCE. Replaces P9955V, P00549PCE.', aquamax: false },
-                { name: 'P03802PCE', crm: 103, drought: 7, hiYield: '~244', stress: '~210', notes: 'Top-end yield on better dryland to irrigated. Taller plant. Replaces P03951PCE, P0487PCE.', aquamax: false },
-                { name: 'P04651V', crm: 104, drought: 9, hiYield: '~240', stress: '~205', notes: 'AquaMax Vorceed. Top drought tolerance. 220-250 bu/a environment. Replaces P0075Q, P0487Q, P0622Q.', aquamax: true },
-                { name: 'P08215PCUE', crm: 108, drought: 9, hiYield: '~241', stress: '~168', notes: 'SUPER TOUGH. AquaMax. Best for durability acres. Replaces P0995AM.', aquamax: true },
-                { name: 'P10705V', crm: 110, drought: 7, hiYield: '~250', stress: '~195', notes: 'LIMITED LAUNCH. Full irrigation. Very high yield. Top silage 108-112 CRM. Companion to P10300PCE.', aquamax: false, limited: true },
-                { name: 'P11259PCE', crm: 111, drought: 9, hiYield: '~250', stress: '~162', notes: 'TOP RIGHT ON CHART! AquaMax. Best stress + yield. Going after P1122AML acres.', aquamax: true },
-                { name: 'P14270V/PCE', crm: 114, drought: 8, hiYield: '~240', stress: '~193', notes: 'SILAGE PRODUCT. +2 Goss improvement. Replaces P14830AML, P1828AM. +10.3 bu/a vs P14830AML.', aquamax: false, silage: true },
-                { name: 'P15517V', crm: 115, drought: 5, hiYield: '~235', stress: '~180', notes: 'SILAGE ONLY! High quality silage. Replaces P1828AM. NEEDS WATER - drought is 5!', aquamax: false, silage: true },
-                { name: 'P18512V/PCE', crm: 118, drought: 7, hiYield: '~234', stress: '~185', notes: 'GRAIN product but TOP SILAGE in 112-118 CRM. Dual purpose grain/silage.', aquamax: false, silage: true }
-            ],
+        // Discontinued (XD) Hybrids
+        const xdHybrids = [
+            { name: 'P0075Q', crm: 100, drought: 6, hiYield: '~230', notes: 'Replaced by P04651V. Q technology being phased out.', y2024: 1170, y2025: 895, y2026: 754 },
+            { name: 'P0339Q', crm: 103, drought: 6, hiYield: '~232', notes: 'Discontinued 2027. Consider P03115V or P03802PCE.', y2024: 811, y2025: 469, y2026: 0 },
+            { name: 'P0487Q', crm: 104, drought: 6, hiYield: '~235', notes: 'Replaced by P04651V, P03802PCE. Better drought options available.', y2024: 604, y2025: 53, y2026: 60 },
+            { name: 'P05466Q', crm: 105, drought: 6, hiYield: '~238', notes: 'Discontinued. Move to P05466V instead.', y2024: 517, y2025: 0, y2026: 0 },
+            { name: 'P0622Q', crm: 106, drought: 6, hiYield: '~235', notes: 'Replaced by P0622AML and newer V options.', y2024: 843, y2025: 359, y2026: 75 },
+            { name: 'P07340Q', crm: 107, drought: 6, hiYield: '~235', notes: 'Q technology discontinued.', y2024: 282, y2025: 846, y2026: 124 },
+            { name: 'P0817Q', crm: 108, drought: 6, hiYield: '~235', notes: 'Discontinued. Consider P08527V.', y2024: 165, y2025: 172, y2026: 0 },
+            { name: 'P0924Q', crm: 109, drought: 6, hiYield: '~232', notes: 'Discontinued 2027.', y2024: 374, y2025: 92, y2026: 87 },
+            { name: 'P1089AMXT', crm: 110, drought: 6, hiYield: '~238', notes: 'Discontinued. P10705V or P10625V are replacements.', y2024: 486, y2025: 64, y2026: 0 },
+            { name: 'P1151Q', crm: 111, drought: 6, hiYield: '~235', notes: 'Discontinued. Move to P1122AML or P11259PCE.', y2024: 40, y2025: 149, y2026: 0 },
+            { name: 'P1278Q', crm: 112, drought: 6, hiYield: '~235', notes: 'Discontinued 2027.', y2024: 188, y2025: 0, y2026: 0 },
+            { name: 'P1366Q', crm: 113, drought: 6, hiYield: '~238', notes: 'Discontinued. Consider P13777V.', y2024: 615, y2025: 809, y2026: 135 },
+            { name: 'P1828Q', crm: 118, drought: 5, hiYield: '~230', notes: 'Replaced by P14270V, P15517V, P18512V.', y2024: 88, y2025: 0, y2026: 0 },
+            { name: 'P9489AM', crm: 94, drought: 7, hiYield: '~225', notes: 'Discontinued 2027. Consider P96567V.', y2024: 121, y2025: 149, y2026: 0 },
+            { name: 'P9845AM', crm: 98, drought: 7, hiYield: '~228', notes: 'Replaced by P99491V/PCE.', y2024: 10, y2025: 0, y2026: 100 }
+        ];
 
-            // CONTINUING HYBRIDS (Available 2027)
-            continuing: [
-                { name: 'P0075AM', crm: 100, drought: 7, hiYield: '~230', notes: 'Solid performer. Multiple year history.' },
-                { name: 'P0157AMXT', crm: 101, drought: 7, hiYield: '~235', notes: 'AMXT technology. Good yield stability.' },
-                { name: 'P03115V', crm: 103, drought: 7, hiYield: '~238', notes: 'Vorceed option. Companion to P04651V.' },
-                { name: 'P03357PCUE', crm: 103, drought: 7, hiYield: '~240', notes: 'PCUE tech. Companion to P03802PCE, P04651V.' },
-                { name: 'P05081AML', crm: 105, drought: 8, hiYield: '~242', notes: '90% PCUE, 10% AML volume for 2027.' },
-                { name: 'P05466V', crm: 105, drought: 7, hiYield: '~240', notes: 'Vorceed. Good dryland to irrigation.' },
-                { name: 'P0622AML', crm: 106, drought: 7, hiYield: '~238', notes: 'Strong performer. Multiple year success.' },
-                { name: 'P07340Q', crm: 107, drought: 6, hiYield: '~235', notes: 'Q technology option.' },
-                { name: 'P0817Q', crm: 108, drought: 6, hiYield: '~235', notes: 'Q technology.' },
-                { name: 'P08527V', crm: 108, drought: 7, hiYield: '~240', notes: 'Vorceed. Excellent 2025 observations.' },
-                { name: 'P0859AM', crm: 108, drought: 7, hiYield: '~238', notes: 'AM technology. Reliable performer.' },
-                { name: 'P0908AML', crm: 109, drought: 7, hiYield: '~236', notes: 'AML technology option.' },
-                { name: 'P0995AM', crm: 109, drought: 7, hiYield: '~238', notes: 'Targeted replacement by P08215PCUE.' },
-                { name: 'P10300PCE', crm: 110, drought: 7, hiYield: '~242', notes: 'PCE tech. Companion to P10705V.' },
-                { name: 'P10625V', crm: 110, drought: 8, hiYield: '~245', notes: 'Vorceed. Companion to P10705V.' },
-                { name: 'P1122AML', crm: 111, drought: 7, hiYield: '~242', notes: 'Strong volume. P11259PCE targeting these acres.' },
-                { name: 'P1151AM', crm: 111, drought: 7, hiYield: '~240', notes: 'AM technology. Multiple year performer.' },
-                { name: 'P12393V', crm: 112, drought: 7, hiYield: '~238', notes: 'Vorceed option.' },
-                { name: 'P1244AM', crm: 112, drought: 7, hiYield: '~240', notes: 'AM technology.' },
-                { name: 'P12517V', crm: 112, drought: 8, hiYield: '~248', notes: 'LOVES OUR AREA! Major player. +10 bu/a over P10705V.' },
-                { name: 'P12904V/AML', crm: 112, drought: 7, hiYield: '~240', notes: 'Dual tech options available.' },
-                { name: 'P13777V', crm: 113, drought: 7, hiYield: '~242', notes: 'Vorceed. P14270V is more stable.' },
-                { name: 'P13777PCUE', crm: 113, drought: 7, hiYield: '~242', notes: 'PCUE option available.' },
-                { name: 'P1366AML', crm: 113, drought: 6, hiYield: '~238', notes: 'AML technology.' },
-                { name: 'P14364PCUE', crm: 114, drought: 7, hiYield: '~240', notes: 'Companion to P14270.' },
-                { name: 'P14830AML', crm: 114, drought: 6, hiYield: '~235', notes: 'Being replaced by P14270. -10.3 bu/a vs P14270.' },
-                { name: 'P1413AM', crm: 114, drought: 6, hiYield: '~235', notes: 'AM technology.' },
-                { name: 'P1548AM', crm: 115, drought: 6, hiYield: '~238', notes: 'Full season AM option.' }
-            ]
-        };
+        // New 2027 Hybrids
+        const new2027Hybrids = [
+            { name: 'P96567V/PCE', crm: 96, drought: 8, hiYield: '~235', stress: '~200', notes: 'Drought tolerance focus. V/PCE options. Replaces P95819V.', aquamax: false, y2024: 0, y2025: 0, y2026: 0 },
+            { name: 'P99491V/PCE', crm: 99, drought: 7, hiYield: '~242', stress: '~208', notes: 'Top Quadrant performer. +15 bu/a vs P00549YHRCE. Replaces P9955V, P00549PCE.', aquamax: false, y2024: 0, y2025: 0, y2026: 0 },
+            { name: 'P03802PCE', crm: 103, drought: 7, hiYield: '~244', stress: '~210', notes: 'Top-end yield on better dryland to irrigated. Taller plant. Replaces P03951PCE, P0487PCE.', aquamax: false, y2024: 0, y2025: 0, y2026: 0 },
+            { name: 'P04651V', crm: 104, drought: 9, hiYield: '~240', stress: '~205', notes: 'AquaMax Vorceed. TOP DROUGHT TOLERANCE. 220-250 bu/a environment. Replaces P0075Q, P0487Q, P0622Q.', aquamax: true, y2024: 0, y2025: 0, y2026: 0 },
+            { name: 'P08215PCUE', crm: 108, drought: 9, hiYield: '~241', stress: '~168', notes: 'SUPER TOUGH. AquaMax. Best for durability acres. Replaces P0995AM.', aquamax: true, y2024: 0, y2025: 0, y2026: 0 },
+            { name: 'P10705V', crm: 110, drought: 7, hiYield: '~250', stress: '~195', notes: 'LIMITED LAUNCH. Full irrigation. Very high yield. Top silage 108-112 CRM. Companion to P10300PCE.', aquamax: false, limited: true, y2024: 0, y2025: 0, y2026: 0 },
+            { name: 'P11259PCE', crm: 111, drought: 9, hiYield: '~250', stress: '~162', notes: 'TOP RIGHT ON CHART! AquaMax. Best stress + yield. Going after P1122AML acres.', aquamax: true, y2024: 0, y2025: 0, y2026: 0 },
+            { name: 'P14270V/PCE', crm: 114, drought: 8, hiYield: '~240', stress: '~193', notes: 'SILAGE PRODUCT. +2 Goss improvement. Replaces P14830AML, P1828AM. +10.3 bu/a vs P14830AML.', aquamax: false, silage: true, y2024: 0, y2025: 0, y2026: 0 },
+            { name: 'P15517V', crm: 115, drought: 5, hiYield: '~235', stress: '~180', notes: 'SILAGE ONLY! High quality silage. Replaces P1828AM. NEEDS WATER - drought is 5!', aquamax: false, silage: true, y2024: 0, y2025: 0, y2026: 0 },
+            { name: 'P18512V/PCE', crm: 118, drought: 7, hiYield: '~234', stress: '~185', notes: 'GRAIN product but TOP SILAGE in 112-118 CRM. Dual purpose grain/silage.', aquamax: false, silage: true, y2024: 0, y2025: 0, y2026: 0 }
+        ];
+
+        // Continuing Hybrids
+        const contHybrids = [
+            { name: 'P0075AM', crm: 100, drought: 7, hiYield: '~230', notes: 'Solid performer. Multiple year history. CACTUS eligible.', y2024: 1446, y2025: 1062, y2026: 959 },
+            { name: 'P0157AMXT', crm: 101, drought: 7, hiYield: '~235', notes: 'AMXT technology. Good yield stability. CACTUS eligible.', y2024: 115, y2025: 194, y2026: 484 },
+            { name: 'P03115V', crm: 103, drought: 7, hiYield: '~238', notes: 'Vorceed option. Companion to P04651V.', y2024: 2, y2025: 324, y2026: 355 },
+            { name: 'P05081AML', crm: 105, drought: 8, hiYield: '~242', notes: '90% PCUE, 10% AML volume for 2027.', y2024: 6, y2025: 478, y2026: 679 },
+            { name: 'P05466V', crm: 105, drought: 7, hiYield: '~240', notes: 'Vorceed. Good dryland to irrigation.', y2024: 10, y2025: 837, y2026: 1105 },
+            { name: 'P0622AML', crm: 106, drought: 7, hiYield: '~238', notes: 'Strong performer. Multiple year success.', y2024: 1994, y2025: 1696, y2026: 1180 },
+            { name: 'P08527V', crm: 108, drought: 7, hiYield: '~240', notes: 'Vorceed. Excellent 2025 observations.', y2024: 6, y2025: 292, y2026: 1331 },
+            { name: 'P0859AM', crm: 108, drought: 7, hiYield: '~238', notes: 'AM technology. Reliable performer.', y2024: 356, y2025: 511, y2026: 555 },
+            { name: 'P0995AM', crm: 109, drought: 7, hiYield: '~238', notes: 'Targeted replacement by P08215PCUE.', y2024: 3, y2025: 7, y2026: 96 },
+            { name: 'P10300PCE', crm: 110, drought: 7, hiYield: '~242', notes: 'PCE tech. Companion to P10705V.', y2024: 0, y2025: 0, y2026: 8 },
+            { name: 'P10625V', crm: 110, drought: 8, hiYield: '~245', notes: 'Vorceed. Companion to P10705V.', y2024: 8, y2025: 25, y2026: 202 },
+            { name: 'P1122AML', crm: 111, drought: 7, hiYield: '~242', notes: 'Strong volume. P11259PCE targeting these acres.', y2024: 42, y2025: 237, y2026: 978 },
+            { name: 'P1244AM', crm: 112, drought: 7, hiYield: '~240', notes: 'AM technology. CACTUS eligible.', y2024: 173, y2025: 130, y2026: 533 },
+            { name: 'P12517V', crm: 112, drought: 8, hiYield: '~248', notes: 'LOVES OUR AREA! Major player. +10 bu/a over P10705V.', y2024: 0, y2025: 0, y2026: 127 },
+            { name: 'P13777V', crm: 113, drought: 7, hiYield: '~242', notes: 'Vorceed. P14270V is more stable.', y2024: 0, y2025: 101, y2026: 544 },
+            { name: 'P14364PCUE', crm: 114, drought: 7, hiYield: '~240', notes: 'PCUE. Companion to P14270.', y2024: 0, y2025: 0, y2026: 0 },
+            { name: 'P1548AM', crm: 115, drought: 6, hiYield: '~238', notes: 'Full season AM option.', y2024: 0, y2025: 14, y2026: 199 },
+            { name: 'P9845PCE', crm: 98, drought: 7, hiYield: '~228', notes: 'PCE tech. CACTUS eligible.', y2024: 1, y2025: 97, y2026: 0 }
+        ];
+
+        // CACTUS products
+        const cactusHybrids = [
+            { name: 'P9845PCE', crm: 98, discount: '≤ $30', bags2026: 66 },
+            { name: 'P0075AM', crm: 100, discount: '≤ $20', bags2026: 320 },
+            { name: 'P0157AMXT', crm: 101, discount: '≤ 45%', bags2026: 484 },
+            { name: 'P0487Q', crm: 104, discount: '≤ $75', bags2026: 0 },
+            { name: 'P0622Q', crm: 106, discount: 'NEW', bags2026: 0 },
+            { name: 'P1244AM', crm: 112, discount: '≤ 32%', bags2026: 233 },
+            { name: 'P13476Q', crm: 113, discount: 'NEW', bags2026: 0 }
+        ];
 
         // State
-        let allocations = {};
-        let charts = {};
+        let dpRequests = {};
+        let cactusRequests = {};
+        let bags2027 = {};
+        let rcAllocations = {};
 
-        // Initialize allocations
-        function initAllocations() {
-            const saved = localStorage.getItem('hybridAllocations');
+        function init() {
+            loadSavedData();
+            renderSummary();
+            renderCactusSection();
+            renderDataTable();
+            renderXDCards();
+            renderNewCards();
+            renderContCards();
+        }
+
+        function loadSavedData() {
+            const saved = localStorage.getItem('portfolioData3');
             if (saved) {
-                allocations = JSON.parse(saved);
-            } else {
-                [...hybridData.discontinued, ...hybridData.new2027, ...hybridData.continuing].forEach(h => {
-                    allocations[h.name] = 0;
-                });
+                const data = JSON.parse(saved);
+                dpRequests = data.dpRequests || {};
+                cactusRequests = data.cactusRequests || {};
+                bags2027 = data.bags2027 || {};
+                rcAllocations = data.rcAllocations || {};
             }
+
+            // Initialize defaults
+            [...xdHybrids, ...new2027Hybrids, ...contHybrids].forEach(h => {
+                const key = h.name.replace('/PCE', '').replace('/AML', '');
+                if (dpRequests[key] === undefined) dpRequests[key] = 0;
+                if (bags2027[key] === undefined) bags2027[key] = h.y2026 || 0;
+                if (rcAllocations[key] === undefined) rcAllocations[key] = 0;
+            });
+            cactusHybrids.forEach(h => {
+                if (cactusRequests[h.name] === undefined) cactusRequests[h.name] = 0;
+            });
         }
 
-        function saveAllocations() {
-            localStorage.setItem('hybridAllocations', JSON.stringify(allocations));
+        function saveData() {
+            localStorage.setItem('portfolioData3', JSON.stringify({ dpRequests, cactusRequests, bags2027, rcAllocations }));
         }
 
-        // Render functions
         function renderSummary() {
-            const continuingCount = hybridData.continuing.length;
-            const newCount = hybridData.new2027.length;
-            const xdCount = hybridData.discontinued.length;
-            const totalPortfolio = continuingCount + newCount;
-
-            document.getElementById('continuing-count').textContent = continuingCount;
-            document.getElementById('new-count').textContent = newCount;
-            document.getElementById('xd-count').textContent = xdCount;
-            document.getElementById('total-portfolio').textContent = totalPortfolio;
+            document.getElementById('xd-count').textContent = xdHybrids.length;
+            document.getElementById('new-count').textContent = new2027Hybrids.length;
+            document.getElementById('cont-count').textContent = contHybrids.length;
+            document.getElementById('total-dp-request').textContent = Object.values(dpRequests).reduce((s, v) => s + v, 0).toLocaleString();
+            document.getElementById('cactus-units').textContent = Object.values(cactusRequests).reduce((s, v) => s + v, 0).toLocaleString();
+            document.getElementById('total-rc').textContent = Object.values(rcAllocations).reduce((s, v) => s + v, 0).toLocaleString();
         }
 
-        function renderTotalAllocation() {
-            let total = 0;
-            // Only count non-discontinued hybrids
-            [...hybridData.new2027, ...hybridData.continuing].forEach(h => {
-                total += allocations[h.name] || 0;
+        function renderCactusSection() {
+            let html = '';
+            cactusHybrids.forEach(h => {
+                const ask = cactusRequests[h.name] || 0;
+                html += `<tr>
+                    <td style="text-align:left;"><strong>${h.name}</strong></td>
+                    <td>${h.crm}</td>
+                    <td style="color:#28a745; font-weight:600;">${h.discount}</td>
+                    <td>${h.bags2026 || '-'}</td>
+                    <td style="background:#e0f7fa; border-left:3px solid #17a2b8; border-right:3px solid #17a2b8;"><input type="number" min="0" value="${ask}" style="border:2px solid #17a2b8; background:#e0f7fa;" onchange="updateCactus('${h.name}', this.value)"></td>
+                    <td style="font-weight:bold;">${(h.bags2026 + ask) || '-'}</td>
+                </tr>`;
+            });
+            document.getElementById('cactus-table-body').innerHTML = html;
+        }
+
+        function updateCactus(name, value) {
+            cactusRequests[name] = parseInt(value) || 0;
+            saveData();
+            renderCactusSection();
+            renderSummary();
+        }
+
+        function renderDataTable() {
+            const allHybrids = [...xdHybrids, ...new2027Hybrids, ...contHybrids];
+            const t2024 = allHybrids.reduce((s, h) => s + (h.y2024 || 0), 0);
+            const t2025 = allHybrids.reduce((s, h) => s + (h.y2025 || 0), 0);
+            const t2026 = allHybrids.reduce((s, h) => s + (h.y2026 || 0), 0);
+            let t2027 = 0, tDP = 0, tRC = 0;
+
+            let html = '';
+            allHybrids.sort((a, b) => a.crm - b.crm).forEach(h => {
+                const key = h.name.replace('/PCE', '').replace('/AML', '');
+                const b2027 = bags2027[key] || 0;
+                const dp = dpRequests[key] || 0;
+                const rc = rcAllocations[key] || 0;
+                t2027 += b2027;
+                tDP += dp;
+                tRC += rc;
+
+                html += `<tr>
+                    <td style="text-align:left;"><strong>${h.name}</strong></td>
+                    <td style="background:#f8f9fa;">${h.y2024 || '-'}</td>
+                    <td style="background:#f8f9fa;">${t2024 > 0 ? ((h.y2024/t2024)*100).toFixed(1) + '%' : '-'}</td>
+                    <td style="background:#e3f2fd;">${h.y2025 || '-'}</td>
+                    <td style="background:#e3f2fd;">${t2025 > 0 ? ((h.y2025/t2025)*100).toFixed(1) + '%' : '-'}</td>
+                    <td style="background:#e8f5e9;">${h.y2026 || '-'}</td>
+                    <td style="background:#e8f5e9;">${t2026 > 0 ? ((h.y2026/t2026)*100).toFixed(1) + '%' : '-'}</td>
+                    <td style="background:#e3f2fd;"><input type="number" min="0" value="${b2027}" onchange="update2027('${key}', this.value)"></td>
+                    <td style="background:#e3f2fd;">-</td>
+                    <td class="dp-highlight"><input type="number" min="0" value="${dp}" class="dp-input" onchange="updateDP('${key}', this.value)"></td>
+                    <td class="rc-highlight"><input type="number" min="0" value="${rc}" class="rc-input" onchange="updateRC('${key}', this.value)"></td>
+                </tr>`;
             });
 
-            const progressBar = document.getElementById('progress-bar');
-            const totalValue = document.getElementById('total-allocation');
-
-            progressBar.style.width = Math.min(total, 100) + '%';
-            totalValue.textContent = total.toFixed(1) + '%';
-
-            if (total > 100) {
-                progressBar.classList.add('over');
-                totalValue.classList.add('over');
-                totalValue.classList.remove('under', 'exact');
-            } else if (total === 100) {
-                progressBar.classList.remove('over');
-                totalValue.classList.add('exact');
-                totalValue.classList.remove('over', 'under');
-            } else {
-                progressBar.classList.remove('over');
-                totalValue.classList.add('under');
-                totalValue.classList.remove('over', 'exact');
-            }
+            document.getElementById('main-table-body').innerHTML = html;
+            document.getElementById('foot-2024').textContent = t2024.toLocaleString();
+            document.getElementById('foot-2025').textContent = t2025.toLocaleString();
+            document.getElementById('foot-2026').textContent = t2026.toLocaleString();
+            document.getElementById('foot-2027').textContent = t2027.toLocaleString();
+            document.getElementById('foot-dp').textContent = tDP.toLocaleString();
+            document.getElementById('foot-rc').textContent = tRC.toLocaleString();
         }
 
-        function renderHybrids() {
-            const statusFilter = document.getElementById('filter-status').value;
-            const crmFilter = document.getElementById('filter-crm').value;
-            const search = document.getElementById('search-hybrid').value.toLowerCase();
-
-            const grid = document.getElementById('hybrid-grid');
-            let html = '';
-
-            // Helper to filter
-            function filterHybrid(h) {
-                if (search && !h.name.toLowerCase().includes(search)) return false;
-                if (crmFilter !== 'all') {
-                    if (crmFilter === 'early' && (h.crm < 90 || h.crm >= 100)) return false;
-                    if (crmFilter === 'mid' && (h.crm < 100 || h.crm >= 110)) return false;
-                    if (crmFilter === 'full' && h.crm < 110) return false;
-                }
-                return true;
-            }
-
-            // Render discontinued
-            if (statusFilter === 'all' || statusFilter === 'discontinued') {
-                hybridData.discontinued.filter(filterHybrid).forEach(h => {
-                    html += renderHybridCard(h, 'discontinued');
-                });
-            }
-
-            // Render new
-            if (statusFilter === 'all' || statusFilter === 'available' || statusFilter === 'new') {
-                hybridData.new2027.filter(filterHybrid).forEach(h => {
-                    html += renderHybridCard(h, 'new');
-                });
-            }
-
-            // Render continuing
-            if (statusFilter === 'all' || statusFilter === 'available' || statusFilter === 'continuing') {
-                hybridData.continuing.filter(filterHybrid).forEach(h => {
-                    html += renderHybridCard(h, 'continuing');
-                });
-            }
-
-            grid.innerHTML = html || '<p style="color:#666; grid-column: 1/-1; text-align:center;">No hybrids match your filters.</p>';
+        function update2027(key, value) {
+            bags2027[key] = parseInt(value) || 0;
+            saveData();
+            renderDataTable();
         }
 
-        function renderHybridCard(hybrid, type) {
-            const isDiscontinued = type === 'discontinued';
-            const isNew = type === 'new';
-            const allocation = allocations[hybrid.name] || 0;
+        function updateDP(key, value) {
+            dpRequests[key] = parseInt(value) || 0;
+            saveData();
+            renderDataTable();
+            renderSummary();
+        }
 
-            let badges = `<span class="badge badge-crm">${hybrid.crm} CRM</span>`;
-            if (isDiscontinued) badges += '<span class="badge badge-xd">XD</span>';
-            if (isNew) badges += '<span class="badge badge-new">NEW</span>';
-            if (hybrid.aquamax) badges += '<span class="badge badge-aquamax">AquaMax</span>';
-            if (hybrid.silage) badges += '<span class="badge badge-silage">SILAGE</span>';
-            if (hybrid.limited) badges += '<span class="badge" style="background:#ffc107;color:#333;">LIMITED</span>';
+        function updateRC(key, value) {
+            rcAllocations[key] = parseInt(value) || 0;
+            saveData();
+            renderDataTable();
+            renderSummary();
+        }
 
-            let specs = '';
-            if (hybrid.drought) specs += `<div class="spec"><span class="spec-label">Drought:</span><span class="spec-value">${hybrid.drought}</span></div>`;
-            if (hybrid.hiYield) specs += `<div class="spec"><span class="spec-label">Hi-Yield:</span><span class="spec-value">${hybrid.hiYield}</span></div>`;
-            if (hybrid.stress) specs += `<div class="spec"><span class="spec-label">Stress:</span><span class="spec-value">${hybrid.stress}</span></div>`;
+        function renderCard(h, type) {
+            const key = h.name.replace('/PCE', '').replace('/AML', '');
+            const dp = dpRequests[key] || 0;
+            const rc = rcAllocations[key] || 0;
+            const t2024 = 8886, t2025 = 7933, t2026 = 7669; // Totals for %
+
+            let badges = `<span class="badge badge-crm">${h.crm} CRM</span>`;
+            if (type === 'xd') badges += '<span class="badge badge-xd">XD27</span>';
+            if (type === 'new') badges += '<span class="badge badge-new">NEW</span>';
+            if (h.aquamax) badges += '<span class="badge badge-aquamax">AquaMax</span>';
+            if (h.silage) badges += '<span class="badge badge-silage">Silage</span>';
+            if (h.limited) badges += '<span class="badge badge-limited">LIMITED</span>';
+
+            // NEW hybrids get RC Request, Continuing get DP Request
+            let requestRow = '';
+            if (type === 'new') {
+                requestRow = `
+                    <div class="rc-request-row">
+                        <label>Additional RC Request:</label>
+                        <input type="number" min="0" value="${rc}" onchange="updateRCCard('${key}', this.value)">
+                        <span style="font-size:0.75rem; color:#666;">bags</span>
+                    </div>`;
+            } else if (type === 'cont') {
+                requestRow = `
+                    <div class="dp-request-row">
+                        <label>Additional DP Request:</label>
+                        <input type="number" min="0" value="${dp}" onchange="updateDPCard('${key}', this.value)">
+                        <span style="font-size:0.75rem; color:#666;">bags</span>
+                    </div>`;
+            }
 
             return `
-                <div class="hybrid-item ${isDiscontinued ? 'discontinued' : ''} ${isNew ? 'new' : ''}">
+                <div class="hybrid-card ${type}">
                     <div class="hybrid-header">
-                        <span class="hybrid-name">${hybrid.name}</span>
+                        <span class="hybrid-name">${h.name}</span>
                         <div class="hybrid-badges">${badges}</div>
                     </div>
-                    ${specs ? `<div class="hybrid-specs">${specs}</div>` : ''}
-                    <div class="hybrid-notes">${hybrid.notes || ''}</div>
-                    <div class="percentage-control">
-                        <label>% of Business:</label>
-                        <input type="range" min="0" max="50" step="0.5" value="${allocation}"
-                               onchange="updateAllocation('${hybrid.name}', this.value)"
-                               oninput="updateSliderDisplay('${hybrid.name}', this.value)"
-                               ${isDiscontinued ? 'disabled' : ''}>
-                        <span class="percentage-value" id="pct-${hybrid.name.replace(/[^a-zA-Z0-9]/g, '')}">${allocation.toFixed(1)}%</span>
+                    <div class="hybrid-specs">
+                        <div class="spec"><span class="spec-label">Drought:</span><span class="spec-value">${h.drought}/10</span></div>
+                        <div class="spec"><span class="spec-label">Hi-Yield:</span><span class="spec-value">${h.hiYield}</span></div>
+                        ${h.stress ? `<div class="spec"><span class="spec-label">Stress:</span><span class="spec-value">${h.stress}</span></div>` : ''}
                     </div>
+                    <div class="hybrid-notes">${h.notes}</div>
+                    <div class="hybrid-history">
+                        <div class="history-item"><div class="year">2024</div><div class="bags">${h.y2024 || '-'}</div><div class="pct">${h.y2024 ? ((h.y2024/t2024)*100).toFixed(1)+'%' : ''}</div></div>
+                        <div class="history-item"><div class="year">2025</div><div class="bags">${h.y2025 || '-'}</div><div class="pct">${h.y2025 ? ((h.y2025/t2025)*100).toFixed(1)+'%' : ''}</div></div>
+                        <div class="history-item"><div class="year">2026</div><div class="bags">${h.y2026 || '-'}</div><div class="pct">${h.y2026 ? ((h.y2026/t2026)*100).toFixed(1)+'%' : ''}</div></div>
+                        <div class="history-item" style="background:#e3f2fd;"><div class="year">2027</div><div class="bags">${bags2027[key] || '-'}</div><div class="pct"></div></div>
+                    </div>
+                    ${requestRow}
                 </div>
             `;
         }
 
-        function updateSliderDisplay(name, value) {
-            const id = 'pct-' + name.replace(/[^a-zA-Z0-9]/g, '');
-            document.getElementById(id).textContent = parseFloat(value).toFixed(1) + '%';
+        function renderXDCards() {
+            document.getElementById('xd-grid').innerHTML = xdHybrids.map(h => renderCard(h, 'xd')).join('');
         }
 
-        function updateAllocation(name, value) {
-            allocations[name] = parseFloat(value);
-            saveAllocations();
-            renderTotalAllocation();
-            renderCharts();
+        function renderNewCards() {
+            document.getElementById('new-grid').innerHTML = new2027Hybrids.map(h => renderCard(h, 'new')).join('');
         }
 
-        function resetAllocations() {
-            if (confirm('Reset all business allocations to 0%?')) {
-                Object.keys(allocations).forEach(k => allocations[k] = 0);
-                saveAllocations();
-                renderHybrids();
-                renderTotalAllocation();
-                renderCharts();
-            }
+        function renderContCards() {
+            document.getElementById('cont-grid').innerHTML = contHybrids.map(h => renderCard(h, 'cont')).join('');
         }
 
-        function renderCharts() {
-            // Destroy existing
-            Object.values(charts).forEach(c => c.destroy());
-            charts = {};
-
-            // Get allocated hybrids
-            const allocated = [];
-            [...hybridData.new2027, ...hybridData.continuing].forEach(h => {
-                if (allocations[h.name] > 0) {
-                    allocated.push({ name: h.name, value: allocations[h.name], isNew: hybridData.new2027.some(n => n.name === h.name) });
-                }
-            });
-
-            // Sort by value
-            allocated.sort((a, b) => b.value - a.value);
-
-            // Allocation chart
-            const colors = allocated.map(a => a.isNew ? '#28a745' : '#1a5f2a');
-            charts.allocation = new Chart(document.getElementById('allocation-chart'), {
-                type: 'bar',
-                data: {
-                    labels: allocated.map(a => a.name),
-                    datasets: [{
-                        label: '% of Business',
-                        data: allocated.map(a => a.value),
-                        backgroundColor: colors
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    indexAxis: 'y',
-                    plugins: {
-                        legend: { display: false }
-                    },
-                    scales: {
-                        x: { max: 50, title: { display: true, text: 'Percentage' } }
-                    }
-                }
-            });
-
-            // Composition chart
-            const newTotal = hybridData.new2027.reduce((sum, h) => sum + (allocations[h.name] || 0), 0);
-            const continuingTotal = hybridData.continuing.reduce((sum, h) => sum + (allocations[h.name] || 0), 0);
-            const unallocated = Math.max(0, 100 - newTotal - continuingTotal);
-
-            charts.composition = new Chart(document.getElementById('composition-chart'), {
-                type: 'doughnut',
-                data: {
-                    labels: ['New 2027 Hybrids', 'Continuing Hybrids', 'Unallocated'],
-                    datasets: [{
-                        data: [newTotal, continuingTotal, unallocated],
-                        backgroundColor: ['#28a745', '#1a5f2a', '#e9ecef']
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom' }
-                    }
-                }
-            });
+        function updateDPCard(key, value) {
+            dpRequests[key] = parseInt(value) || 0;
+            saveData();
+            renderDataTable();
+            renderSummary();
         }
 
-        function exportAllocations() {
-            let csv = 'Hybrid,CRM,Status,Allocation %\n';
+        function updateRCCard(key, value) {
+            rcAllocations[key] = parseInt(value) || 0;
+            saveData();
+            renderDataTable();
+            renderSummary();
+        }
 
-            hybridData.discontinued.forEach(h => {
-                csv += `"${h.name}",${h.crm},Discontinued (XD),0\n`;
-            });
+        function exportCSV() {
+            let csv = 'Hybrid,CRM,2024,2024%,2025,2025%,2026,2026%,2027,DP Request,Extra RC Allocation,Status,Notes\n';
+            const allHybrids = [...xdHybrids.map(h => ({...h, status: 'Discontinued'})), ...new2027Hybrids.map(h => ({...h, status: 'NEW 2027'})), ...contHybrids.map(h => ({...h, status: 'Continuing'}))];
+            const t2024 = 8886, t2025 = 7933, t2026 = 7669;
 
-            hybridData.new2027.forEach(h => {
-                csv += `"${h.name}",${h.crm},New 2027,${allocations[h.name] || 0}\n`;
-            });
-
-            hybridData.continuing.forEach(h => {
-                csv += `"${h.name}",${h.crm},Continuing,${allocations[h.name] || 0}\n`;
+            allHybrids.sort((a, b) => a.crm - b.crm).forEach(h => {
+                const key = h.name.replace('/PCE', '').replace('/AML', '');
+                csv += `"${h.name}",${h.crm},${h.y2024 || 0},${((h.y2024||0)/t2024*100).toFixed(1)}%,${h.y2025 || 0},${((h.y2025||0)/t2025*100).toFixed(1)}%,${h.y2026 || 0},${((h.y2026||0)/t2026*100).toFixed(1)}%,${bags2027[key] || 0},${dpRequests[key] || 0},${rcAllocations[key] || 0},"${h.status}","${h.notes.replace(/"/g, '""')}"\n`;
             });
 
             const blob = new Blob([csv], { type: 'text/csv' });
-            const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = url;
-            a.download = 'pioneer_2027_hybrid_allocation.csv';
+            a.href = URL.createObjectURL(blob);
+            a.download = 'pioneer_2027_portfolio.csv';
             a.click();
         }
 
-        // Initialize
-        initAllocations();
-        renderSummary();
-        renderHybrids();
-        renderTotalAllocation();
-        renderCharts();
+        function exportDPSummary() {
+            let csv = 'DEMAND PLAN SUMMARY - Additional Requests\n\nHybrid,CRM,2026 Actual,DP Request,Notes\n';
+            let total = 0;
+
+            Object.entries(dpRequests).filter(([k, v]) => v > 0).sort((a, b) => b[1] - a[1]).forEach(([key, dp]) => {
+                const h = [...xdHybrids, ...new2027Hybrids, ...contHybrids].find(x => x.name.replace('/PCE', '').replace('/AML', '') === key);
+                if (h) {
+                    csv += `"${h.name}",${h.crm},${h.y2026 || 0},${dp},"${h.notes.replace(/"/g, '""')}"\n`;
+                    total += dp;
+                }
+            });
+            csv += `\nTOTAL DP REQUEST:,,,${total}\n`;
+
+            csv += '\n\nEXTRA RC ALLOCATION\nHybrid,CRM,2026 Actual,RC Allocation,Notes\n';
+            let totalRC = 0;
+            Object.entries(rcAllocations).filter(([k, v]) => v > 0).sort((a, b) => b[1] - a[1]).forEach(([key, rc]) => {
+                const h = [...xdHybrids, ...new2027Hybrids, ...contHybrids].find(x => x.name.replace('/PCE', '').replace('/AML', '') === key);
+                if (h) {
+                    csv += `"${h.name}",${h.crm},${h.y2026 || 0},${rc},"${h.notes.replace(/"/g, '""')}"\n`;
+                    totalRC += rc;
+                }
+            });
+            csv += `\nTOTAL RC ALLOCATION:,,,${totalRC}\n`;
+
+            csv += '\n\nCACTUS REQUESTS\nProduct,2026 Invoiced,Additional Ask,Total\n';
+            cactusHybrids.forEach(h => {
+                const ask = cactusRequests[h.name] || 0;
+                if (ask > 0 || h.bags2026 > 0) csv += `${h.name},${h.bags2026},${ask},${h.bags2026 + ask}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'pioneer_dp_summary.csv';
+            a.click();
+        }
+
+        function copyToClipboard() {
+            let text = 'Hybrid\tCRM\t2024\t2025\t2026\t2027\tDP Request\tExtra RC Allocation\n';
+            [...xdHybrids, ...new2027Hybrids, ...contHybrids].sort((a, b) => a.crm - b.crm).forEach(h => {
+                const key = h.name.replace('/PCE', '').replace('/AML', '');
+                text += `${h.name}\t${h.crm}\t${h.y2024||0}\t${h.y2025||0}\t${h.y2026||0}\t${bags2027[key]||0}\t${dpRequests[key]||0}\t${rcAllocations[key]||0}\n`;
+            });
+            navigator.clipboard.writeText(text).then(() => alert('Copied!'));
+        }
+
+        init();
     </script>
 </body>
 </html>
