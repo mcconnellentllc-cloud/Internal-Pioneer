@@ -154,6 +154,8 @@
             cursor: pointer;
             transition: background 0.2s;
             font-weight: 500;
+            text-decoration: none;
+            color: white;
         }
 
         .nav-link:hover {
@@ -929,7 +931,8 @@
                 <span class="nav-title">Grower Management</span>
             </div>
             <div class="nav-links">
-                <div class="nav-link active" data-view="dashboard">Dashboard</div>
+                <a href="index-new.html" class="nav-link">Home</a>
+                <div class="nav-link active" data-view="customers">Customers</div>
                 <div class="nav-link" data-view="calendar">Calendar</div>
             </div>
             <button class="logout-btn" id="logoutBtn">Sign Out</button>
@@ -1684,7 +1687,7 @@ END:VEVENT\n`;
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
             if (email === AUTH_EMAIL && password === AUTH_PASSWORD) {
-                sessionStorage.setItem('grower_auth', 'true');
+                sessionStorage.setItem('pioneer_auth', 'true');
                 document.getElementById('loginScreen').style.display = 'none';
                 document.getElementById('appContainer').style.display = 'block';
                 loadGrowerData();
@@ -1694,17 +1697,17 @@ END:VEVENT\n`;
         });
 
         document.getElementById('logoutBtn').addEventListener('click', () => {
-            sessionStorage.removeItem('grower_auth');
+            sessionStorage.removeItem('pioneer_auth');
             location.reload();
         });
 
-        document.querySelectorAll('.nav-link').forEach(link => {
+        document.querySelectorAll('.nav-link[data-view]').forEach(link => {
             link.addEventListener('click', () => {
                 document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
                 link.classList.add('active');
 
                 const view = link.dataset.view;
-                document.getElementById('dashboardView').style.display = view === 'dashboard' ? 'block' : 'none';
+                document.getElementById('dashboardView').style.display = view === 'customers' ? 'block' : 'none';
                 document.getElementById('calendarView').style.display = view === 'calendar' ? 'block' : 'none';
 
                 if (view === 'calendar') {
@@ -1774,7 +1777,7 @@ END:VEVENT\n`;
         });
 
         // Check if already logged in
-        if (sessionStorage.getItem('grower_auth') === 'true') {
+        if (sessionStorage.getItem('pioneer_auth') === 'true') {
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('appContainer').style.display = 'block';
             loadGrowerData();
