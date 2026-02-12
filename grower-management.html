@@ -613,6 +613,18 @@
             color: #e65100;
         }
 
+        .event-fieldday {
+            background: #fce4ec;
+            color: #c2185b;
+            font-weight: 600;
+        }
+
+        .event-fieldsigns {
+            background: #f3e5f5;
+            color: #7b1fa2;
+            font-weight: 600;
+        }
+
         /* SCHEDULE LIST */
         .schedule-list {
             background: white;
@@ -687,6 +699,21 @@
         .type-visit {
             background: #e8f5e9;
             color: #2e7d32;
+        }
+
+        .type-followup {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .type-fieldday {
+            background: #fce4ec;
+            color: #c2185b;
+        }
+
+        .type-fieldsigns {
+            background: #f3e5f5;
+            color: #7b1fa2;
         }
 
         /* MODAL */
@@ -1099,6 +1126,46 @@
         let currentMonth = new Date();
         let growerChart = null;
 
+        // Get 3rd Thursday of a given month/year
+        function getNthWeekday(year, month, weekday, n) {
+            const firstDay = new Date(year, month, 1);
+            let dayOfWeek = firstDay.getDay();
+            let daysUntilWeekday = (weekday - dayOfWeek + 7) % 7;
+            let nthDate = 1 + daysUntilWeekday + (n - 1) * 7;
+            return new Date(year, month, nthDate);
+        }
+
+        // Generate annual events for current and next year
+        function getAnnualEvents() {
+            const events = [];
+            const currentYear = new Date().getFullYear();
+
+            [currentYear, currentYear + 1].forEach(year => {
+                // Field Days - 3rd Thursday in August (month 7)
+                const fieldDaysDate = getNthWeekday(year, 7, 4, 3); // 4 = Thursday
+                events.push({
+                    grower: 'ALL GROWERS',
+                    type: 'fieldday',
+                    date: fieldDaysDate.toISOString().split('T')[0],
+                    time: '08:00',
+                    notes: 'Annual Field Day Event',
+                    isAnnual: true
+                });
+
+                // Field Signs - June 1st (beginning of June)
+                events.push({
+                    grower: 'ALL GROWERS',
+                    type: 'fieldsigns',
+                    date: `${year}-06-01`,
+                    time: '08:00',
+                    notes: 'Put up field signs',
+                    isAnnual: true
+                });
+            });
+
+            return events;
+        }
+
         // Fetch grower data
         async function loadGrowerData() {
             try {
@@ -1441,6 +1508,11 @@
             document.getElementById('eventModal').classList.add('show');
         }
 
+        // Get all events (user + annual)
+        function getAllEvents() {
+            return [...calendarEvents, ...getAnnualEvents()];
+        }
+
         // Calendar functions
         function renderCalendar() {
             const year = currentMonth.getFullYear();
@@ -1456,6 +1528,8 @@
 
             const today = new Date();
             const isCurrentMonth = today.getFullYear() === year && today.getMonth() === month;
+
+            const allEvents = getAllEvents();
 
             let html = '';
             let day = 1;
@@ -1478,14 +1552,14 @@
                 }
 
                 const dateStr = isOtherMonth ? '' : `${year}-${String(month + 1).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
-                const dayEvents = isOtherMonth ? [] : calendarEvents.filter(e => e.date === dateStr);
+                const dayEvents = isOtherMonth ? [] : allEvents.filter(e => e.date === dateStr);
 
                 html += `
                     <div class="calendar-day ${isOtherMonth ? 'other-month' : ''} ${isToday ? 'today' : ''}">
                         <div class="day-number ${isOtherMonth ? 'other' : ''}">${dayNum}</div>
                         ${dayEvents.map(e => `
                             <div class="calendar-event event-${e.type}" title="${e.grower}: ${e.notes || e.type}">
-                                ${e.grower}
+                                ${e.type === 'fieldday' ? 'FIELD DAY' : e.type === 'fieldsigns' ? 'FIELD SIGNS' : e.grower}
                             </div>
                         `).join('')}
                     </div>
@@ -1498,9 +1572,22 @@
             renderScheduleList();
         }
 
+        // Get event title based on type
+        function getEventTitle(type) {
+            switch(type) {
+                case 'call': return 'Phone Call';
+                case 'visit': return 'Farm Visit';
+                case 'followup': return 'Follow-up';
+                case 'fieldday': return 'Field Day';
+                case 'fieldsigns': return 'Field Signs Setup';
+                default: return type;
+            }
+        }
+
         // Render schedule list
         function renderScheduleList() {
-            const upcoming = calendarEvents
+            const allEvents = getAllEvents();
+            const upcoming = allEvents
                 .filter(e => new Date(e.date) >= new Date())
                 .sort((a, b) => new Date(a.date) - new Date(b.date))
                 .slice(0, 10);
@@ -1519,10 +1606,10 @@
                                 <div class="schedule-month">${monthNames[date.getMonth()]}</div>
                             </div>
                             <div class="schedule-details">
-                                <div class="schedule-title">${e.type === 'call' ? 'Phone Call' : e.type === 'visit' ? 'Farm Visit' : 'Follow-up'}</div>
+                                <div class="schedule-title">${getEventTitle(e.type)}</div>
                                 <div class="schedule-grower">${e.grower}${e.notes ? ' - ' + e.notes : ''}</div>
                             </div>
-                            <span class="schedule-type type-${e.type}">${e.type}</span>
+                            <span class="schedule-type type-${e.type}">${e.type === 'fieldday' ? 'field day' : e.type === 'fieldsigns' ? 'signs' : e.type}</span>
                         </div>
                     `;
                 }).join('');
@@ -1532,15 +1619,19 @@
         function exportToICal() {
             let ical = 'BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Pioneer Grower Management//EN\n';
 
-            calendarEvents.forEach((e, i) => {
+            const allEvents = getAllEvents();
+            allEvents.forEach((e, i) => {
                 const date = e.date.replace(/-/g, '');
                 const time = (e.time || '09:00').replace(':', '') + '00';
+                const summary = e.type === 'fieldday' ? 'PIONEER FIELD DAY' :
+                               e.type === 'fieldsigns' ? 'Put Up Field Signs' :
+                               `${getEventTitle(e.type)}: ${e.grower}`;
                 ical += `BEGIN:VEVENT
 UID:pioneer-${i}-${Date.now()}@grower-management
 DTSTART:${date}T${time}
 DTEND:${date}T${time}
-SUMMARY:${e.type === 'call' ? 'Call' : e.type === 'visit' ? 'Visit' : 'Follow-up'}: ${e.grower}
-DESCRIPTION:${e.notes || 'Grower interaction'}
+SUMMARY:${summary}
+DESCRIPTION:${e.notes || 'Pioneer event'}
 END:VEVENT\n`;
             });
 
