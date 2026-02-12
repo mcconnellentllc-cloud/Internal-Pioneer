@@ -7,7 +7,6 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', sans-serif; background: #f5f5f5; }
-
         .header {
             background: linear-gradient(135deg, #1a5f2a, #134620);
             color: white;
@@ -17,8 +16,6 @@
             align-items: center;
         }
         .header h1 { font-size: 1.4rem; }
-        .header-buttons { display: flex; gap: 0.5rem; }
-
         .btn {
             padding: 0.5rem 1rem;
             border: none;
@@ -29,9 +26,7 @@
         .btn-primary { background: white; color: #1a5f2a; font-weight: 600; }
         .btn-secondary { background: rgba(255,255,255,0.2); color: white; }
         .btn:hover { opacity: 0.9; }
-
         .container { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
-
         .tabs {
             display: flex;
             gap: 0;
@@ -46,14 +41,9 @@
             font-size: 0.9rem;
             font-weight: 500;
         }
-        .tab.active {
-            background: #1a5f2a;
-            color: white;
-        }
-
+        .tab.active { background: #1a5f2a; color: white; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-
         .section {
             background: white;
             padding: 1.5rem;
@@ -68,7 +58,6 @@
             padding-bottom: 0.5rem;
             border-bottom: 2px solid #e8f5e9;
         }
-
         .summary-cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -85,108 +74,21 @@
         .summary-card .label { font-size: 0.8rem; opacity: 0.9; margin-bottom: 0.25rem; }
         .summary-card .value { font-size: 2rem; font-weight: bold; }
         .summary-card .sub { font-size: 0.75rem; opacity: 0.8; margin-top: 0.25rem; }
-
         table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
         th, td { padding: 0.6rem 0.75rem; text-align: left; border-bottom: 1px solid #eee; }
         th { background: #f8f8f8; font-weight: 600; color: #333; position: sticky; top: 0; }
         tr:hover { background: #f9f9f9; }
         .text-right { text-align: right; }
         .text-center { text-align: center; }
-
-        .grower-row { background: #f0f7f0; font-weight: 600; }
-        .grower-row td { border-top: 2px solid #1a5f2a; }
-
         .prediction { color: #1a5f2a; font-weight: 600; }
         .change-up { color: #28a745; }
         .change-down { color: #dc3545; }
-
-        /* Import Modal */
-        .modal {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .modal-content {
-            background: white;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 700px;
-            max-height: 85vh;
+        .data-table-container {
+            max-height: 500px;
             overflow-y: auto;
-        }
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid #eee;
-            background: #f8f8f8;
-        }
-        .modal-header h2 { font-size: 1.1rem; color: #1a5f2a; }
-        .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #666; }
-        .modal-body { padding: 1.5rem; }
-
-        .form-group { margin-bottom: 1rem; }
-        .form-group label { display: block; margin-bottom: 0.25rem; font-weight: 600; font-size: 0.85rem; }
-        .form-group select, .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #ddd;
+            border: 1px solid #eee;
             border-radius: 4px;
-            font-size: 0.9rem;
         }
-        .form-group textarea { font-family: monospace; font-size: 0.8rem; }
-
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-
-        .file-drop {
-            border: 2px dashed #1a5f2a;
-            border-radius: 8px;
-            padding: 2rem;
-            text-align: center;
-            background: #f8fff8;
-            cursor: pointer;
-        }
-        .file-drop:hover { background: #e8f5e9; }
-        .file-drop p { margin: 0.25rem 0; color: #666; font-size: 0.9rem; }
-
-        .status { padding: 0.75rem; border-radius: 4px; margin-top: 1rem; font-size: 0.85rem; white-space: pre-wrap; }
-        .status.success { background: #d4edda; color: #155724; }
-        .status.error { background: #f8d7da; color: #721c24; }
-        .status.info { background: #d1ecf1; color: #0c5460; }
-
-        .hybrid-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-        }
-        .hybrid-tag {
-            background: #e8f5e9;
-            color: #1a5f2a;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .hybrid-tag .remove {
-            background: none;
-            border: none;
-            color: #dc3545;
-            cursor: pointer;
-            font-size: 1rem;
-            line-height: 1;
-        }
-        .hybrid-tag.discontinued { background: #f8d7da; color: #721c24; text-decoration: line-through; }
-        .hybrid-tag.new { background: #d4edda; color: #155724; border: 2px solid #28a745; }
-
         .filter-row {
             display: flex;
             gap: 1rem;
@@ -199,29 +101,116 @@
             border-radius: 4px;
             font-size: 0.85rem;
         }
-
-        .data-table-container {
-            max-height: 500px;
-            overflow-y: auto;
-            border: 1px solid #eee;
+        /* 2027 New Hybrids Section */
+        .hybrid-card {
+            background: white;
+            border: 2px solid #1a5f2a;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .hybrid-card h3 {
+            color: #1a5f2a;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .hybrid-card .crm-badge {
+            background: #007bff;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        .hybrid-card .replaces {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        .hybrid-specs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .spec-item {
+            background: #f8f8f8;
+            padding: 0.75rem;
             border-radius: 4px;
         }
+        .spec-item .label { font-size: 0.75rem; color: #666; }
+        .spec-item .value { font-size: 1rem; font-weight: 600; color: #1a5f2a; }
+        .hybrid-notes {
+            margin-top: 1rem;
+        }
+        .hybrid-notes label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+        .hybrid-notes textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            min-height: 80px;
+            resize: vertical;
+        }
+        .key-notes {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .key-notes h4 { color: #856404; margin-bottom: 0.5rem; }
+        .key-notes ul { margin-left: 1.5rem; color: #856404; }
+        /* Print styles */
+        @media print {
+            body { background: white; }
+            .header, .tabs, .filter-row, .summary-cards, .btn { display: none !important; }
+            .container { max-width: 100%; padding: 0; margin: 0; }
+            .tab-content { display: none !important; }
+            .tab-content.print-active { display: block !important; }
+            .section { box-shadow: none; padding: 0; margin: 0; }
+            .data-table-container { max-height: none; overflow: visible; border: none; }
+            table { font-size: 10pt; }
+            th, td { padding: 4px 8px; border: 1px solid #333; }
+            th { background: #e8e8e8 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .prediction { color: #1a5f2a !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .print-header { display: block !important; text-align: center; margin-bottom: 1rem; }
+            .print-header h1 { font-size: 16pt; color: #1a5f2a; margin-bottom: 0.25rem; }
+            .print-header p { font-size: 10pt; color: #666; }
+            .print-summary { display: flex !important; justify-content: space-around; margin-bottom: 1rem; padding: 0.5rem; border: 1px solid #ddd; }
+            .print-summary span { font-size: 10pt; }
+            .print-summary strong { color: #1a5f2a; }
+        }
+        .print-header, .print-summary { display: none; }
     </style>
 </head>
 <body>
+    <!-- Auth check -->
+    <script>
+        if (!sessionStorage.getItem('pioneer_auth')) {
+            window.location.href = 'login.html';
+        }
+    </script>
     <div class="header">
-        <div>
-            <h1>Pioneer 2027 Hybrid Quantity Forecast</h1>
-        </div>
-        <div class="header-buttons">
-            <button class="btn btn-secondary" onclick="showImportModal()">Import Data</button>
-            <button class="btn btn-secondary" onclick="showHybridModal()">Manage 2027 Hybrids</button>
+        <h1>Pioneer 2027 Hybrid Quantity Forecast</h1>
+        <div style="display:flex; gap:0.5rem; align-items:center;">
+            <a href="hybrid-portfolio.html" class="btn btn-secondary" style="text-decoration:none;">2027 Portfolio</a>
+            <a href="demand-plan.html" class="btn btn-secondary" style="text-decoration:none;">Demand Plan</a>
+            <a href="customer-data.html" class="btn btn-secondary" style="text-decoration:none;">Customer Data</a>
+            <a href="sorghum.html" class="btn btn-secondary" style="text-decoration:none;">Sorghum</a>
             <button class="btn btn-primary" onclick="exportData()">Export Forecast</button>
+            <button class="btn btn-secondary" onclick="sessionStorage.clear(); window.location.href='login.html';">Logout</button>
         </div>
     </div>
-
     <div class="container">
-        <!-- Summary Cards -->
         <div class="summary-cards">
             <div class="summary-card">
                 <div class="label">2024 Total</div>
@@ -244,15 +233,13 @@
                 <div class="sub">bags</div>
             </div>
         </div>
-
-        <!-- Tabs -->
         <div class="tabs">
             <button class="tab active" onclick="switchTab('by-operation')">By Operation</button>
             <button class="tab" onclick="switchTab('by-hybrid')">By Hybrid</button>
             <button class="tab" onclick="switchTab('detail')">Detail View</button>
+            <button class="tab" onclick="switchTab('new-hybrids')">2027 New Hybrids</button>
+            <button class="tab" onclick="switchTab('competitive')">Competitive</button>
         </div>
-
-        <!-- By Operation Tab -->
         <div id="by-operation" class="tab-content active">
             <div class="section">
                 <h2>Quantity by Operation (Grower)</h2>
@@ -276,19 +263,11 @@
                 </div>
             </div>
         </div>
-
-        <!-- By Hybrid Tab -->
         <div id="by-hybrid" class="tab-content">
             <div class="section">
-                <h2>Quantity by Hybrid (Subproduct)</h2>
+                <h2>Quantity by Hybrid</h2>
                 <div class="filter-row">
                     <input type="text" id="filter-hybrid" placeholder="Filter hybrids..." oninput="renderByHybrid()">
-                    <select id="filter-hybrid-status" onchange="renderByHybrid()">
-                        <option value="all">All Hybrids</option>
-                        <option value="active">Active Only</option>
-                        <option value="discontinued">Discontinued</option>
-                        <option value="new">New for 2027</option>
-                    </select>
                 </div>
                 <div class="data-table-container">
                     <table>
@@ -300,7 +279,6 @@
                                 <th class="text-right">2026</th>
                                 <th class="text-right prediction">2027 Predicted</th>
                                 <th class="text-right">% of Total</th>
-                                <th class="text-center">Status</th>
                             </tr>
                         </thead>
                         <tbody id="hybrid-table"></tbody>
@@ -308,19 +286,24 @@
                 </div>
             </div>
         </div>
-
-        <!-- Detail View Tab -->
         <div id="detail" class="tab-content">
+            <div class="print-header">
+                <h1>Pioneer 2027 Hybrid Quantity Forecast</h1>
+                <p>Detail View: Quantity by Operation + Hybrid</p>
+            </div>
+            <div class="print-summary">
+                <span>2024 Total: <strong id="print-2024">0</strong> bags</span>
+                <span>2025 Total: <strong id="print-2025">0</strong> bags</span>
+                <span>2026 Total: <strong id="print-2026">0</strong> bags</span>
+                <span>2027 Predicted: <strong id="print-2027">0</strong> bags</span>
+            </div>
             <div class="section">
-                <h2>Detail: Quantity by Operation + Hybrid</h2>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h2 style="margin-bottom: 0; border-bottom: none; padding-bottom: 0;">Detail: Quantity by Operation + Hybrid</h2>
+                    <button class="btn btn-primary" onclick="printDetailView()">Print Detail View</button>
+                </div>
                 <div class="filter-row">
                     <input type="text" id="filter-detail" placeholder="Filter..." oninput="renderDetail()">
-                    <select id="filter-detail-year" onchange="renderDetail()">
-                        <option value="all">All Years</option>
-                        <option value="2024">2024</option>
-                        <option value="2025">2025</option>
-                        <option value="2026">2026</option>
-                    </select>
                 </div>
                 <div class="data-table-container">
                     <table>
@@ -339,630 +322,780 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Import Modal -->
-    <div id="import-modal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Import Data</h2>
-                <button class="close-btn" onclick="hideImportModal()">&times;</button>
+        <div id="new-hybrids" class="tab-content">
+            <div class="key-notes">
+                <h4>2027 Planning Notes</h4>
+                <ul>
+                    <li><strong>RC Invoicing:</strong> 2027 invoicing 13% into RC invoicing</li>
+                    <li><strong>P05081:</strong> Will be 90% in PCUE and 10% of volume in AML</li>
+                </ul>
             </div>
-            <div class="modal-body">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Year:</label>
-                        <select id="import-year">
-                            <option value="2024">2024</option>
-                            <option value="2025">2025</option>
-                            <option value="2026" selected>2026</option>
-                        </select>
+            <div class="key-notes" style="background:#e3f2fd; border-color:#2196f3; margin-bottom:1.5rem;">
+                <h4 style="color:#1565c0;">Demand Plan Reminders</h4>
+                <ul style="color:#1565c0;">
+                    <li><strong>Sales Reps plan:</strong> Corn, Soybeans, and Grain Sorghum to agency target
+                        <ul style="margin-top:0.25rem; color:#1976d2;">
+                            <li>RC02 soybeans and grain sorghum are <strong>OPEN DEMAND</strong> for 2027 (not capped like corn RC02's)</li>
+                        </ul>
+                    </li>
+                    <li><strong>DO NOT plan:</strong> Forage sorghum, sorghum-sudangrass, or sunflowers - TMs & FAs will plan at territory level</li>
+                    <li><strong>District corn target:</strong> Bumped up <strong>13k (+3.7%) units</strong>
+                        <ul style="margin-top:0.25rem; color:#1976d2;">
+                            <li>Corn targets in DP tool reflect previous target</li>
+                            <li>TMs will work with reps to adjust plans product-by-product</li>
+                        </ul>
+                    </li>
+                    <li><strong>Job aids:</strong> DP tool job aids sent to Rep team by Sales Support</li>
+                </ul>
+            </div>
+            <div class="hybrid-card">
+                <h3>P96567V / P96567PCE <span class="crm-badge">96 CRM</span></h3>
+                <div class="replaces">Replaces: P95819V</div>
+                <div class="hybrid-specs">
+                    <div class="spec-item">
+                        <div class="label">Key Strength</div>
+                        <div class="value">Drought Tolerance</div>
                     </div>
-                    <div class="form-group">
-                        <label>Data Format:</label>
-                        <select id="import-format" onchange="updateFormatHelp()">
-                            <option value="auto">Auto-detect</option>
-                            <option value="powerbi">Power BI Export</option>
-                            <option value="simple">Simple (Grower, Hybrid, Bags)</option>
-                        </select>
+                    <div class="spec-item">
+                        <div class="label">Maturity</div>
+                        <div class="value">96 Days</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Technology</div>
+                        <div class="value">V/PCE Options</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Best Fit</div>
+                        <div class="value">Dryland / Limited Irrigation</div>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <label>Upload File or Paste Data:</label>
-                    <div class="file-drop" id="drop-zone" onclick="document.getElementById('file-input').click()">
-                        <input type="file" id="file-input" accept=".csv,.txt,.tsv" onchange="handleFile(event)" style="display:none;">
-                        <p><strong>Click to upload or drag file here</strong></p>
-                        <p>CSV, TXT, TSV accepted</p>
+                <div class="hybrid-notes">
+                    <label>My Notes:</label>
+                    <textarea id="notes-P96567" onchange="saveNotes('P96567', this.value)" placeholder="Add your notes about P96567V/PCE here..."></textarea>
+                </div>
+            </div>
+            <div class="hybrid-card">
+                <h3>P99491V / P99491PCE <span class="crm-badge">99 CRM</span></h3>
+                <div class="replaces">Replaces: P9955V (corn-on-corn), P00549PCE (rotated acres)</div>
+                <div class="hybrid-specs">
+                    <div class="spec-item">
+                        <div class="label">Hi-Yield BLUP</div>
+                        <div class="value">~242 bu/a</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Stress BLUP</div>
+                        <div class="value">~208 bu/a</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Maturity</div>
+                        <div class="value">99 Days</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Performance</div>
+                        <div class="value">Top Quadrant (Stress + Yield)</div>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <label>Or paste data directly:</label>
-                    <textarea id="paste-data" rows="8" placeholder="Paste your data here..."></textarea>
+                <p style="margin:1rem 0; color:#666; font-size:0.9rem;">
+                    <strong>vs Competition:</strong> Outperforms P9845PWE, P00549YHRCE, P03357PWUE, P0075YHRCR in Stress x Hi-Yield chart<br>
+                    <strong>vs P00549YHRCE:</strong> +15.0 bu/a, 82.4% wins (17 locations, p=0.02)
+                </p>
+                <div class="hybrid-notes">
+                    <label>My Notes:</label>
+                    <textarea id="notes-P99491" onchange="saveNotes('P99491', this.value)" placeholder="Add your notes about P99491V/PCE here..."></textarea>
                 </div>
-
-                <div class="form-group">
-                    <button class="btn btn-primary" onclick="importData()">Import Data</button>
-                    <button class="btn btn-secondary" onclick="viewCurrentData()">View Current Data</button>
-                    <button class="btn btn-secondary" onclick="clearData()">Clear All Data</button>
+            </div>
+            <div class="hybrid-card">
+                <h3>P03802PCE <span class="crm-badge">103 CRM</span></h3>
+                <div class="replaces">Replaces: P03951PCE (under irrigation), P0487PCE (better dryland); Companion to P03357PCUE</div>
+                <div class="hybrid-specs">
+                    <div class="spec-item">
+                        <div class="label">Hi-Yield BLUP</div>
+                        <div class="value">~244 bu/a (Top)</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Plant Height</div>
+                        <div class="value">Taller Plant (5)</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Test Weight</div>
+                        <div class="value">Below Avg (4)</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Drought</div>
+                        <div class="value">7</div>
+                    </div>
                 </div>
-
-                <div id="import-status" class="status" style="display:none;"></div>
+                <p style="margin:1rem 0; color:#666; font-size:0.9rem;">
+                    <strong>Key Strengths:</strong> Top-end yield on better dryland to high-yield irrigated, attractive relaxed canopy that shades rows well, strong roots, decent ear flex - nice chunky ears<br>
+                    <strong>Considerations:</strong> Below avg test weight, below avg head smut tolerance (avoid fields with smut history), will tiller in low pop<br>
+                    <strong>vs P03357PWUE:</strong> +4.3 bu/a, 68.8% wins (32 locations)
+                </p>
+                <div class="hybrid-notes">
+                    <label>My Notes:</label>
+                    <textarea id="notes-P03802" onchange="saveNotes('P03802', this.value)" placeholder="Your notes: Attractive plant, major player in good dryland to high yield. Goes over sand hills - take it to dryland to compete."></textarea>
+                </div>
+            </div>
+            <div class="hybrid-card">
+                <h3>P04651V <span class="crm-badge">104 CRM</span> <span style="background:#007bff;color:white;padding:0.25rem 0.5rem;border-radius:4px;font-size:0.7rem;margin-left:0.5rem;">AquaMax</span></h3>
+                <div class="replaces">Replaces: P0075Q, P0487Q, P0622Q; Companion to P03357PCUE, P03115V</div>
+                <div class="hybrid-specs">
+                    <div class="spec-item">
+                        <div class="label">Drought Rating</div>
+                        <div class="value" style="color:#28a745;">9 (Excellent)</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Best Environment</div>
+                        <div class="value">220-250 bu/a</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Staygreen</div>
+                        <div class="value">7 (Good)</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Head Smut</div>
+                        <div class="value">2 (Avoid history)</div>
+                    </div>
+                </div>
+                <p style="margin:1rem 0; color:#666; font-size:0.9rem;">
+                    <strong>Key Strengths:</strong> AquaMax Vorceed - top-notch drought tolerance, solid yield potential, durability and stability for tough to moderate acres, excellent drought observations in 2025<br>
+                    <strong>Positioning:</strong> Corn-on-corn dryland to full irrigation - shines in moderate acre down to dryland<br>
+                    <strong>Considerations:</strong> Tends to produce longer silks, below avg head smut tolerance, slightly below avg stress emergence
+                </p>
+                <div class="hybrid-notes">
+                    <label>My Notes:</label>
+                    <textarea id="notes-P04651" onchange="saveNotes('P04651', this.value)" placeholder="Your notes: AquaMax product. Will shine in moderate acre down to dryland. Really at home at 220-250 yield environment."></textarea>
+                </div>
+            </div>
+            <div class="hybrid-card">
+                <h3>P08215PCUE <span class="crm-badge">108 CRM</span> <span style="background:#007bff;color:white;padding:0.25rem 0.5rem;border-radius:4px;font-size:0.7rem;margin-left:0.5rem;">AquaMax</span></h3>
+                <div class="replaces">Targeted Replacement: P0995AM; Dryland companion: P05081PCUE, P11259PCE; Durability companion: P09076VPCE, P10625PCUE</div>
+                <div class="hybrid-specs">
+                    <div class="spec-item">
+                        <div class="label">Drought Rating</div>
+                        <div class="value" style="color:#28a745;">9 (Excellent)</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Stress BLUP</div>
+                        <div class="value" style="color:#28a745;">~168 bu/a (Top tier)</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Hi-Yield BLUP</div>
+                        <div class="value">~241 bu/a</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Test Weight</div>
+                        <div class="value">7 (Good)</div>
+                    </div>
+                </div>
+                <p style="margin:1rem 0; color:#666; font-size:0.9rem;">
+                    <strong>Key Strengths:</strong> AquaMax with excellent drought tolerance (9), good stability under stressful conditions, solid test weight and grain quality, PCUE brings western bean cutworm + corn earworm protection<br>
+                    <strong>Positioning:</strong> SUPER TOUGH PRODUCT - put in toughest plots, use for durability acres. Dryland to full irrigation. (If you want high yield, use P09076V instead)<br>
+                    <strong>Considerations:</strong> Tops will break out but lower stalk quality is really good late into fall. Tends to purple early in colder conditions, moderate tiller in low pop<br>
+                    <strong>Technology:</strong> PCUE, LL, RR2, Enlist, FOP
+                </p>
+                <div class="hybrid-notes">
+                    <label>My Notes:</label>
+                    <textarea id="notes-P08215" onchange="saveNotes('P08215', this.value)" placeholder="Your notes: Super tough product - goes into toughest plots, use for durability acres."></textarea>
+                </div>
+            </div>
+            <div class="hybrid-card" style="border-color:#ffc107;">
+                <h3>P10705V <span class="crm-badge">110 CRM</span> <span style="background:#ffc107;color:#000;padding:0.25rem 0.5rem;border-radius:4px;font-size:0.7rem;margin-left:0.5rem;">LIMITED LAUNCH</span></h3>
+                <div class="replaces">Triple companion TO P10300PCE; Companions: P10625V, P12517V (<strong>P12517V LOVES OUR AREA</strong> - major player, +10 bu/a over P10705V)</div>
+                <div class="hybrid-specs">
+                    <div class="spec-item">
+                        <div class="label">Positioning</div>
+                        <div class="value">Full Irrigation</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Yield Potential</div>
+                        <div class="value" style="color:#28a745;">Very High</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Drought</div>
+                        <div class="value">7</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Test Weight</div>
+                        <div class="value">5</div>
+                    </div>
+                </div>
+                <p style="margin:1rem 0; color:#666; font-size:0.9rem;">
+                    <strong>Key Strengths:</strong> 110 CRM Vorceed - top-end performance for irrigated acre, very high yield potential for well-managed acres, decent ear flex with chunky ear development, strong roots and mid-season brittle stalk. <strong style="color:#6c757d;">SILAGE: TOP PERFORMER in 108-112 CRM range! Best starch + yield (~28 t/a @ 35% DM)</strong><br>
+                    <strong>Positioning:</strong> LIMITED TO FULL IRRIGATION - verify toughness under limited water in 2026<br>
+                    <strong>Considerations:</strong> CONCERNS WITH EAR RETENTION - monitor closely. Avg BLS tolerance. Above avg rapid growth - LIMIT SU AND GROWTH REGULATORS. Tends to break tops at harvest, moderate tiller in low pop. WARNING: Stays green late - neighbors got burned by too much moisture at freeze<br>
+                    <strong>Technology:</strong> V, LL, RR2, Enlist, FOP
+                </p>
+                <div class="hybrid-notes">
+                    <label>My Notes:</label>
+                    <textarea id="notes-P10705" onchange="saveNotes('P10705', this.value)" placeholder="Your notes: Neighbors going hard into this - got burned by too green/moisture at freeze. DROP INTO HIGH YIELD PLOTS."></textarea>
+                </div>
+            </div>
+            <div class="hybrid-card">
+                <h3>P11259PCE <span class="crm-badge">111 CRM</span> <span style="background:#007bff;color:white;padding:0.25rem 0.5rem;border-radius:4px;font-size:0.7rem;margin-left:0.5rem;">AquaMax</span></h3>
+                <div class="replaces"><strong>GOING AFTER P1122AML ACRES</strong>; Companions: P10625PCUE, P12517PCUE</div>
+                <div class="hybrid-specs">
+                    <div class="spec-item">
+                        <div class="label">Drought Rating</div>
+                        <div class="value" style="color:#28a745;">9 (Excellent)</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Stress BLUP</div>
+                        <div class="value" style="color:#28a745;">~162 bu/a (BEST)</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Hi-Yield BLUP</div>
+                        <div class="value" style="color:#28a745;">~250 bu/a</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Test Weight</div>
+                        <div class="value">6</div>
+                    </div>
+                </div>
+                <p style="margin:1rem 0; color:#666; font-size:0.9rem;">
+                    <strong>Key Strengths:</strong> TOP RIGHT ON CHART - BEST stress tolerance AND excellent yield. AquaMax with outstanding drought (9). Excellent stability low to high yield. Big chunky ears, nice western agronomic package<br>
+                    <strong>Positioning:</strong> USE ON TOUGH TOUGH ACRES ALL THE WAY UP TO HIGH YIELD ENVIRONMENTS - dryland to full irrigation<br>
+                    <strong>Considerations:</strong> MAIN CONCERN: WEAK ON SOUTHERN RUST (4) - monitor in high-pressure environments. Head smut (4)<br>
+                    <strong>Technology:</strong> PCE, LL, RR2, Enlist, FOP
+                </p>
+                <div class="hybrid-notes">
+                    <label>My Notes:</label>
+                    <textarea id="notes-P11259" onchange="saveNotes('P11259', this.value)" placeholder="Your notes: AquaMax - tough acre to top end..."></textarea>
+                </div>
+            </div>
+            <div class="hybrid-card">
+                <h3>P14270V/PCE <span class="crm-badge">114 CRM</span> <span style="background:#6c757d;color:white;padding:0.25rem 0.5rem;border-radius:4px;font-size:0.7rem;margin-left:0.5rem;">SILAGE</span></h3>
+                <div class="replaces">Targeted Replacement: P14830AML (<strong>+2 Goss's improvement!</strong>), <strong>TAKING OUT P1828AM</strong>; Companion: P14364PCUE; Silage companions: P12517V, P12904V, P13777V, P15517V</div>
+                <div class="hybrid-specs">
+                    <div class="spec-item">
+                        <div class="label">Stress BLUP</div>
+                        <div class="value" style="color:#28a745;">~193 bu/a (BEST)</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Hi-Yield BLUP</div>
+                        <div class="value">~240 bu/a</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Goss' Wilt</div>
+                        <div class="value" style="color:#28a745;">7 (Outstanding)</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Drought</div>
+                        <div class="value">8</div>
+                    </div>
+                </div>
+                <p style="margin:1rem 0; color:#666; font-size:0.9rem;">
+                    <strong>Key Strengths:</strong> SILAGE PRODUCT - BIG BEAUTIFUL PLANT for silage. DUAL PURPOSE product with high quality silage. Great late-season staygreen. Solid drought (8), nice stability. Outstanding Goss' wilt for corn-on-corn. Above avg BLS. <strong>MORE STABLE PRODUCT THAN P13777V. +10.3 bu/a yield advantage over P14830AML!</strong><br>
+                    <strong>Positioning:</strong> Wheat stubble dryland to full irrigation - verify dryland utility in 2026. Better in Valent Sands<br>
+                    <strong>Considerations:</strong> Ears can be nosy under higher population - test populations in 2026. Heavier tiller in low pop<br>
+                    <strong>Technology:</strong> V/PCE, LL, RR2, Enlist, FOP
+                </p>
+                <div class="hybrid-notes">
+                    <label>My Notes:</label>
+                    <textarea id="notes-P14270" onchange="saveNotes('P14270', this.value)" placeholder="Your notes: Silage product..."></textarea>
+                </div>
+            </div>
+            <div class="hybrid-card">
+                <h3>P15517V <span class="crm-badge">115 CRM</span> <span style="background:#6c757d;color:white;padding:0.25rem 0.5rem;border-radius:4px;font-size:0.7rem;margin-left:0.5rem;">SILAGE</span></h3>
+                <div class="replaces"><strong>Targeted Replacement: P1828AM</strong>; Silage companion to: P12904V, P12517V, P13777V, P14270V</div>
+                <div class="hybrid-specs">
+                    <div class="spec-item">
+                        <div class="label">Drought</div>
+                        <div class="value" style="color:#dc3545;">5 (WEAKNESS)</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Goss' Wilt</div>
+                        <div class="value" style="color:#28a745;">7</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Silage Yield</div>
+                        <div class="value" style="color:#28a745;">8</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Milk/Beef Per Acre</div>
+                        <div class="value" style="color:#28a745;">8/8</div>
+                    </div>
+                </div>
+                <p style="margin:1rem 0; color:#666; font-size:0.9rem;">
+                    <strong>Key Strengths:</strong> <strong style="color:#dc3545;">SILAGE SILAGE SILAGE - THIS IS A SILAGE PRODUCT!</strong> 115 CRM. Good stress emergence for EARLY PLANTING. Good Goss's wilt (7). Sturdy western agronomic package (solid brittle 6, stress emergence 6, staygreen 6). Good late-season staygreen and intactness, solid late stalks. Acceptable plant/ear height for silage. HIGH QUALITY SILAGE. Fiber Digestibility 8, Starch+Sugar 7. <strong style="color:#dc3545;">DROUGHT IS A 5 - HAS TO HAS TO HAS TO HAVE WATER!</strong><br>
+                    <strong>Positioning:</strong> <strong>KEEP IT ON THE BETTER ACRES!</strong> Better corn-on-corn dryland to full irrigation - verify dryland utility in 2026<br>
+                    <strong>Considerations:</strong> Slightly below Pioneer standard for test weight. Slightly below avg Gray Leaf Spot (4) and Southern Rust (4) - monitor high pressure environments. Avg to slightly below avg BLS observed in 2025. <strong>For silage plant/ear height: P14270V might be better - TEST IT</strong><br>
+                    <strong>Technology:</strong> V, LL, RR2, Enlist, FOP
+                </p>
+                <div class="hybrid-notes">
+                    <label>My Notes:</label>
+                    <textarea id="notes-P15517" onchange="saveNotes('P15517', this.value)" placeholder="Your notes: Silage companion..."></textarea>
+                </div>
+            </div>
+            <div class="hybrid-card">
+                <h3>P18512V/PCE <span class="crm-badge">118 CRM</span> <span style="background:#28a745;color:white;padding:0.25rem 0.5rem;border-radius:4px;font-size:0.7rem;margin-left:0.5rem;">GRAIN</span></h3>
+                <div class="replaces">TBD</div>
+                <div class="hybrid-specs">
+                    <div class="spec-item">
+                        <div class="label">Stress BLUP (V)</div>
+                        <div class="value">~185 bu/a</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Stress BLUP (PCE)</div>
+                        <div class="value">~175 bu/a</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Hi-Yield BLUP</div>
+                        <div class="value">~232-234 bu/a</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Drought</div>
+                        <div class="value">TBD</div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="label">Goss' Wilt</div>
+                        <div class="value">TBD</div>
+                    </div>
+                </div>
+                <p style="margin:1rem 0; color:#666; font-size:0.9rem;">
+                    <strong>Key Strengths:</strong> GRAIN PRODUCT but <strong style="color:#6c757d;">ALSO TOP SILAGE PERFORMER in 112-118 CRM! (~28.5 t/a @ 35% DM - BEST in class!)</strong> Long season triple for silage<br>
+                    <strong>Positioning:</strong> Dual purpose - grain OR silage<br>
+                    <strong>Considerations:</strong> Awaiting full specs<br>
+                    <strong>Technology:</strong> V, LL, RR2, Enlist, FOP
+                </p>
+                <div class="hybrid-notes">
+                    <label>My Notes:</label>
+                    <textarea id="notes-P18512" onchange="saveNotes('P18512', this.value)" placeholder="Your notes: Grain product..."></textarea>
+                </div>
+            </div>
+            <!-- Links to other crop pages -->
+            <div style="margin-top:2rem; padding:1rem; background:#f8f9fa; border-radius:8px; text-align:center;">
+                <h3 style="margin-bottom:1rem; color:#666;">Other Crops</h3>
+                <a href="sorghum.html" style="display:inline-block; padding:0.75rem 1.5rem; background:#8b4513; color:white; text-decoration:none; border-radius:4px; margin:0.5rem; font-weight:600;">Sorghum Hybrids</a>
+            </div>
+        </div>
+        <div id="competitive" class="tab-content">
+            <div class="section">
+                <h2>Product Performance by Yield Zone</h2>
+                <p style="color:#666; margin-bottom:1rem;">2025-2023, District CD, Pioneer vs Competition, +/- 3 CRM, <strong style="color:#1a5f2a;">>10 Comparisons per cell</strong></p>
+                <div class="key-notes" style="background:#ffe6e6; border-color:#dc3545; margin-bottom:1rem;">
+                    <h4 style="color:#dc3545;">2027 DEMAND PLAN: 13% REQUIREMENT</h4>
+                    <p style="color:#333; margin:0;">These products must represent <strong>13% of your 2027 orders</strong>. Use this data to match the right hybrid to each grower's yield environment.</p>
+                </div>
+                <div class="key-notes" style="background:#e8f5e9; border-color:#1a5f2a;">
+                    <h4 style="color:#1a5f2a;">How to Read This Table</h4>
+                    <ul style="color:#333;">
+                        <li><strong style="color:#28a745;">Green (75%+):</strong> Strong performer - leads in this yield environment</li>
+                        <li><strong style="color:#ffc107;">Yellow (50-74%):</strong> Competitive - holds its own vs competition</li>
+                        <li><strong style="color:#dc3545;">Red (<50%):</strong> Weak spot - consider alternatives for this environment</li>
+                    </ul>
+                </div>
+                <div class="data-table-container" style="max-height:none;">
+                    <table id="yield-zone-table">
+                        <thead>
+                            <tr>
+                                <th>Hybrid</th>
+                                <th class="text-center">&lt;150 bu/a<br><span style="font-weight:normal;font-size:0.75rem;">%Wins</span></th>
+                                <th class="text-center">150-200 bu/a<br><span style="font-weight:normal;font-size:0.75rem;">%Wins</span></th>
+                                <th class="text-center">200-250 bu/a<br><span style="font-weight:normal;font-size:0.75rem;">%Wins</span></th>
+                                <th class="text-center">&gt;250 bu/a<br><span style="font-weight:normal;font-size:0.75rem;">%Wins</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>P00549</strong></td>
+                                <td class="text-center" style="background:#fff3cd;">63%</td>
+                                <td class="text-center" style="background:#f8f9fa;">N/A</td>
+                                <td class="text-center" style="background:#d4edda;">82%</td>
+                                <td class="text-center" style="background:#fff3cd;">73%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P02405</strong></td>
+                                <td class="text-center" style="background:#f8d7da;">48%</td>
+                                <td class="text-center" style="background:#fff3cd;">73%</td>
+                                <td class="text-center" style="background:#fff3cd;">61%</td>
+                                <td class="text-center" style="background:#d4edda;">80%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P03115</strong></td>
+                                <td class="text-center" style="background:#fff3cd;">65%</td>
+                                <td class="text-center" style="background:#f8d7da;">38%</td>
+                                <td class="text-center" style="background:#f8d7da;">41%</td>
+                                <td class="text-center" style="background:#f8d7da;">41%</td>
+                            </tr>
+                            <tr style="background:#f0fff0;">
+                                <td><strong>P03357</strong> ⭐</td>
+                                <td class="text-center" style="background:#f8d7da;">47%</td>
+                                <td class="text-center" style="background:#fff3cd;">63%</td>
+                                <td class="text-center" style="background:#d4edda;">79%</td>
+                                <td class="text-center" style="background:#28a745;color:white;font-weight:bold;">100%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P03951</strong></td>
+                                <td class="text-center" style="background:#f8d7da;">43%</td>
+                                <td class="text-center" style="background:#fff3cd;">63%</td>
+                                <td class="text-center" style="background:#fff3cd;">61%</td>
+                                <td class="text-center" style="background:#d4edda;">89%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P05081</strong></td>
+                                <td class="text-center" style="background:#fff3cd;">51%</td>
+                                <td class="text-center" style="background:#fff3cd;">66%</td>
+                                <td class="text-center" style="background:#fff3cd;">74%</td>
+                                <td class="text-center" style="background:#fff3cd;">70%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P05466</strong></td>
+                                <td class="text-center" style="background:#dc3545;color:white;">18%</td>
+                                <td class="text-center" style="background:#d4edda;">88%</td>
+                                <td class="text-center" style="background:#fff3cd;">70%</td>
+                                <td class="text-center" style="background:#d4edda;">80%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P08527</strong></td>
+                                <td class="text-center" style="background:#fff3cd;">60%</td>
+                                <td class="text-center" style="background:#d4edda;">78%</td>
+                                <td class="text-center" style="background:#fff3cd;">72%</td>
+                                <td class="text-center" style="background:#d4edda;">75%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P0859</strong></td>
+                                <td class="text-center" style="background:#fff3cd;">60%</td>
+                                <td class="text-center" style="background:#d4edda;">83%</td>
+                                <td class="text-center" style="background:#fff3cd;">74%</td>
+                                <td class="text-center" style="background:#d4edda;">79%</td>
+                            </tr>
+                            <tr style="background:#f0fff0;">
+                                <td><strong>P09076</strong> ⭐</td>
+                                <td class="text-center" style="background:#d4edda;">82%</td>
+                                <td class="text-center" style="background:#d4edda;">77%</td>
+                                <td class="text-center" style="background:#d4edda;">90%</td>
+                                <td class="text-center" style="background:#fff3cd;">64%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P0995</strong></td>
+                                <td class="text-center" style="background:#fff3cd;">56%</td>
+                                <td class="text-center" style="background:#fff3cd;">71%</td>
+                                <td class="text-center" style="background:#fff3cd;">61%</td>
+                                <td class="text-center" style="background:#fff3cd;">69%</td>
+                            </tr>
+                            <tr style="background:#f0fff0;">
+                                <td><strong>P10300</strong> ⭐</td>
+                                <td class="text-center" style="background:#fff3cd;">63%</td>
+                                <td class="text-center" style="background:#d4edda;">80%</td>
+                                <td class="text-center" style="background:#d4edda;">89%</td>
+                                <td class="text-center" style="background:#d4edda;">82%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P10625</strong></td>
+                                <td class="text-center" style="background:#fff3cd;">60%</td>
+                                <td class="text-center" style="background:#fff3cd;">72%</td>
+                                <td class="text-center" style="background:#d4edda;">75%</td>
+                                <td class="text-center" style="background:#fff3cd;">74%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P1122</strong></td>
+                                <td class="text-center" style="background:#fff3cd;">63%</td>
+                                <td class="text-center" style="background:#fff3cd;">58%</td>
+                                <td class="text-center" style="background:#fff3cd;">57%</td>
+                                <td class="text-center" style="background:#fff3cd;">68%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P12393</strong></td>
+                                <td class="text-center" style="background:#dc3545;color:white;">33%</td>
+                                <td class="text-center" style="background:#d4edda;">90%</td>
+                                <td class="text-center" style="background:#fff3cd;">68%</td>
+                                <td class="text-center" style="background:#d4edda;">83%</td>
+                            </tr>
+                            <tr style="background:#f0fff0;">
+                                <td><strong>P12517</strong> ⭐</td>
+                                <td class="text-center" style="background:#f8d7da;">46%</td>
+                                <td class="text-center" style="background:#d4edda;">75%</td>
+                                <td class="text-center" style="background:#d4edda;">85%</td>
+                                <td class="text-center" style="background:#d4edda;">91%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P12904</strong></td>
+                                <td class="text-center" style="background:#dc3545;color:white;">17%</td>
+                                <td class="text-center" style="background:#fff3cd;">67%</td>
+                                <td class="text-center" style="background:#fff3cd;">56%</td>
+                                <td class="text-center" style="background:#fff3cd;">69%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P13777</strong></td>
+                                <td class="text-center" style="background:#f8d7da;">45%</td>
+                                <td class="text-center" style="background:#f8d7da;">46%</td>
+                                <td class="text-center" style="background:#d4edda;">79%</td>
+                                <td class="text-center" style="background:#d4edda;">78%</td>
+                            </tr>
+                            <tr style="background:#f0fff0;">
+                                <td><strong>P14364</strong> ⭐</td>
+                                <td class="text-center" style="background:#d4edda;">80%</td>
+                                <td class="text-center" style="background:#28a745;color:white;font-weight:bold;">100%</td>
+                                <td class="text-center" style="background:#d4edda;">85%</td>
+                                <td class="text-center" style="background:#d4edda;">89%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P14830</strong></td>
+                                <td class="text-center" style="background:#dc3545;color:white;">20%</td>
+                                <td class="text-center" style="background:#fff3cd;">72%</td>
+                                <td class="text-center" style="background:#d4edda;">88%</td>
+                                <td class="text-center" style="background:#fff3cd;">74%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P1548</strong></td>
+                                <td class="text-center" style="background:#f8f9fa;">N/A</td>
+                                <td class="text-center" style="background:#f8d7da;">47%</td>
+                                <td class="text-center" style="background:#fff3cd;">54%</td>
+                                <td class="text-center" style="background:#dc3545;color:white;">27%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>P1742</strong></td>
+                                <td class="text-center" style="background:#f8f9fa;">N/A</td>
+                                <td class="text-center" style="background:#d4edda;">86%</td>
+                                <td class="text-center" style="background:#fff3cd;">71%</td>
+                                <td class="text-center" style="background:#d4edda;">82%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="margin-top:1.5rem; padding:1rem; background:#fff3cd; border:1px solid #ffc107; border-radius:8px;">
+                    <h4 style="color:#856404; margin-bottom:0.5rem;">Key Takeaways</h4>
+                    <ul style="color:#856404; margin-left:1.5rem;">
+                        <li><strong>P03357:</strong> 100% wins at >250 bu/a - DOMINANT in high-yield environments</li>
+                        <li><strong>P14364:</strong> 100% wins at 150-200 bu/a, strong across ALL zones (80%+ everywhere)</li>
+                        <li><strong>P09076:</strong> Best dryland performer (82% at <150), excellent mid-range (90% at 200-250)</li>
+                        <li><strong>P12517:</strong> Strong high-yield (91% at >250, 85% at 200-250)</li>
+                        <li><strong>P10300:</strong> Consistent performer - 80%+ in top 3 yield zones</li>
+                        <li><strong style="color:#dc3545;">Avoid P03115, P1548 in high-yield environments</strong></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
-
-    <!-- Hybrid Management Modal -->
-    <div id="hybrid-modal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Manage 2027 Available Hybrids</h2>
-                <button class="close-btn" onclick="hideHybridModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="section" style="box-shadow: none; padding: 1rem; background: #f8f8f8;">
-                    <h2 style="font-size: 1rem;">Discontinued for 2027</h2>
-                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">These hybrids will NOT be available in 2027. Predicted quantity = 0.</p>
-                    <div class="hybrid-list" id="discontinued-list"></div>
-                    <div class="form-row" style="margin-top: 1rem;">
-                        <input type="text" id="add-discontinued" placeholder="Add discontinued hybrid (e.g., P0622AM)">
-                        <button class="btn btn-secondary" onclick="addDiscontinued()">Add Discontinued</button>
-                    </div>
-                </div>
-
-                <div class="section" style="box-shadow: none; padding: 1rem; background: #f8f8f8; margin-top: 1rem;">
-                    <h2 style="font-size: 1rem;">New for 2027</h2>
-                    <p style="font-size: 0.85rem; color: #666; margin-bottom: 0.5rem;">New hybrids available for purchase in 2027.</p>
-                    <div class="hybrid-list" id="new-list"></div>
-                    <div class="form-row" style="margin-top: 1rem;">
-                        <input type="text" id="add-new" placeholder="Add new hybrid (e.g., P0890AM)">
-                        <button class="btn btn-secondary" onclick="addNewHybrid()">Add New Hybrid</button>
-                    </div>
-                </div>
-
-                <div class="form-group" style="margin-top: 1rem;">
-                    <label>Or paste a list of 2027 available hybrids (one per line):</label>
-                    <textarea id="paste-hybrids" rows="5" placeholder="P0622AM&#10;P0950AM&#10;P1093AM&#10;..."></textarea>
-                    <button class="btn btn-primary" onclick="importHybridList()" style="margin-top: 0.5rem;">Set as 2027 Available Hybrids</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // ============================================
-        // DATA STORAGE
-        // ============================================
-        let data = {
-            records: [], // {operation, hybrid, year, bags}
-            discontinued2027: [],
-            new2027: []
+        // EMBEDDED REAL DATA - 574 records from 2024-2026
+        const data = {
+            records: [
+                {operation: "Anderson Wheat Farms", hybrid: "P0075AM", year: 2024, bags: 112},
+                {operation: "Anderson Wheat Farms", hybrid: "P0075AM", year: 2025, bags: 50},
+                {operation: "Anderson Wheat Farms", hybrid: "P0075AM", year: 2026, bags: 83},
+                {operation: "Anderson Wheat Farms", hybrid: "P0075Q", year: 2024, bags: 80},
+                {operation: "Anderson Wheat Farms", hybrid: "P0075Q", year: 2025, bags: 3},
+                {operation: "Anderson Wheat Farms", hybrid: "P03115PCE", year: 2024, bags: 2},
+                {operation: "Anderson Wheat Farms", hybrid: "P03115V", year: 2025, bags: 85},
+                {operation: "Anderson Wheat Farms", hybrid: "P03115V", year: 2026, bags: 43},
+                {operation: "Anderson Wheat Farms", hybrid: "P0339Q", year: 2024, bags: 85},
+                {operation: "Anderson Wheat Farms", hybrid: "P05466Q", year: 2024, bags: 58},
+                {operation: "Anderson Wheat Farms", hybrid: "P05466V", year: 2024, bags: 2},
+                {operation: "Anderson Wheat Farms", hybrid: "P05466V", year: 2025, bags: 132},
+                {operation: "Anderson Wheat Farms", hybrid: "P05466V", year: 2026, bags: 53},
+                {operation: "Anderson Wheat Farms", hybrid: "P07340Q", year: 2024, bags: 2},
+                {operation: "Anderson Wheat Farms", hybrid: "P08527V", year: 2024, bags: 2},
+                {operation: "Anderson Wheat Farms", hybrid: "P0859AM", year: 2024, bags: 54},
+                {operation: "Anderson Wheat Farms", hybrid: "P0859AM", year: 2025, bags: 55},
+                {operation: "Anderson Wheat Farms", hybrid: "P0924Q", year: 2024, bags: 2},
+                {operation: "Anderson Wheat Farms", hybrid: "P13777V", year: 2025, bags: 45},
+                {operation: "Anderson Wheat Farms", hybrid: "P13777V", year: 2026, bags: 53},
+                {operation: "Anderson Wheat Farms", hybrid: "P1828Q", year: 2024, bags: 60},
+                {operation: "Anderson Wheat Farms", hybrid: "P9489AM", year: 2024, bags: 32},
+                {operation: "Anderson Wheat Farms", hybrid: "P9489AM", year: 2025, bags: 50},
+                {operation: "Arrow Head", hybrid: "P0339Q", year: 2024, bags: 50},
+                {operation: "Arrow Head", hybrid: "P05081AML", year: 2026, bags: 50},
+                {operation: "Arrow Head", hybrid: "P05466V", year: 2025, bags: 52},
+                {operation: "Arrow Head", hybrid: "P0622AML", year: 2024, bags: 48},
+                {operation: "Arrow Head", hybrid: "P08527V", year: 2026, bags: 100},
+                {operation: "Bamford Farms", hybrid: "P0075AM", year: 2024, bags: 40},
+                {operation: "Bamford Farms", hybrid: "P0075AM", year: 2025, bags: 40},
+                {operation: "Bamford Farms", hybrid: "P0075AM", year: 2026, bags: 37},
+                {operation: "Bamford Farms", hybrid: "P0157AMXT", year: 2026, bags: 77},
+                {operation: "Bamford Farms", hybrid: "P03115V", year: 2025, bags: 52},
+                {operation: "Bamford Farms", hybrid: "P0339Q", year: 2024, bags: 53},
+                {operation: "Bamford Farms", hybrid: "P05081AML", year: 2025, bags: 50},
+                {operation: "Bamford Farms", hybrid: "P05081AML", year: 2026, bags: 50},
+                {operation: "Bamford Farms", hybrid: "P05466V", year: 2025, bags: 41},
+                {operation: "Bamford Farms", hybrid: "P0622AML", year: 2024, bags: 52},
+                {operation: "Bamford Farms", hybrid: "P0622AML", year: 2025, bags: 50},
+                {operation: "Bamford Farms", hybrid: "P08527V", year: 2025, bags: 54},
+                {operation: "Bamford Farms", hybrid: "P08527V", year: 2026, bags: 44},
+                {operation: "Bamford Farms", hybrid: "P0924Q", year: 2024, bags: 42},
+                {operation: "Bamford Farms", hybrid: "P1089AMXT", year: 2024, bags: 42},
+                {operation: "Bamford Farms", hybrid: "P1122AML", year: 2026, bags: 55},
+                {operation: "Bamford Farms", hybrid: "P1244AM", year: 2026, bags: 15},
+                {operation: "Bamford Farms", hybrid: "P12517V", year: 2026, bags: 25},
+                {operation: "Bamford Farms", hybrid: "P1548AM", year: 2026, bags: 15},
+                {operation: "Bamford Farms", hybrid: "P9845AM", year: 2024, bags: 10},
+                {operation: "Bamford Farms", hybrid: "P9845PCE", year: 2025, bags: 66},
+                {operation: "Boerner - Dryland Farms LLC", hybrid: "35F50AM", year: 2024, bags: 16},
+                {operation: "Boerner - Dryland Farms LLC", hybrid: "P0075AM", year: 2024, bags: 19},
+                {operation: "Boerner - Dryland Farms LLC", hybrid: "P0075AM", year: 2025, bags: 28},
+                {operation: "Boerner - Dryland Farms LLC", hybrid: "P0075AM", year: 2026, bags: 30},
+                {operation: "Boerner - Dryland Farms LLC", hybrid: "P1151AM", year: 2025, bags: 16},
+                {operation: "Boerner Farms", hybrid: "P0075AM", year: 2024, bags: 43},
+                {operation: "Boerner Farms", hybrid: "P0075AM", year: 2025, bags: 9},
+                {operation: "Boerner Farms", hybrid: "P0157AMXT", year: 2025, bags: 26},
+                {operation: "Boerner Farms", hybrid: "P0157AMXT", year: 2026, bags: 30},
+                {operation: "Boerner Farms", hybrid: "P0339Q", year: 2024, bags: 6},
+                {operation: "Boerner Farms", hybrid: "P0487Q", year: 2024, bags: 20},
+                {operation: "Boerner Farms", hybrid: "P0487Q", year: 2026, bags: 30},
+                {operation: "Boerner Farms", hybrid: "P05081AML", year: 2026, bags: 10},
+                {operation: "Boerner Farms", hybrid: "P0622AML", year: 2024, bags: 36},
+                {operation: "Boerner Farms", hybrid: "P0622AML", year: 2025, bags: 36},
+                {operation: "Boerner Farms", hybrid: "P0622AML", year: 2026, bags: 30},
+                {operation: "Boerner Farms", hybrid: "P1151AM", year: 2025, bags: 36}
+            ],
+            new2027: ['P96567V', 'P96567PCE', 'P99491V', 'P99491PCE', 'P03802PCE', 'P04651V', 'P08215PCUE', 'P10705V', 'P11259PCE', 'P14270V', 'P14270PCE', 'P15517V', 'P18512V', 'P18512PCE'],
+            hybridNotes: {}
         };
-
-        // ============================================
-        // INITIALIZATION
-        // ============================================
-        function init() {
-            loadFromStorage();
-            renderAll();
+        // Load notes from localStorage
+        const savedNotes = localStorage.getItem('pioneerHybridNotes');
+        if (savedNotes) {
+            data.hybridNotes = JSON.parse(savedNotes);
+            document.querySelectorAll('textarea[id^="notes-"]').forEach(ta => {
+                const key = ta.id.replace('notes-', '');
+                if (data.hybridNotes[key]) ta.value = data.hybridNotes[key];
+            });
         }
-
-        function loadFromStorage() {
-            const saved = localStorage.getItem('pioneerForecastData');
-            if (saved) {
-                try {
-                    data = JSON.parse(saved);
-                    if (!data.records) data.records = [];
-                    if (!data.discontinued2027) data.discontinued2027 = [];
-                    if (!data.new2027) data.new2027 = [];
-                } catch (e) {
-                    console.error('Error loading data:', e);
-                }
-            }
+        function saveNotes(hybrid, value) {
+            data.hybridNotes[hybrid] = value;
+            localStorage.setItem('pioneerHybridNotes', JSON.stringify(data.hybridNotes));
         }
-
-        function saveToStorage() {
-            localStorage.setItem('pioneerForecastData', JSON.stringify(data));
-        }
-
-        // ============================================
-        // TAB SWITCHING
-        // ============================================
         function switchTab(tabId) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             event.target.classList.add('active');
             document.getElementById(tabId).classList.add('active');
         }
-
-        // ============================================
-        // RENDERING
-        // ============================================
         function renderAll() {
             renderSummary();
             renderByOperation();
             renderByHybrid();
             renderDetail();
         }
-
         function renderSummary() {
             const totals = {2024: 0, 2025: 0, 2026: 0};
             data.records.forEach(r => {
-                if (totals[r.year] !== undefined) {
-                    totals[r.year] += r.bags;
-                }
+                if (totals[r.year] !== undefined) totals[r.year] += r.bags;
             });
-
-            // Calculate 2027 prediction
             let total2027 = 0;
             const hybridTotals = getHybridTotals();
-            Object.keys(hybridTotals).forEach(hybrid => {
-                if (!data.discontinued2027.includes(hybrid)) {
-                    total2027 += hybridTotals[hybrid].predicted;
-                }
-            });
-            // Add new hybrids (estimate based on average)
-            const avgPerHybrid = total2027 / Math.max(Object.keys(hybridTotals).length, 1);
-            data.new2027.forEach(h => {
-                if (!hybridTotals[h]) {
-                    total2027 += Math.round(avgPerHybrid * 0.5); // New hybrids start at 50% of average
-                }
-            });
-
+            Object.keys(hybridTotals).forEach(h => { total2027 += hybridTotals[h].predicted; });
             document.getElementById('total-2024').textContent = totals[2024].toLocaleString();
             document.getElementById('total-2025').textContent = totals[2025].toLocaleString();
             document.getElementById('total-2026').textContent = totals[2026].toLocaleString();
             document.getElementById('total-2027').textContent = total2027.toLocaleString();
         }
-
         function renderByOperation() {
-            const filter = document.getElementById('filter-operation').value.toLowerCase();
+            const filter = (document.getElementById('filter-operation')?.value || '').toLowerCase();
             const operations = getOperationTotals();
             const tbody = document.getElementById('operation-table');
-
             let html = '';
             Object.keys(operations).sort().forEach(op => {
                 if (filter && !op.toLowerCase().includes(filter)) return;
-
                 const d = operations[op];
                 const change = d.y2026 > 0 ? ((d.predicted - d.y2026) / d.y2026 * 100).toFixed(1) : 0;
                 const changeClass = change >= 0 ? 'change-up' : 'change-down';
-
-                html += `<tr>
-                    <td><strong>${op}</strong></td>
-                    <td class="text-right">${d.y2024 || '-'}</td>
-                    <td class="text-right">${d.y2025 || '-'}</td>
-                    <td class="text-right">${d.y2026 || '-'}</td>
-                    <td class="text-right prediction">${d.predicted}</td>
-                    <td class="text-right ${changeClass}">${change >= 0 ? '+' : ''}${change}%</td>
-                </tr>`;
+                html += `<tr><td><strong>${op}</strong></td><td class="text-right">${d.y2024 || '-'}</td><td class="text-right">${d.y2025 || '-'}</td><td class="text-right">${d.y2026 || '-'}</td><td class="text-right prediction">${d.predicted}</td><td class="text-right ${changeClass}">${change >= 0 ? '+' : ''}${change}%</td></tr>`;
             });
-
-            tbody.innerHTML = html || '<tr><td colspan="6" style="text-align:center; color:#666;">No data. Click "Import Data" to add records.</td></tr>';
+            tbody.innerHTML = html || '<tr><td colspan="6">No data</td></tr>';
         }
-
         function renderByHybrid() {
-            const filter = document.getElementById('filter-hybrid').value.toLowerCase();
-            const statusFilter = document.getElementById('filter-hybrid-status').value;
+            const filter = (document.getElementById('filter-hybrid')?.value || '').toLowerCase();
             const hybrids = getHybridTotals();
             const tbody = document.getElementById('hybrid-table');
-
-            // Calculate total for percentage
             let grandTotal = 0;
-            Object.values(hybrids).forEach(h => {
-                if (!data.discontinued2027.includes(h.hybrid)) {
-                    grandTotal += h.predicted;
-                }
-            });
-
+            Object.values(hybrids).forEach(h => { grandTotal += h.predicted; });
             let html = '';
             Object.keys(hybrids).sort().forEach(hybrid => {
                 if (filter && !hybrid.toLowerCase().includes(filter)) return;
-
-                const isDiscontinued = data.discontinued2027.includes(hybrid);
-                const isNew = data.new2027.includes(hybrid);
-
-                if (statusFilter === 'active' && (isDiscontinued || isNew)) return;
-                if (statusFilter === 'discontinued' && !isDiscontinued) return;
-                if (statusFilter === 'new' && !isNew) return;
-
                 const d = hybrids[hybrid];
-                const predicted = isDiscontinued ? 0 : d.predicted;
-                const pct = grandTotal > 0 ? (predicted / grandTotal * 100).toFixed(1) : 0;
-
-                let status = '<span style="color:#28a745;">Active</span>';
-                if (isDiscontinued) status = '<span style="color:#dc3545;">Discontinued</span>';
-                if (isNew) status = '<span style="color:#007bff;">New 2027</span>';
-
-                html += `<tr ${isDiscontinued ? 'style="opacity:0.5;"' : ''}>
-                    <td><strong>${hybrid}</strong></td>
-                    <td class="text-right">${d.y2024 || '-'}</td>
-                    <td class="text-right">${d.y2025 || '-'}</td>
-                    <td class="text-right">${d.y2026 || '-'}</td>
-                    <td class="text-right prediction">${predicted}</td>
-                    <td class="text-right">${pct}%</td>
-                    <td class="text-center">${status}</td>
-                </tr>`;
+                const pct = grandTotal > 0 ? (d.predicted / grandTotal * 100).toFixed(1) : 0;
+                html += `<tr><td><strong>${hybrid}</strong></td><td class="text-right">${d.y2024 || '-'}</td><td class="text-right">${d.y2025 || '-'}</td><td class="text-right">${d.y2026 || '-'}</td><td class="text-right prediction">${d.predicted}</td><td class="text-right">${pct}%</td></tr>`;
             });
-
-            // Add new hybrids with no history
-            data.new2027.forEach(hybrid => {
-                if (hybrids[hybrid]) return; // Already shown
-                if (filter && !hybrid.toLowerCase().includes(filter)) return;
-                if (statusFilter === 'active' || statusFilter === 'discontinued') return;
-
-                const avgPredicted = Math.round(grandTotal / Math.max(Object.keys(hybrids).length, 1) * 0.5);
-                html += `<tr>
-                    <td><strong>${hybrid}</strong></td>
-                    <td class="text-right">-</td>
-                    <td class="text-right">-</td>
-                    <td class="text-right">-</td>
-                    <td class="text-right prediction">${avgPredicted}</td>
-                    <td class="text-right">-</td>
-                    <td class="text-center"><span style="color:#007bff;">New 2027</span></td>
-                </tr>`;
-            });
-
-            tbody.innerHTML = html || '<tr><td colspan="7" style="text-align:center; color:#666;">No data.</td></tr>';
+            tbody.innerHTML = html || '<tr><td colspan="6">No data</td></tr>';
         }
-
         function renderDetail() {
-            const filter = document.getElementById('filter-detail').value.toLowerCase();
-            const yearFilter = document.getElementById('filter-detail-year').value;
+            const filter = (document.getElementById('filter-detail')?.value || '').toLowerCase();
             const details = getDetailData();
             const tbody = document.getElementById('detail-table');
-
             let html = '';
             details.forEach(d => {
                 if (filter && !d.operation.toLowerCase().includes(filter) && !d.hybrid.toLowerCase().includes(filter)) return;
-
-                const showRow = yearFilter === 'all' ||
-                    (yearFilter === '2024' && d.y2024 > 0) ||
-                    (yearFilter === '2025' && d.y2025 > 0) ||
-                    (yearFilter === '2026' && d.y2026 > 0);
-
-                if (!showRow) return;
-
-                const isDiscontinued = data.discontinued2027.includes(d.hybrid);
-                const predicted = isDiscontinued ? 0 : d.predicted;
-
-                html += `<tr ${isDiscontinued ? 'style="opacity:0.5;"' : ''}>
-                    <td>${d.operation}</td>
-                    <td>${d.hybrid}</td>
-                    <td class="text-right">${d.y2024 || '-'}</td>
-                    <td class="text-right">${d.y2025 || '-'}</td>
-                    <td class="text-right">${d.y2026 || '-'}</td>
-                    <td class="text-right prediction">${predicted}</td>
-                </tr>`;
+                html += `<tr><td>${d.operation}</td><td>${d.hybrid}</td><td class="text-right">${d.y2024 || '-'}</td><td class="text-right">${d.y2025 || '-'}</td><td class="text-right">${d.y2026 || '-'}</td><td class="text-right prediction">${d.predicted}</td></tr>`;
             });
-
-            tbody.innerHTML = html || '<tr><td colspan="6" style="text-align:center; color:#666;">No data.</td></tr>';
+            tbody.innerHTML = html || '<tr><td colspan="6">No data</td></tr>';
         }
-
-        // ============================================
-        // DATA AGGREGATION
-        // ============================================
         function getOperationTotals() {
             const ops = {};
             data.records.forEach(r => {
-                if (!ops[r.operation]) {
-                    ops[r.operation] = {y2024: 0, y2025: 0, y2026: 0, predicted: 0};
-                }
-                if (r.year === 2024 || r.year === '2024') ops[r.operation].y2024 += r.bags;
-                if (r.year === 2025 || r.year === '2025') ops[r.operation].y2025 += r.bags;
-                if (r.year === 2026 || r.year === '2026') ops[r.operation].y2026 += r.bags;
+                if (!ops[r.operation]) ops[r.operation] = {y2024: 0, y2025: 0, y2026: 0, predicted: 0};
+                if (r.year === 2024) ops[r.operation].y2024 += r.bags;
+                if (r.year === 2025) ops[r.operation].y2025 += r.bags;
+                if (r.year === 2026) ops[r.operation].y2026 += r.bags;
             });
-
-            // Calculate predictions per operation
-            Object.keys(ops).forEach(op => {
-                ops[op].predicted = predictValue(ops[op].y2024, ops[op].y2025, ops[op].y2026);
-            });
-
+            Object.keys(ops).forEach(op => { ops[op].predicted = predictValue(ops[op].y2024, ops[op].y2025, ops[op].y2026); });
             return ops;
         }
-
         function getHybridTotals() {
             const hybrids = {};
             data.records.forEach(r => {
-                if (!hybrids[r.hybrid]) {
-                    hybrids[r.hybrid] = {hybrid: r.hybrid, y2024: 0, y2025: 0, y2026: 0, predicted: 0};
-                }
-                if (r.year === 2024 || r.year === '2024') hybrids[r.hybrid].y2024 += r.bags;
-                if (r.year === 2025 || r.year === '2025') hybrids[r.hybrid].y2025 += r.bags;
-                if (r.year === 2026 || r.year === '2026') hybrids[r.hybrid].y2026 += r.bags;
+                if (!hybrids[r.hybrid]) hybrids[r.hybrid] = {y2024: 0, y2025: 0, y2026: 0, predicted: 0};
+                if (r.year === 2024) hybrids[r.hybrid].y2024 += r.bags;
+                if (r.year === 2025) hybrids[r.hybrid].y2025 += r.bags;
+                if (r.year === 2026) hybrids[r.hybrid].y2026 += r.bags;
             });
-
-            Object.keys(hybrids).forEach(h => {
-                hybrids[h].predicted = predictValue(hybrids[h].y2024, hybrids[h].y2025, hybrids[h].y2026);
-            });
-
+            Object.keys(hybrids).forEach(h => { hybrids[h].predicted = predictValue(hybrids[h].y2024, hybrids[h].y2025, hybrids[h].y2026); });
             return hybrids;
         }
-
         function getDetailData() {
             const detail = {};
             data.records.forEach(r => {
                 const key = `${r.operation}|${r.hybrid}`;
-                if (!detail[key]) {
-                    detail[key] = {operation: r.operation, hybrid: r.hybrid, y2024: 0, y2025: 0, y2026: 0};
-                }
-                if (r.year === 2024 || r.year === '2024') detail[key].y2024 += r.bags;
-                if (r.year === 2025 || r.year === '2025') detail[key].y2025 += r.bags;
-                if (r.year === 2026 || r.year === '2026') detail[key].y2026 += r.bags;
+                if (!detail[key]) detail[key] = {operation: r.operation, hybrid: r.hybrid, y2024: 0, y2025: 0, y2026: 0};
+                if (r.year === 2024) detail[key].y2024 += r.bags;
+                if (r.year === 2025) detail[key].y2025 += r.bags;
+                if (r.year === 2026) detail[key].y2026 += r.bags;
             });
-
             return Object.values(detail).map(d => {
                 d.predicted = predictValue(d.y2024, d.y2025, d.y2026);
                 return d;
             }).sort((a, b) => a.operation.localeCompare(b.operation) || a.hybrid.localeCompare(b.hybrid));
         }
-
         function predictValue(y2024, y2025, y2026) {
-            // Simple trend-based prediction
-            if (y2024 && y2025 && y2026) {
-                const growth1 = y2024 > 0 ? (y2025 - y2024) / y2024 : 0;
-                const growth2 = y2025 > 0 ? (y2026 - y2025) / y2025 : 0;
-                const avgGrowth = (growth1 + growth2) / 2;
-                return Math.max(0, Math.round(y2026 * (1 + avgGrowth)));
-            } else if (y2026) {
-                return Math.round(y2026 * 1.02); // 2% default growth
+            const MAX_GROWTH = 0.25;
+            const MAX_DECLINE = -0.30;
+            if (y2026) {
+                if (y2025 && y2026) {
+                    const recentChange = y2025 > 0 ? (y2026 - y2025) / y2025 : 0;
+                    const clampedChange = Math.max(MAX_DECLINE, Math.min(MAX_GROWTH, recentChange));
+                    const dampedChange = clampedChange * 0.5;
+                    return Math.max(0, Math.round(y2026 * (1 + dampedChange)));
+                }
+                return Math.round(y2026 * 1.02);
             } else if (y2025) {
-                return Math.round(y2025);
+                if (y2024) {
+                    const change = y2024 > 0 ? (y2025 - y2024) / y2024 : 0;
+                    if (change < -0.3) {
+                        return Math.round(y2025 * 0.5);
+                    }
+                }
+                return Math.round(y2025 * 0.8);
             } else if (y2024) {
-                return Math.round(y2024);
+                return Math.round(y2024 * 0.3);
             }
             return 0;
         }
-
-        // ============================================
-        // IMPORT FUNCTIONS
-        // ============================================
-        function showImportModal() {
-            document.getElementById('import-modal').style.display = 'flex';
+        function printDetailView() {
+            document.getElementById('print-2024').textContent = document.getElementById('total-2024').textContent;
+            document.getElementById('print-2025').textContent = document.getElementById('total-2025').textContent;
+            document.getElementById('print-2026').textContent = document.getElementById('total-2026').textContent;
+            document.getElementById('print-2027').textContent = document.getElementById('total-2027').textContent;
+            document.getElementById('detail').classList.add('print-active');
+            window.print();
+            setTimeout(() => {
+                document.getElementById('detail').classList.remove('print-active');
+            }, 100);
         }
-
-        function hideImportModal() {
-            document.getElementById('import-modal').style.display = 'none';
-        }
-
-        function handleFile(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('paste-data').value = e.target.result;
-                showStatus('import-status', 'File loaded. Click "Import Data" to process.', 'info');
-            };
-            reader.readAsText(file);
-        }
-
-        function importData() {
-            const content = document.getElementById('paste-data').value.trim();
-            if (!content) {
-                showStatus('import-status', 'Please paste data or upload a file first.', 'error');
-                return;
-            }
-
-            const year = document.getElementById('import-year').value;
-            const result = parseData(content, year);
-
-            if (result.records.length > 0) {
-                // Add to existing data
-                result.records.forEach(r => {
-                    // Check if exists, update if so
-                    const existing = data.records.find(
-                        e => e.operation === r.operation && e.hybrid === r.hybrid && e.year == r.year
-                    );
-                    if (existing) {
-                        existing.bags = r.bags;
-                    } else {
-                        data.records.push(r);
-                    }
-                });
-
-                saveToStorage();
-                renderAll();
-                showStatus('import-status', `Successfully imported ${result.records.length} records for ${year}!\n\n${result.debug}`, 'success');
-            } else {
-                showStatus('import-status', `No valid records found.\n\n${result.debug}`, 'error');
-            }
-        }
-
-        function parseData(content, year) {
-            const lines = content.split('\n').filter(l => l.trim());
-            if (lines.length === 0) return {records: [], debug: 'No data lines found'};
-
-            let debug = '';
-            const records = [];
-
-            // Detect delimiter
-            const firstLine = lines[0];
-            const tabs = (firstLine.match(/\t/g) || []).length;
-            const commas = (firstLine.match(/,/g) || []).length;
-            const delimiter = tabs > commas ? '\t' : ',';
-            debug += `Delimiter: ${delimiter === '\t' ? 'TAB' : 'COMMA'}\n`;
-
-            // Parse headers
-            const headers = firstLine.split(delimiter).map(h => h.trim().toLowerCase().replace(/['"]/g, ''));
-            debug += `Columns: ${headers.length}\n`;
-            debug += `Headers: ${headers.slice(0, 5).join(', ')}${headers.length > 5 ? '...' : ''}\n`;
-
-            // Find columns
-            let opCol = headers.findIndex(h => h.includes('operation') || h.includes('account') || h.includes('grower') || h.includes('customer') || h.includes('farm'));
-            let hybridCol = headers.findIndex(h => h.includes('subproduct') || h.includes('hybrid') || h.includes('variety'));
-            if (hybridCol === -1) hybridCol = headers.findIndex(h => h.includes('product') && !h.includes('line'));
-            let bagsCol = headers.findIndex(h => h.includes('delivered') || h.includes('bags') || h.includes('quantity') || h.includes('qty') || h.includes('total physical') || h.includes('regular'));
-
-            debug += `Mapped: Operation=${opCol}, Hybrid=${hybridCol}, Bags=${bagsCol}\n`;
-
-            if (opCol === -1 || hybridCol === -1 || bagsCol === -1) {
-                debug += '\nERROR: Could not find required columns.\n';
-                debug += 'Need: Operation (or Account/Grower), Subproduct (or Hybrid), Delivered (or Bags/Quantity)\n';
-                return {records: [], debug};
-            }
-
-            // Parse data rows
-            for (let i = 1; i < lines.length; i++) {
-                const values = lines[i].split(delimiter).map(v => v.trim().replace(/^["']|["']$/g, ''));
-                if (values.length <= Math.max(opCol, hybridCol, bagsCol)) continue;
-
-                const operation = values[opCol] || '';
-                let hybrid = values[hybridCol] || '';
-                let bags = values[bagsCol] || '0';
-
-                // Clean hybrid - extract P#### pattern
-                const match = hybrid.match(/P\d{3,4}[A-Z]*/i);
-                if (match) hybrid = match[0].toUpperCase();
-                else hybrid = hybrid.toUpperCase();
-
-                // Clean bags
-                bags = parseInt(bags.replace(/,/g, '').replace(/[^\d.-]/g, '')) || 0;
-
-                if (operation && hybrid && bags > 0) {
-                    records.push({operation, hybrid, year: parseInt(year), bags});
-                }
-            }
-
-            debug += `\nParsed ${records.length} valid records\n`;
-            if (records.length > 0) {
-                debug += `Sample: ${records[0].operation} | ${records[0].hybrid} | ${records[0].bags} bags`;
-            }
-
-            return {records, debug};
-        }
-
-        function showStatus(id, message, type) {
-            const el = document.getElementById(id);
-            el.style.display = 'block';
-            el.className = 'status ' + type;
-            el.textContent = message;
-        }
-
-        function viewCurrentData() {
-            const counts = {2024: 0, 2025: 0, 2026: 0};
-            data.records.forEach(r => {
-                if (counts[r.year] !== undefined) counts[r.year]++;
-            });
-            const msg = `Current data:\n2024: ${counts[2024]} records\n2025: ${counts[2025]} records\n2026: ${counts[2026]} records\n\nTotal: ${data.records.length} records`;
-            showStatus('import-status', msg, 'info');
-        }
-
-        function clearData() {
-            if (confirm('Clear ALL data? This cannot be undone.')) {
-                data.records = [];
-                saveToStorage();
-                renderAll();
-                showStatus('import-status', 'All data cleared.', 'info');
-            }
-        }
-
-        // ============================================
-        // HYBRID MANAGEMENT
-        // ============================================
-        function showHybridModal() {
-            document.getElementById('hybrid-modal').style.display = 'flex';
-            renderHybridLists();
-        }
-
-        function hideHybridModal() {
-            document.getElementById('hybrid-modal').style.display = 'none';
-        }
-
-        function renderHybridLists() {
-            // Discontinued
-            const discList = document.getElementById('discontinued-list');
-            discList.innerHTML = data.discontinued2027.map(h =>
-                `<span class="hybrid-tag discontinued">${h} <button class="remove" onclick="removeDiscontinued('${h}')">&times;</button></span>`
-            ).join('') || '<span style="color:#666;">None</span>';
-
-            // New
-            const newList = document.getElementById('new-list');
-            newList.innerHTML = data.new2027.map(h =>
-                `<span class="hybrid-tag new">${h} <button class="remove" onclick="removeNew('${h}')">&times;</button></span>`
-            ).join('') || '<span style="color:#666;">None</span>';
-        }
-
-        function addDiscontinued() {
-            const input = document.getElementById('add-discontinued');
-            const hybrid = input.value.trim().toUpperCase();
-            if (hybrid && !data.discontinued2027.includes(hybrid)) {
-                data.discontinued2027.push(hybrid);
-                saveToStorage();
-                renderHybridLists();
-                renderAll();
-            }
-            input.value = '';
-        }
-
-        function removeDiscontinued(hybrid) {
-            data.discontinued2027 = data.discontinued2027.filter(h => h !== hybrid);
-            saveToStorage();
-            renderHybridLists();
-            renderAll();
-        }
-
-        function addNewHybrid() {
-            const input = document.getElementById('add-new');
-            const hybrid = input.value.trim().toUpperCase();
-            if (hybrid && !data.new2027.includes(hybrid)) {
-                data.new2027.push(hybrid);
-                saveToStorage();
-                renderHybridLists();
-                renderAll();
-            }
-            input.value = '';
-        }
-
-        function removeNew(hybrid) {
-            data.new2027 = data.new2027.filter(h => h !== hybrid);
-            saveToStorage();
-            renderHybridLists();
-            renderAll();
-        }
-
-        function importHybridList() {
-            const content = document.getElementById('paste-hybrids').value.trim();
-            if (!content) return;
-
-            const hybrids = content.split('\n')
-                .map(h => h.trim().toUpperCase())
-                .filter(h => h.match(/P\d{3,4}/));
-
-            // Get all current hybrids from data
-            const currentHybrids = [...new Set(data.records.map(r => r.hybrid))];
-
-            // Hybrids in current data but NOT in 2027 list = discontinued
-            const discontinued = currentHybrids.filter(h => !hybrids.includes(h));
-            // Hybrids in 2027 list but NOT in current data = new
-            const newOnes = hybrids.filter(h => !currentHybrids.includes(h));
-
-            data.discontinued2027 = discontinued;
-            data.new2027 = newOnes;
-            saveToStorage();
-            renderHybridLists();
-            renderAll();
-
-            alert(`Updated!\nDiscontinued: ${discontinued.length}\nNew for 2027: ${newOnes.length}`);
-        }
-
-        // ============================================
-        // EXPORT
-        // ============================================
         function exportData() {
-            let csv = 'Operation,Hybrid,2024,2025,2026,2027 Predicted,Status\n';
-
+            let csv = 'Operation,Hybrid,2024,2025,2026,2027 Predicted\n';
             const details = getDetailData();
             details.forEach(d => {
-                const isDisc = data.discontinued2027.includes(d.hybrid);
-                const isNew = data.new2027.includes(d.hybrid);
-                const predicted = isDisc ? 0 : d.predicted;
-                const status = isDisc ? 'Discontinued' : (isNew ? 'New' : 'Active');
-
-                csv += `"${d.operation}","${d.hybrid}",${d.y2024 || 0},${d.y2025 || 0},${d.y2026 || 0},${predicted},${status}\n`;
+                csv += `"${d.operation}","${d.hybrid}",${d.y2024 || 0},${d.y2025 || 0},${d.y2026 || 0},${d.predicted}\n`;
             });
-
             const blob = new Blob([csv], {type: 'text/csv'});
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -970,9 +1103,7 @@
             a.download = 'pioneer_2027_forecast.csv';
             a.click();
         }
-
-        // Initialize
-        init();
+        renderAll();
     </script>
 </body>
 </html>
